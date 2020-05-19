@@ -8,7 +8,7 @@ const Layout: React.FC = ({ children }) => {
   const { activate } = context;
 
   useEffect(() => {
-    activate(injected);
+    activate(injected, console.error);
   }, []);
 
   return !context.active && !context.error ? (
