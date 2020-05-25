@@ -277,6 +277,43 @@
         "hasInitialValuesInDeclarations": false,
         "uninitializedBaseContracts": []
       }
+    },
+    "DocExchange": {
+      "address": "0x1E6C6D4c33FfB5763562DDA25F260e84Be69d2C7",
+      "constructorCode": "608060405234801561001057600080fd5b50610458806100206000396000f3fe",
+      "bodyBytecodeHash": "167057e1f0e73f4632f0d9c828320dc88f39b7468ad91b99836fc4ebe297285e",
+      "localBytecodeHash": "e027048d52e4df22ba208f5e508a8bbb2ad41d5496ee54ac8a4266f74c781cdb",
+      "deployedBytecodeHash": "e027048d52e4df22ba208f5e508a8bbb2ad41d5496ee54ac8a4266f74c781cdb",
+      "types": {
+        "t_bytes": {
+          "id": "t_bytes",
+          "kind": "elementary",
+          "label": "bytes"
+        },
+        "t_mapping<t_bytes>": {
+          "id": "t_mapping<t_bytes>",
+          "valueType": "t_bytes",
+          "label": "mapping(key => bytes)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "DocExchange",
+          "path": "contracts/DocExchange.sol",
+          "label": "documents",
+          "astId": 2138,
+          "type": "t_mapping<t_bytes>",
+          "src": "105:35:13"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
     }
   },
   "solidityLibs": {},
@@ -286,6 +323,15 @@
         "address": "0x7c9BeD2220B6A7545d31ad8911BAeB7003483337",
         "version": "1.0.0",
         "implementation": "0x444a25e1bCFD4bc9C57e69E0C0e24a0983fA24e2",
+        "admin": "0x5c19BF66CC2c9386Cdf06d346F32F140A4559be9",
+        "kind": "Upgradeable"
+      }
+    ],
+    "ledger-academy/DocExchange": [
+      {
+        "address": "0xcB4c372940117184A3fe3eBDe36d118b6f3A454e",
+        "version": "1.0.0",
+        "implementation": "0x1E6C6D4c33FfB5763562DDA25F260e84Be69d2C7",
         "admin": "0x5c19BF66CC2c9386Cdf06d346F32F140A4559be9",
         "kind": "Upgradeable"
       }
