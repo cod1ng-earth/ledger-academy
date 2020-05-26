@@ -16,6 +16,7 @@ import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
 contract IterableDocExchange is Initializable {
     mapping(address => uint256) index; // owner => index in store
     bytes32[] store; // cids for our users, indexed as integer
+
     uint256 r_size; //the running size of the index for simpler returns
 
     function initialize() public initializer {
@@ -34,7 +35,7 @@ contract IterableDocExchange is Initializable {
     }
 
     function removeMyDoc() public {
-        uint256 position = indexOfMyDoc();
+        uint256 position = indexOf(msg.sender);
         require(position != 0, "you don't have a document");
         delete store[position];
         index[msg.sender] = 0;
