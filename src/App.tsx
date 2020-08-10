@@ -1,22 +1,18 @@
 import React from "react";
 import Layout from "./Layout";
-import { Connectors } from "web3-react";
-import Web3Provider from "web3-react";
+import { Web3ReactProvider } from '@web3-react/core'
+
 import Main from "./Main";
 import Web3 from "web3";
 
-const { InjectedConnector } = Connectors;
-const MetaMask = new InjectedConnector({
-  supportedNetworks: [1, 3, 4, 5, 7, 17],
-});
-const connectors = { MetaMask: MetaMask };
-
+const getLibrary = (provider: any): Web3 => new Web3(provider);
+  
 const App: React.FC = () => (
-  <Web3Provider connectors={connectors} libraryName="web3.js" web3Api={Web3}>
+  <Web3ReactProvider getLibrary={getLibrary}>
     <Layout>
       <Main></Main>
     </Layout>
-  </Web3Provider>
+  </Web3ReactProvider>
 );
 
 export default App;

@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
-import { useWeb3Context } from "web3-react";
+import { injected } from './connectors'
+import { useWeb3React } from "@web3-react/core";
+import Web3 from "web3";
 
 const Layout: React.FC = ({ children }) => {
-  const context = useWeb3Context();
+  const context = useWeb3React<Web3>()
+  const { activate } = context;
 
   useEffect(() => {
-    context.setConnector("MetaMask");
+    activate(injected);
   }, []);
 
   return !context.active && !context.error ? (
