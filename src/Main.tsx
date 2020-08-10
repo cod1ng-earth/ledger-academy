@@ -5,6 +5,8 @@ import Web3 from "web3";
 import ADIToken from "./contracts/ADIToken.json";
 import TransferForm from "./TransferForm";
 import _secrets from "../.secrets.json";
+import SignForm from "./SignForm";
+import VerifyForm from "./VerifyForm";
 
 const Main: React.FC = () => {
   const { account, library: web3 } = useWeb3React<Web3>();
@@ -53,9 +55,14 @@ const Main: React.FC = () => {
         <small>({_secrets.contractAddress})</small>
       </p>
       <p>to spare with others.</p>
+
+      <h2>Transfer ADI</h2>
       {adiBalance && (
         <TransferForm updateBalance={queryADIBalance}></TransferForm>
       )}
+      <h2>Sign a message</h2>
+      <SignForm /> <br/>
+      <VerifyForm /> <br/>
     </div>
   );
 };
