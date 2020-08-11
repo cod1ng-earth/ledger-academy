@@ -38,7 +38,6 @@ const Main: React.FC = () => {
         const readableAdiBalance = Web3.utils.fromWei(_adiBalance);
         setADIBalance(readableAdiBalance);
       }
-      
     })();
   }, [web3]);
 
@@ -62,6 +61,7 @@ const Main: React.FC = () => {
       )}
       <h2>Sign a message</h2>
       <SignForm /> <br/>
+      <h2>Verify a message</h2>
       <VerifyForm /> <br/>
     </div>
   );
