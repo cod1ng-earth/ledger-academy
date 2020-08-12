@@ -41,7 +41,9 @@ const IpfsPage: React.FC = () => {
     console.log("cid stored on chain", resultBytes);
 
     const bytes = Web3.utils.hexToBytes(resultBytes);
+    console.log(bytes);
     const cid = new CID(Buffer.from(bytes));
+
     console.log("CID recovered from contract", cid.toString());
 
     const contentChunks = await ipfsNode!.cat(cid);
@@ -54,6 +56,24 @@ const IpfsPage: React.FC = () => {
     console.log("content: ", result);
     setMyDocumentContent(result);
     return result;
+  }
+
+  async function readAllPreviousVersions() {
+    const oldEvents = await contract.getPastEvents("DocumentAdded", {
+      fromBlock: "earliest",
+      toBlock: "latest",
+    });
+    console.log(oldEvents);
+    const cids = oldEvents.map((evt) => {
+      try {
+        const bytes = Web3.utils.hexToBytes(evt.returnValues.cid);
+        const cid = new CID(Buffer.from(bytes));
+        return { cid };
+      } catch (e) {
+        return { cid: null };
+      }
+    });
+    setFiles(cids);
   }
 
   async function addToIpfs(content: string | any[]): Promise<any[]> {
@@ -101,17 +121,21 @@ const IpfsPage: React.FC = () => {
         </button>
       </form>
       <h2>History:</h2>
+      <button onClick={readAllPreviousVersions}>get from chain...</button>
       <ul>
-        {files.map((f) => (
-          <li>
-            <a
-              href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
-              target="_blank"
-            >
-              {f.cid.toString()}
-            </a>
-          </li>
-        ))}
+        {files.map(
+          (f) =>
+            f.cid && (
+              <li key={f.cid}>
+                <a
+                  href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
+                  target="_blank"
+                >
+                  {f.cid.toString()}
+                </a>
+              </li>
+            )
+        )}
       </ul>
       <h2>My Document:</h2>
       <button onClick={getMyDocumentFromChainAndResolve}>
