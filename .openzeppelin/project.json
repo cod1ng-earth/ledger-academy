@@ -1,7 +1,8 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "ADIToken": "ADIToken"
+    "ADIToken": "ADIToken",
+    "Verifier": "Verifier"
   },
   "dependencies": {
     "@openzeppelin/contracts-ethereum-package": "^3.0.0"
