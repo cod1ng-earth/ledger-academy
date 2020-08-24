@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-
-import IPFS from "ipfs";
-import _secrets from "../.secrets.json";
+import { IPFS } from 'ipfs';
+import React, { useState } from 'react';
+import { useIPFS } from './context/IPFS';
 
 const IpfsPage: React.FC = () => {
-  const [ipfsNode, setIpfsNode] = useState();
+  const ipfs = useIPFS();
 
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<IPFS.IPFSFile[]>([]);
 
   async function addToIpfs(content: string | any[]): Promise<any[]> {
-    const addResult = ipfsNode!.add(content);
+    if (!ipfs) { return []; }
+
+    const addResult = await ipfs.add(content);
     const results = [];
 
     for await (const result of addResult) {
@@ -18,23 +19,15 @@ const IpfsPage: React.FC = () => {
     return results;
   }
 
-  const submit = async (e) => {
+  const submit = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    const _currentContent = e.target["thecontent"].value;
-    const ipfsResult = await addToIpfs(_currentContent);
+    const currentContent = e.target.thecontent.value;
+    const ipfsResult = await addToIpfs(currentContent);
     console.log(ipfsResult);
 
     setFiles([...files, ipfsResult[0]]);
   };
-
-  useEffect(() => {
-    (async () => {
-      const _ipfsNode = await IPFS.create();
-      console.log("ipfs node is running");
-      setIpfsNode(_ipfsNode);
-    })();
-  }, []);
 
   return (
     <div>
@@ -47,9 +40,10 @@ const IpfsPage: React.FC = () => {
       <h2>Files:</h2>
       <ul>
         {files.map((f) => (
-          <li>
+          <li key={f.cid.toString()}>
             <a
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
+              rel="noreferrer"
               target="_blank"
             >
               {f.cid.toString()}
