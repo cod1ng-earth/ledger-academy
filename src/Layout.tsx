@@ -1,23 +1,32 @@
-import React, { useEffect } from "react";
-import { injected } from './connectors'
-import { useWeb3React } from "@web3-react/core";
-import Web3 from "web3";
-import { Link } from "@reach/router";
+import React, { useEffect } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import Web3 from 'web3';
+import { Link } from '@reach/router';
+import { injected } from './connectors';
 
 const Layout: React.FC = ({ children }) => {
-  const context = useWeb3React<Web3>()
-  const { activate } = context;
+  const { activate, active, error } = useWeb3React<Web3>();
 
   useEffect(() => {
     activate(injected, console.error);
   }, []);
 
-  return !context.active && !context.error ? (
+  return !active && !error ? (
     <div>loading...</div>
   ) : (
     <div>
       <header>
-        Demo [<Link to="/">main</Link> | <Link to="/ipfs">ipfs</Link>]
+        Demo [
+        <Link to="/">main</Link>
+        {' '}
+        |
+        {' '}
+        <Link to="/ipfs">ipfs</Link>
+        {' '}
+        |
+        {' '}
+        <Link to="/identity">identity</Link>
+        ]
       </header>
       <main>{children}</main>
     </div>
