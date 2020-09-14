@@ -146,6 +146,7 @@ declare module 'ipfs' {
 
       export interface IpfsFile {
           path: string;
+          cid: CID;
           hash: string;
           size: number;
           content?: FileContent;

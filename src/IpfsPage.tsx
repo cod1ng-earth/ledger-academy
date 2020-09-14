@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-import {Ipfs, IpfsFile, create as createNode} from "ipfs";
+import {Ipfs, create as createNode} from "ipfs";
 import _secrets from "../.secrets.json";
+import PubSub from "./PubSub";
 
 const IpfsPage: React.FC = () => {
   const [ipfsNode, setIpfsNode] = useState<Ipfs>();
+  const [topic, setTopic] = useState<string>();
+  const [files, setFiles] = useState<Ipfs.IpfsFile[]>([]);
 
-  const [files, setFiles] = useState([]);
-
-  async function addToIpfs(content: string | any[]): Promise<any[]> {
+  async function addToIpfs(content: string | any[]): Promise<Ipfs.IpfsFile[]> {
     const addResult = ipfsNode!.add(content);
     const results = [];
 
@@ -30,7 +31,13 @@ const IpfsPage: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const _ipfsNode = await createNode();
+      const _ipfsNode = await createNode({
+        config: {
+          Addresses: {
+            Swarm: ['/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star'],
+          },
+        },
+      });
       console.log("ipfs node is running");
       setIpfsNode(_ipfsNode);
     })();
@@ -46,7 +53,7 @@ const IpfsPage: React.FC = () => {
       </form>
       <h2>Files:</h2>
       <ul>
-        {files.map((f: IpfsFile) => (
+        {files.map((f: Ipfs.IpfsFile) => (
           <li key={f.cid.toString()}>
             <a
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
@@ -57,6 +64,12 @@ const IpfsPage: React.FC = () => {
           </li>
         ))}
       </ul>
+
+      {ipfsNode && <div>
+          <h1>Pubsub {topic}</h1>
+          <PubSub ipfs={ipfsNode} onTopic={setTopic} />
+        </div>
+      }
     </div>
   );
 };

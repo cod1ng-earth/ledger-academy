@@ -12,16 +12,14 @@ const Layout: React.FC = ({ children }) => {
     activate(injected, console.error);
   }, []);
 
-  return !context.active && !context.error ? (
-    <div>loading...</div>
-  ) : (
+  return (
     <div>
       <header>
         Demo [<Link to="/">main</Link> | <Link to="/ipfs">ipfs</Link>]
       </header>
       <main>{children}</main>
     </div>
-  );
+  )
 };
 
 export default Layout;

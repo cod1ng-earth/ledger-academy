@@ -8,7 +8,7 @@ import TransferForm from './TransferForm';
 import _secrets from '../.secrets.json';
 
 const Main: React.FC = () => {
-  const { account, library: web3 } = useWeb3React<Web3>();
+  const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
 
   const [ethBalance, setEthBalance] = useState<string>('');
   const [adiBalance, setADIBalance] = useState<string>('');
@@ -43,7 +43,7 @@ const Main: React.FC = () => {
   }, [web3]);
 
   return (
-    <div>
+    {web3Active && !web3Error && <div>
       <p>
         oh hai
         {' '}
@@ -75,6 +75,7 @@ const Main: React.FC = () => {
         <TransferForm updateBalance={queryADIBalance} />
       )}
     </div>
+      }
   );
 };
 
