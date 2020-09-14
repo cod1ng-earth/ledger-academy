@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import React, { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import ADIToken from './contracts/ADIToken.json';
 import TransferForm from './TransferForm';
+import { RouteComponentProps } from '@reach/router';
 
-const Main: React.FC = () => {
+const Main = (props: RouteComponentProps) => {
   const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
 
   const [ethBalance, setEthBalance] = useState<string>('');
@@ -18,31 +18,40 @@ const Main: React.FC = () => {
 
     const contract = new web3.eth.Contract(
       ADIToken.abi as AbiItem[],
-      process.env.CONTRACT_ADDRESS,
+      process.env.REACT_APP_CONTRACT_ADDRESS,
     );
-
-    const balance = await contract.methods
+    let balance = "0";
+    try {
+      balance = await contract.methods
       .balanceOf(account)
       .call({ from: account });
+    } catch(e) {
+      console.error("ohoh", e);
+    }
+    
     return balance;
   };
 
   useEffect(() => {
     (async () => {
-      if (web3) {
+      if (web3 && account) {
         const _ethBalance = await web3.eth.getBalance(account);
         const readableEthBalance = Web3.utils.fromWei(_ethBalance);
         setEthBalance(readableEthBalance);
-
-        const _adiBalance = await queryADIBalance();
-        const readableAdiBalance = Web3.utils.fromWei(_adiBalance);
-        setADIBalance(readableAdiBalance);
+        try {
+          const _adiBalance = await queryADIBalance();
+          const readableAdiBalance = Web3.utils.fromWei(_adiBalance);
+          setADIBalance(readableAdiBalance);
+        } catch(e) {
+          setADIBalance("0");
+        }
       }
     })();
-  }, [web3]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, web3]);
 
-  return (
-    {web3Active && !web3Error && <div>
+  return (!web3Active) ? <p>enable web3 please {web3Error} </p> : (
+    <div>
       <p>
         oh hai
         {' '}
@@ -65,7 +74,7 @@ const Main: React.FC = () => {
         <br />
         <small>
           (
-          {process.env.CONTRACT_ADDRESS}
+          {process.env.REACT_APP_CONTRACT_ADDRESS}
           )
         </small>
       </p>
@@ -74,7 +83,6 @@ const Main: React.FC = () => {
         <TransferForm updateBalance={queryADIBalance} />
       )}
     </div>
-      }
   );
 };
 

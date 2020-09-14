@@ -1,11 +1,13 @@
+import { Router } from "@reach/router";
+import { Web3ReactProvider } from '@web3-react/core';
 import React from "react";
-import { Router, Link } from "@reach/router";
-import Layout from "./Layout";
-import { Web3ReactProvider } from '@web3-react/core'
-
-import Main from "./Main";
-import IpfsPage from "./IpfsPage";
 import Web3 from "web3";
+import { IPFSProvider } from "./context/IPFS";
+import IpfsPage from "./IpfsPage";
+import Layout from "./Layout";
+import Main from "./Main";
+
+
 
 const getLibrary = (provider: any): Web3 => {
   return new Web3(provider)
@@ -13,12 +15,14 @@ const getLibrary = (provider: any): Web3 => {
   
 const App: React.FC = () => (
   <Web3ReactProvider getLibrary={getLibrary}>
-    <Layout>
-      <Router>
-        <Main path="/" />
-        <IpfsPage path="ipfs" />
-      </Router>
-    </Layout>
+    <IPFSProvider>
+      <Layout>
+        <Router>
+          <Main path="/" />
+          <IpfsPage path="ipfs" />
+        </Router>
+      </Layout>
+    </IPFSProvider>
   </Web3ReactProvider>
 );
 

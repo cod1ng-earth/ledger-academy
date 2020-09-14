@@ -4,7 +4,6 @@ import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 
 import ADIToken from './contracts/ADIToken.json';
-import _secrets from '../.secrets.json';
 
 const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const { account, library: web3 } = useWeb3React<Web3>();
@@ -17,7 +16,7 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const transferADITokens = async (): Promise<void> => {
     const contract = new web3!.eth.Contract(
       ADIToken.abi as AbiItem[],
-      _secrets.contractAddress,
+      process.env.REACT_APP_CONTRACT_ADDRESS,
     );
 
     setIsTransactionPending(true);

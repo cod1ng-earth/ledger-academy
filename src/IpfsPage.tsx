@@ -1,46 +1,26 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/jsx-no-target-blank */
+import React, { useState } from "react";
 
-import {Ipfs, create as createNode} from "ipfs";
+import { Ipfs } from "ipfs";
 import PubSub from "./PubSub";
+import { useIPFS } from "./context/IPFS";
+import { RouteComponentProps } from "@reach/router";
 
-const IpfsPage: React.FC = () => {
-  const [ipfsNode, setIpfsNode] = useState<Ipfs>();
+const IpfsPage = (props: RouteComponentProps) => {
+  const ipfsNode = useIPFS();
   const [topic, setTopic] = useState<string>();
-  const [files, setFiles] = useState<Ipfs.IpfsFile[]>([]);
+  const [files, setFiles] = useState<Ipfs.UnixFSEntry[]>([]);
 
-  async function addToIpfs(content: string | any[]): Promise<Ipfs.IpfsFile[]> {
-    const addResult = ipfsNode!.add(content);
-    const results = [];
-
-    for await (const result of addResult) {
-      results.push(result);
-    }
-    return results;
-  }
-
-  const submit = async (e) => {
+  const submit = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     const _currentContent = e.target["thecontent"].value;
-    const ipfsResult = await addToIpfs(_currentContent);
+    const ipfsResult = await ipfsNode?.add(_currentContent);
     console.log(ipfsResult);
-
-    setFiles([...files, ipfsResult[0]]);
+    if (ipfsResult) {
+      setFiles([...files, ipfsResult]);
+    }
   };
-
-  useEffect(() => {
-    (async () => {
-      const _ipfsNode = await createNode({
-        config: {
-          Addresses: {
-            Swarm: ['/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star'],
-          },
-        },
-      });
-      console.log("ipfs node is running");
-      setIpfsNode(_ipfsNode);
-    })();
-  }, []);
 
   return (
     <div>
@@ -52,10 +32,11 @@ const IpfsPage: React.FC = () => {
       </form>
       <h2>Files:</h2>
       <ul>
-        {files.map((f: Ipfs.IpfsFile) => (
+        {files.map((f) => (
           <li key={f.cid.toString()}>
             <a
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
+             
               target="_blank"
             >
               {f.cid.toString()}
@@ -66,7 +47,7 @@ const IpfsPage: React.FC = () => {
 
       {ipfsNode && <div>
           <h1>Pubsub {topic}</h1>
-          <PubSub ipfs={ipfsNode} onTopic={setTopic} />
+          <PubSub onTopic={setTopic} />
         </div>
       }
     </div>

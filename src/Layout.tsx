@@ -10,6 +10,7 @@ const Layout: React.FC = ({ children }) => {
 
   useEffect(() => {
     activate(injected, console.error);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

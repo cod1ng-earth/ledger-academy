@@ -19,9 +19,11 @@ thumb
 sketch
 
 # End of https://www.gitignore.io/api/react
-.openzeppelin/.session
+contracts/.openzeppelin/.session
 
-.openzeppelin/dev-*
+contracts/.openzeppelin/dev-*
+contracts/build
 build
+
 .secrets*.json
 .env.*

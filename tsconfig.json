@@ -3,19 +3,25 @@
     "esModuleInterop": true,
     "jsx": "react",
     "baseUrl": "./src",
-	"rootDir": "src",
-	"resolveJsonModule": true,
+    "rootDir": "src",
+    "resolveJsonModule": true,
     "target": "es5",
-		"module": "esnext",
-		"lib": ["dom", "es2018"],
-		"moduleResolution": "node",
-		"strict": true,
-		"downlevelIteration": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"emitDecoratorMetadata": true,
-		"sourceMap": true
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "strict": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }
