@@ -2,7 +2,20 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+	"rootDir": "src",
+	"resolveJsonModule": true,
+    "target": "es5",
+		"module": "esnext",
+		"lib": ["dom", "es2018"],
+		"moduleResolution": "node",
+		"strict": true,
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"emitDecoratorMetadata": true,
+		"sourceMap": true
   },
+  "exclude": ["node_modules"],
   "include": ["src/**/*"]
 }

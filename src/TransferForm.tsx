@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { useWeb3React } from "@web3-react/core";
-import Web3 from "web3";
+import React, { useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import Web3 from 'web3';
+import { AbiItem } from 'web3-utils';
 
-import ADIToken from "./contracts/ADIToken.json";
-import _secrets from "../.secrets.json";
+import ADIToken from './contracts/ADIToken.json';
+import _secrets from '../.secrets.json';
 
 const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const { account, library: web3 } = useWeb3React<Web3>();
 
-  const [to, setTo] = useState("");
-  const [amount, setAmount] = useState("");
+  const [to, setTo] = useState('');
+  const [amount, setAmount] = useState('');
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>();
 
   const transferADITokens = async (): Promise<void> => {
-    const contract = new web3.eth.Contract(
-      ADIToken.abi,
-      _secrets.contractAddress
+    const contract = new web3!.eth.Contract(
+      ADIToken.abi as AbiItem[],
+      _secrets.contractAddress,
     );
 
     setIsTransactionPending(true);
@@ -25,14 +26,14 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
       from: account,
       gasPrice: 21 * 1e5,
     });
-    promiEvent.on("transactionHash", setTransactionHash);
-    promiEvent.on("receipt", (receipt) => {
+    promiEvent.on('transactionHash', setTransactionHash);
+    promiEvent.on('receipt', (receipt: any) => {
       console.log(receipt);
       setIsTransactionPending(false);
-      setTransactionHash("");
+      setTransactionHash('');
       updateBalance();
     });
-    promiEvent.on("confirmation", (number, confirmation) => {
+    promiEvent.on('confirmation', (number: number, confirmation: any) => {
       console.debug(confirmation);
     });
   };
@@ -40,7 +41,13 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   return (
     <div>
       {isTransactionPending ? (
-        <p>standby, your transaction {transactionHash} is pending</p>
+        <p>
+          standby, your transaction
+          {' '}
+          {transactionHash}
+          {' '}
+          is pending
+        </p>
       ) : (
         <>
           <label htmlFor="address">Adress</label>

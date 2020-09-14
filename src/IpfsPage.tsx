@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import IPFS from "ipfs";
+import {Ipfs, IpfsFile, create as createNode} from "ipfs";
 import _secrets from "../.secrets.json";
 
 const IpfsPage: React.FC = () => {
-  const [ipfsNode, setIpfsNode] = useState();
+  const [ipfsNode, setIpfsNode] = useState<Ipfs>();
 
   const [files, setFiles] = useState([]);
 
@@ -30,7 +30,7 @@ const IpfsPage: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const _ipfsNode = await IPFS.create();
+      const _ipfsNode = await createNode();
       console.log("ipfs node is running");
       setIpfsNode(_ipfsNode);
     })();
@@ -39,15 +39,15 @@ const IpfsPage: React.FC = () => {
   return (
     <div>
       <form onSubmit={submit}>
-        <textarea name="thecontent">test</textarea>
+        <textarea name="thecontent" defaultValue="test" />
         <button type="submit" value="store!">
           store!
         </button>
       </form>
       <h2>Files:</h2>
       <ul>
-        {files.map((f) => (
-          <li>
+        {files.map((f: IpfsFile) => (
+          <li key={f.cid.toString()}>
             <a
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
               target="_blank"
