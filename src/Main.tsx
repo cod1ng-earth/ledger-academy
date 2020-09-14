@@ -5,7 +5,6 @@ import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import ADIToken from './contracts/ADIToken.json';
 import TransferForm from './TransferForm';
-import _secrets from '../.secrets.json';
 
 const Main: React.FC = () => {
   const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
@@ -19,7 +18,7 @@ const Main: React.FC = () => {
 
     const contract = new web3.eth.Contract(
       ADIToken.abi as AbiItem[],
-      _secrets.contractAddress,
+      process.env.CONTRACT_ADDRESS,
     );
 
     const balance = await contract.methods
@@ -66,7 +65,7 @@ const Main: React.FC = () => {
         <br />
         <small>
           (
-          {_secrets.contractAddress}
+          {process.env.CONTRACT_ADDRESS}
           )
         </small>
       </p>

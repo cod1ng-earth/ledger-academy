@@ -24,3 +24,4 @@ sketch
 .openzeppelin/dev-*
 build
 .secrets*.json
+.env.*

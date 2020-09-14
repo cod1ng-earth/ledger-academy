@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import {Ipfs, create as createNode} from "ipfs";
-import _secrets from "../.secrets.json";
 import PubSub from "./PubSub";
 
 const IpfsPage: React.FC = () => {
