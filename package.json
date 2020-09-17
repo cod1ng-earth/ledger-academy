@@ -5,6 +5,7 @@
   "author": "Stefan Adolf <stefan.adolf@turbinekreuzberg.com>",
   "license": "MIT",
   "dependencies": {
+    "3box": "^1.22.0",
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contracts-ethereum-package": "^3.0.0",
     "@reach/router": "^1.3.3",
