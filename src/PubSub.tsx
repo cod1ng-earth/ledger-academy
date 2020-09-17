@@ -57,7 +57,8 @@ const PubSub = (props: IIpfsPubSubInterface) => {
   const ipfs = useIPFS();
 
   async function publish(_message: string): Promise<void> {
-    return ipfs!.pubsub.publish(topic, _message);
+    throw new Error("no pubsub on IPFS client ;)")
+    //return ipfs!.pubsub.publish(topic, _message);
   }
 
   function decodeMessageToUtf8(_message: any): object {
@@ -75,7 +76,8 @@ const PubSub = (props: IIpfsPubSubInterface) => {
   }, []);
 
   async function subscribe(_topic: string): Promise<void> {
-    if (topic) {
+    throw new Error("no pubsub on IPFS client ;)")
+    /*if (topic) {
       ipfs!.pubsub.unsubscribe(topic);
     }
     setTopic(_topic);
@@ -87,6 +89,7 @@ const PubSub = (props: IIpfsPubSubInterface) => {
         console.error(err);
       },
     });
+    */
   }
 
   return (<div>

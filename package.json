@@ -24,10 +24,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && yarn run sharedworkers",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "contracts": "cd contracts && oz compile",
+    "sharedworkers": "webpack-cli --mode production --entry ./src/workers/ipfsWorker.js --output ./build/ipfsWorker.js",
     "prebuild": "yarn run contracts"
   },
   "eslintConfig": {
@@ -52,6 +53,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.2",
+    "webpack-cli": "^3.3.12"
   }
 }

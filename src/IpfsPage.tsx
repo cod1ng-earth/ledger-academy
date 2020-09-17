@@ -2,22 +2,17 @@
 import React, { useState } from "react";
 
 import { Ipfs } from "ipfs";
-import IPFSClient from "ipfs-message-port-client";
 import PubSub from "./PubSub";
-// import { useIPFS } from "./context/IPFS";
+import { useIPFS } from "./context/IPFS";
 import { RouteComponentProps } from "@reach/router";
 
 const IpfsPage = (props: RouteComponentProps) => {
-  const worker = new SharedWorker('ipfsWorker.js', { type: 'module' })
-  const ipfsNode = IPFSClient.from(worker.port)
-  // const ipfsNode = useIPFS();
-
+  const ipfsNode = useIPFS();
 
   const [topic, setTopic] = useState<string>();
   const [files, setFiles] = useState<Ipfs.UnixFSEntry[]>([]);
 
   const submit = async (e: any) => {
-    console.log(ipfsNode);
     e.preventDefault();
     e.stopPropagation();
     const _currentContent = e.target["thecontent"].value;

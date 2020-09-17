@@ -26,7 +26,7 @@ const Main = (props: RouteComponentProps) => {
       .balanceOf(account)
       .call({ from: account });
     } catch(e) {
-      console.error("ohoh", e);
+      console.error("ohoh - no eth provider found");
     }
     
     return balance;

@@ -6,15 +6,17 @@ const main = async () => {
     // which run new SharedWorker...)
     // Note: It is important to start listening before we do any await to ensure
     // that connections aren't missed while awaiting.
+    // eslint-disable-next-line no-restricted-globals
     const connections = listen(self, 'connect')
 
     // Start an IPFS node & create server that will expose it's API to all clients
     // over message channel.
-    const ipfs = await IPFS.create()
+    const ipfs = await IPFS.create() //note that webrtc is not supported in workers!
     const _ipfsId = await ipfs.id()
+    console.log('ipfs node as worker (v%s) is running [id: %s]', _ipfsId.agentVersion, _ipfsId.id);
+
     const service = new IPFSService(ipfs)
     const server = new Server(service)
-    console.log('ipfs node as worker (v%s) is running [id: %s]', _ipfsId.agentVersion, _ipfsId.id);
 
     // connect every queued and future connection to the server.
     for await (const event of connections) {
@@ -22,7 +24,7 @@ const main = async () => {
         if (port) {
             server.connect(port)
         }
-    }
+    }  
 }
 
 /**
