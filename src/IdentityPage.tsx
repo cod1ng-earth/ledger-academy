@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import { useIPFS } from './context/IPFS';
+import NaclIdentity from "components/NaclIdentity";
 
 interface ChangeDetailsProps {
     name: string,
@@ -66,11 +67,14 @@ const IdentityPage = (props: RouteComponentProps) => {
         {' '}
         <b>{profile ? profile.name : account}</b>
       </p>
+      <h1>3box</h1>
       <p><button onClick={loginWith3box}>Login with 3box</button></p>
       {profile &&
         <ChangeDetails name={profile.name} onNameChanged={changeName} />
       }
-    </div>
+      <h1>TweetNacl</h1>
+        <NaclIdentity />
+      </div>
   );
 };
 
