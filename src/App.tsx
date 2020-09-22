@@ -4,6 +4,7 @@ import React from "react";
 import Web3 from "web3";
 import { IPFSProvider } from "./context/IPFS";
 import IpfsPage from "./IpfsPage";
+import IdentityPage from "./IdentityPage";
 import Layout from "./Layout";
 import Main from "./Main";
 
@@ -20,6 +21,7 @@ const App: React.FC = () => (
         <Router>
           <Main path="/" />
           <IpfsPage path="ipfs" />
+          <IdentityPage path="identity" />
         </Router>
       </Layout>
     </IPFSProvider>

@@ -16,7 +16,9 @@ const Layout: React.FC = ({ children }) => {
   return (
     <div>
       <header>
-        Demo [<Link to="/">main</Link> | <Link to="/ipfs">ipfs</Link>]
+        Demo [
+          <Link to="/">main</Link> | <Link to="/ipfs">ipfs</Link> | <Link to="/identity">Identity</Link>
+        ]
       </header>
       <main>{children}</main>
     </div>

@@ -12,7 +12,7 @@ interface MessageDisplayProps {
 
 function MessageDisplay({ data }: MessageDisplayProps) {
   const [binaryUrl, setBinaryUrl] = useState<string>();
-  const ipfs = useIPFS();
+  const {ipfsNode} = useIPFS();
 
   function isCid(_data: string) {
     return _data.startsWith('Qm');
@@ -24,7 +24,7 @@ function MessageDisplay({ data }: MessageDisplayProps) {
     }
     try {
       (async () => {
-        const res = await ipfs!.files.read(`/ipfs/${data}`);
+        const res = await ipfsNode?.files.read(`/ipfs/${data}`);
         const chunks = [];
         for await (const r of res) {
           chunks.push(r);
@@ -54,11 +54,10 @@ const PubSub = (props: IIpfsPubSubInterface) => {
   const [newTopic, setNewTopic] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([]);
-  const ipfs = useIPFS();
+  const {ipfsNode} = useIPFS();
 
   async function publish(_message: string): Promise<void> {
-    throw new Error("no pubsub on IPFS client ;)")
-    //return ipfs!.pubsub.publish(topic, _message);
+    return ipfsNode?.pubsub.publish(topic, _message);
   }
 
   function decodeMessageToUtf8(_message: any): object {
@@ -76,20 +75,20 @@ const PubSub = (props: IIpfsPubSubInterface) => {
   }, []);
 
   async function subscribe(_topic: string): Promise<void> {
-    throw new Error("no pubsub on IPFS client ;)")
-    /*if (topic) {
-      ipfs!.pubsub.unsubscribe(topic);
+    
+    if (topic) {
+      ipfsNode!.pubsub.unsubscribe(topic);
     }
     setTopic(_topic);
     props.onTopic(_topic);
     setMessages([]);
 
-    ipfs!.pubsub.subscribe(_topic, handleNewMessage, {
+    ipfsNode!.pubsub.subscribe(_topic, handleNewMessage, {
       onError: (err: any) => {
         console.error(err);
       },
     });
-    */
+    
   }
 
   return (<div>

@@ -7,7 +7,7 @@ import { useIPFS } from "./context/IPFS";
 import { RouteComponentProps } from "@reach/router";
 
 const IpfsPage = (props: RouteComponentProps) => {
-  const ipfsNode = useIPFS();
+  const {ipfsNode} = useIPFS();
 
   const [topic, setTopic] = useState<string>();
   const [files, setFiles] = useState<Ipfs.UnixFSEntry[]>([]);
@@ -37,7 +37,6 @@ const IpfsPage = (props: RouteComponentProps) => {
           <li key={f.cid.toString()}>
             <a
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
-
               target="_blank"
             >
               {f.cid.toString()}

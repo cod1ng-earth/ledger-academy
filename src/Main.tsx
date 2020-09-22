@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import Box from "3box";
-
 import ADIToken from './contracts/ADIToken.json';
 import TransferForm from './TransferForm';
-import { RouteComponentProps } from '@reach/router';
-//import { useIPFS } from './context/IPFS';
+
+
 
 const Main = (props: RouteComponentProps) => {
   const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
-  //const ipfsNode = useIPFS();
+
   const [ethBalance, setEthBalance] = useState<string>('');
   const [adiBalance, setADIBalance] = useState<string>('');
 
@@ -34,16 +33,6 @@ const Main = (props: RouteComponentProps) => {
     
     return balance;
   };
-
-  const loginWith3box = async () => {
-    const box = await Box.openBox(account, web3?.currentProvider, {
-      //ipfs: ipfsNode,
-      consentCallback: (val: any) => console.log("consent", val)
-    });
-    console.log(box);
-    const ipf = await Box.getIPFS()
-    console.log(await ipf.version())
-  }
 
   useEffect(() => {
     (async () => {
@@ -70,7 +59,6 @@ const Main = (props: RouteComponentProps) => {
         {' '}
         <b>{account}</b>
       </p>
-      <p><button onClick={loginWith3box}>Login with 3box</button></p>
       <p>
         You've got
         {' '}
