@@ -48,8 +48,11 @@ declare module 'ipfs' {
         pin: any;
 
         // Top level Files API
-        add(data: Ipfs.FileContent | Ipfs.FileObject, options?: Ipfs.FileApiAddOptions): Promise<Ipfs.UnixFSEntry>;
-        addAll(source: Ipfs.FileContent | Ipfs.FileObject, options?: Ipfs.FileApiAddOptions): AsyncIterable<Ipfs.UnixFSEntry>;
+    
+        add(data: Ipfs.FileContent | Ipfs.FileObject, options?: Ipfs.FileApiAddOptions): AsyncIterable<UnixFSEntry>;
+        //since 0.48:
+        //add(data: Ipfs.FileContent | Ipfs.FileObject, options?: Ipfs.FileApiAddOptions): Promise<Ipfs.UnixFSEntry>;
+        //addAll(source: Ipfs.FileContent | Ipfs.FileObject, options?: Ipfs.FileApiAddOptions): AsyncIterable<Ipfs.UnixFSEntry>;
 
         cat(ipfsPath: string | Ipfs.CID, options?: {
             offset?: number;

@@ -1,4 +1,4 @@
-import {create as ipfsCreate} from 'ipfs'
+import {create as createIpfs} from 'ipfs'
 import { Server, IPFSService } from 'ipfs-message-port-server'
 
 const main = async () => {
@@ -11,8 +11,13 @@ const main = async () => {
 
     // Start an IPFS node & create server that will expose it's API to all clients
     // over message channel.
-    const ipfs = await ipfsCreate({
-        repo: 'ipfs-worker'
+    const ipfs = await createIpfs({
+        repo: 'ipfs-worker',
+        config: {
+            Addresses: {
+                Swarm: [],
+            },
+        },
     }) //note that webrtc is not supported in workers!
     const _ipfsId = await ipfs.id()
     console.log('ipfs node as worker (v%s) is running [id: %s]', _ipfsId.agentVersion, _ipfsId.id);

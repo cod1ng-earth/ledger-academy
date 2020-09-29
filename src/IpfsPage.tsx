@@ -13,13 +13,19 @@ const IpfsPage = (props: RouteComponentProps) => {
   const [files, setFiles] = useState<Ipfs.UnixFSEntry[]>([]);
 
   const submit = async (e: any) => {
+    if (!ipfsNode) {
+      return false;
+    }
     e.preventDefault();
     e.stopPropagation();
     const _currentContent = e.target["thecontent"].value;
-    const ipfsResult = await ipfsNode?.add(_currentContent);
-    console.log(ipfsResult);
-    if (ipfsResult) {
-      setFiles([...files, ipfsResult]);
+    const ipfsResults = ipfsNode.add(_currentContent);
+    const flatResults = [];
+    for await (const result of ipfsResults) {
+      flatResults.push(result)
+    }
+    if (flatResults) {
+      setFiles([...files, ...flatResults ]);
     }
   };
 
