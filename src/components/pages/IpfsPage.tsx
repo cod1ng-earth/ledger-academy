@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 
 import { Ipfs } from "ipfs";
-import PubSub from "./PubSub";
-import { useIPFS } from "./context/IPFS";
+import PubSub from "../organisms/PubSub";
+import { useIPFS } from '../../context/IPFS';
 import { RouteComponentProps } from "@reach/router";
 
 const IpfsPage = (props: RouteComponentProps) => {

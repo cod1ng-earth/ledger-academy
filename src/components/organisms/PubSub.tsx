@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 
-import { useIPFS } from './context/IPFS';
+import { useIPFS } from '../../context/IPFS';
 
 interface IIpfsPubSubInterface {
   onTopic: (topic: string) => void;

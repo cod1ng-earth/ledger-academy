@@ -3,12 +3,12 @@ import { useWeb3React } from '@web3-react/core';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import ADIToken from './contracts/ADIToken.json';
-import TransferForm from './TransferForm';
+import ADIToken from '../../contracts/ADIToken.json';
+import TransferForm from '../organisms/TransferForm';
 
 
 
-const Main = (props: RouteComponentProps) => {
+const EthPage = (props: RouteComponentProps) => {
   const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
 
   const [ethBalance, setEthBalance] = useState<string>('');
@@ -90,4 +90,4 @@ const Main = (props: RouteComponentProps) => {
   );
 };
 
-export default Main;
+export default EthPage;

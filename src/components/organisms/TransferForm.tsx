@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 
-import ADIToken from './contracts/ADIToken.json';
+import ADIToken from '../../contracts/ADIToken.json';
 
 const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const { account, library: web3 } = useWeb3React<Web3>();

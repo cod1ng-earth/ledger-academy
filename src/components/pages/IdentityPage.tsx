@@ -3,8 +3,8 @@ import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import { useIPFS } from './context/IPFS';
-import NaclIdentity from "components/NaclIdentity";
+import { useIPFS } from '../../context/IPFS';
+import NaclIdentity from "../organisms/NaclIdentity";
 
 interface ChangeDetailsProps {
     name: string,
