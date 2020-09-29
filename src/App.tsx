@@ -1,5 +1,5 @@
 import { Box, CSSReset, Flex, ThemeProvider } from "@chakra-ui/core";
-import { Router } from "@reach/router";
+import { Router, LocationProvider, createHistory, HistorySource } from "@reach/router";
 import { Web3ReactProvider, useWeb3React } from '@web3-react/core';
 import Header from "components/molecules/Header";
 import React, { useEffect } from "react";
@@ -27,9 +27,11 @@ const getLibrary = (provider: any): Web3 => {
   return new Web3(provider)
 };
   
-const App: React.FC = () => (
-  <ThemeProvider theme={customTheme}>
+const App: React.FC = () => {
+  const history = createHistory(window as unknown as HistorySource)
+  return (<ThemeProvider theme={customTheme}>
     <CSSReset />
+    <LocationProvider history={history}>
     <Web3ReactProvider getLibrary={getLibrary}>
       <ActivateWeb3>
         <IPFSProvider>
@@ -49,7 +51,8 @@ const App: React.FC = () => (
         </IPFSProvider>
       </ActivateWeb3>
     </Web3ReactProvider>
-  </ThemeProvider>
-);
+    </LocationProvider>
+  </ThemeProvider>)
+};
 
 export default App;

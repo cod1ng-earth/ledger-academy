@@ -1,13 +1,15 @@
 import { Link, List } from '@chakra-ui/core';
-import { Link as ReachLink } from "@reach/router";
+import { Link as ReachLink, useLocation } from "@reach/router";
 import React from 'react';
 
 /* see https://github.com/chakra-ui/chakra-ui/issues/906 */
 const MenuItem: React.FC<any> = ({to, children, as: As = React.Fragment}) => {
+    const location = useLocation();
+    
     return (<As>
             {/* 
             // @ts-ignore */}
-            <Link mx={2} as={ReachLink} to={to}>{children}</Link>
+            <Link mx={2} as={ReachLink} to={to} color={location.pathname === to ? "red.300": ""}>{children}</Link>
             </As>
     )
 }

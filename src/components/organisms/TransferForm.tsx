@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 
 import ADIToken from '../../contracts/ADIToken.json';
+import { FormControl, FormLabel, Input, FormHelperText, Button, Flex } from '@chakra-ui/core';
 
 const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const { account, library: web3 } = useWeb3React<Web3>();
@@ -38,36 +39,37 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   };
 
   return (
-    <div>
-      {isTransactionPending ? (
-        <p>
-          standby, your transaction
-          {' '}
-          {transactionHash}
-          {' '}
-          is pending
-        </p>
-      ) : (
-        <>
-          <label htmlFor="address">Adress</label>
-          <input
-            type="text"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
+      <Flex direction="row" align="center" justifyContent="center" wrap="wrap">
+        <FormControl isDisabled={isTransactionPending}>
+          <FormLabel htmlFor="address" >Adress</FormLabel>
+          <Input 
+            type="text" value={to} 
+            onChange={(e: any) => setTo(e.target.value)}
           />
+          <FormHelperText>
+            The recipient's Ethereum address
+          </FormHelperText>
+        </FormControl>
 
-          <label htmlFor="amount">Amount</label>
-          <input
-            type="text"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+        <FormControl isDisabled={isTransactionPending}>
+          <FormLabel htmlFor="amount">Amount</FormLabel>
+          <Input 
+            type="number" value={amount}  
+            onChange={(e: any) => setAmount(e.target.value)}
           />
-          <button disabled={!to || !amount} onClick={transferADITokens}>
-            Send!
-          </button>
-        </>
-      )}
-    </div>
+          <FormHelperText>
+            The amount to transfer
+          </FormHelperText>
+        </FormControl>
+
+        <Button variantColor="red" 
+          isLoading={isTransactionPending}
+          loadingText="transacting"
+          isDisabled={!to || !amount || isTransactionPending} 
+          onClick={transferADITokens}>
+          Send!
+        </Button>
+      </Flex>
   );
 };
 
