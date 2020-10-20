@@ -41,3 +41,7 @@ now you can read its ABI from Javascript
 ## live instances:
 
 goerli: `0x7c9BeD2220B6A7545d31ad8911BAeB7003483337`
+
+## styles:
+
+https://chakra-ui.com/

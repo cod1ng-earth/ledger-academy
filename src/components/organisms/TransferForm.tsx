@@ -3,8 +3,10 @@ import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 
+import {
+  FormControl, FormLabel, Input, FormHelperText, Button, Flex,
+} from '@chakra-ui/core';
 import ADIToken from '../../contracts/ADIToken.json';
-import { FormControl, FormLabel, Input, FormHelperText, Button, Flex } from '@chakra-ui/core';
 
 const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
   const { account, library: web3 } = useWeb3React<Web3>();
@@ -42,19 +44,19 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
       <Flex direction="row" align="center" justifyContent="center" wrap="wrap">
         <FormControl isDisabled={isTransactionPending}>
           <FormLabel htmlFor="address" >Adress</FormLabel>
-          <Input 
-            type="text" value={to} 
+          <Input
+            type="text" value={to}
             onChange={(e: any) => setTo(e.target.value)}
           />
           <FormHelperText>
-            The recipient's Ethereum address
+            The recipient&apos;s Ethereum address
           </FormHelperText>
         </FormControl>
 
         <FormControl isDisabled={isTransactionPending}>
           <FormLabel htmlFor="amount">Amount</FormLabel>
-          <Input 
-            type="number" value={amount}  
+          <Input
+            type="number" value={amount}
             onChange={(e: any) => setAmount(e.target.value)}
           />
           <FormHelperText>
@@ -62,13 +64,14 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
           </FormHelperText>
         </FormControl>
 
-        <Button variantColor="red" 
+        <Button variantColor="red"
           isLoading={isTransactionPending}
           loadingText="transacting"
-          isDisabled={!to || !amount || isTransactionPending} 
+          isDisabled={!to || !amount || isTransactionPending}
           onClick={transferADITokens}>
           Send!
         </Button>
+        {transactionHash}
       </Flex>
   );
 };

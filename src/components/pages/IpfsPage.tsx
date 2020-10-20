@@ -1,13 +1,16 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React, { useState } from "react";
-
-import { Ipfs } from "ipfs";
-import PubSub from "../organisms/PubSub";
+import {
+  Box, Button, Flex, Heading, Link, List, ListItem, Textarea,
+} from '@chakra-ui/core';
+import FileManager from 'components/organisms/FileManager';
+import { Ipfs } from 'ipfs';
+import React, { useState } from 'react';
+import { RouteComponentProps } from '@reach/router';
 import { useIPFS } from '../../context/IPFS';
-import { RouteComponentProps } from "@reach/router";
+import PubSub from '../organisms/PubSub';
 
 const IpfsPage = (props: RouteComponentProps) => {
-  const {ipfsNode} = useIPFS();
+  const { ipfsNode } = useIPFS();
 
   const [topic, setTopic] = useState<string>();
   const [files, setFiles] = useState<Ipfs.UnixFSEntry[]>([]);
@@ -18,45 +21,50 @@ const IpfsPage = (props: RouteComponentProps) => {
     }
     e.preventDefault();
     e.stopPropagation();
-    const _currentContent = e.target["thecontent"].value;
+    const _currentContent = e.target.thecontent.value;
     const ipfsResults = ipfsNode.add(_currentContent);
     const flatResults = [];
     for await (const result of ipfsResults) {
-      flatResults.push(result)
+      flatResults.push(result);
     }
     if (flatResults) {
-      setFiles([...files, ...flatResults ]);
+      setFiles([...files, ...flatResults]);
     }
+    return true;
   };
 
   return (
-    <div>
-      <form onSubmit={submit}>
-        <textarea name="thecontent" defaultValue="test" />
-        <button type="submit" value="store!">
-          store!
-        </button>
-      </form>
-      <h2>Files:</h2>
-      <ul>
+    <Flex direction="column">
+      <Heading as="h2" size="md">Add anything to IPFS</Heading>
+        <Box>
+          <form onSubmit={submit}>
+            <Textarea name="thecontent" defaultValue="test" />
+            <Button variantColor="red" type="submit">
+              store!
+            </Button>
+          </form>
+          <FileManager />
+        </Box>
+      <Heading as="h2" size="md">Uploaded so far:</Heading>
+      <List>
         {files.map((f) => (
-          <li key={f.cid.toString()}>
-            <a
+          <ListItem key={f.cid.toString()}>
+            <Link
               href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
               target="_blank"
             >
               {f.cid.toString()}
-            </a>
-          </li>
+            </Link>
+          </ListItem>
         ))}
-      </ul>
-
+      </List>
       {ipfsNode && <div>
-          <h1>Pubsub {topic}</h1>
-          <PubSub onTopic={setTopic} />
-        </div>
-      }
-    </div>
+        <h1>Pubsub {topic}</h1>
+        <PubSub onTopic={setTopic} />
+      </div>
+}
+    </Flex>
+
   );
 };
 

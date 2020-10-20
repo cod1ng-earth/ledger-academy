@@ -1,11 +1,10 @@
-import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, useDisclosure, ListItem } from "@chakra-ui/core";
-import { Link } from "@reach/router";
-import React from "react";
-import MainMenu from "./MainMenu";
-
+import {
+  Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, ListItem, useDisclosure,
+} from '@chakra-ui/core';
+import React from 'react';
+import MainMenu from './MainMenu';
 
 const Navigation = () => {
-  
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -21,7 +20,6 @@ const Navigation = () => {
           <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
         </svg>
       </Button>
-
 
       <Drawer
         isOpen={isOpen}
@@ -46,7 +44,7 @@ const Navigation = () => {
         </DrawerContent>
       </Drawer>
     </>
-  )
+  );
 };
 
 export default Navigation;
