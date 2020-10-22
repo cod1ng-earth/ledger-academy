@@ -6,6 +6,8 @@ import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
+import SignForm from 'components/organisms/SignForm';
+import VerifyForm from 'components/organisms/VerifyForm';
 import { useIPFS } from '../../context/IPFS';
 import NaclEncryption from '../organisms/NaclEncryption';
 
@@ -100,6 +102,13 @@ const IdentityPage = (props: RouteComponentProps) => {
         <Heading>TweetNacl</Heading>
         <NaclEncryption />
       </Box>
+      {account && web3
+        && <Box>
+          <Heading>Sign &amp; Verify on Eth</Heading>
+          <SignForm web3={web3} account={account} />
+          <VerifyForm web3={web3} account={account} />
+        </Box>
+      }
     </Box>
   );
 };
