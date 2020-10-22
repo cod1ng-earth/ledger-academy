@@ -288,6 +288,22 @@
         ],
         "storageDiff": []
       }
+    },
+    "Verifier": {
+      "address": "0xB735f8730debFF357593dba17a7Fa3dD783b3DAe",
+      "constructorCode": "608060405234801561001057600080fd5b506105e7806100206000396000f3fe",
+      "bodyBytecodeHash": "cdcbeb651e8382f67e592daa834afb098964fcd557a81f930da622eb8eef0c64",
+      "localBytecodeHash": "52180514532af933f2e70d0473a69942db0b6637089152e6560d45ec6eeb3e58",
+      "deployedBytecodeHash": "52180514532af933f2e70d0473a69942db0b6637089152e6560d45ec6eeb3e58",
+      "types": {},
+      "storage": [],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
     }
   },
   "solidityLibs": {},
@@ -304,6 +320,15 @@
         "address": "0x45EE3015E650074dAdA9c5390eBc7500601eF9c3",
         "version": "1.0.0",
         "implementation": "0x06FF75044aEcA980651ba782AE11C9FE20401102",
+        "admin": "0x5c19BF66CC2c9386Cdf06d346F32F140A4559be9",
+        "kind": "Upgradeable"
+      }
+    ],
+    "ledger-academy/Verifier": [
+      {
+        "address": "0xB0e0f956693eC1e990EB95C3a435B80548F7db1b",
+        "version": "1.0.0",
+        "implementation": "0xB735f8730debFF357593dba17a7Fa3dD783b3DAe",
         "admin": "0x5c19BF66CC2c9386Cdf06d346F32F140A4559be9",
         "kind": "Upgradeable"
       }
