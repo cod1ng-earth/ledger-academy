@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-const TestPage = () => {
+const TestPage = (props: RouteComponentProps) => {
   const [evts, setEvts] = useState<string[]>(['e0']);
   useEffect(() => {
     let i = 1;

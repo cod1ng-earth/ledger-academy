@@ -1,23 +1,23 @@
 import { box, randomBytes, BoxKeyPair } from 'tweetnacl';
 import {
-    decodeBase64, decodeUTF8,
-    encodeBase64, encodeUTF8
+  decodeBase64, decodeUTF8,
+  encodeBase64, encodeUTF8,
 } from 'tweetnacl-util';
 
 const newNonce = () => randomBytes(box.nonceLength);
 
 export const deriveKeys = (seedBytes: Uint8Array): BoxKeyPair => {
-    const privateKey = seedBytes.slice(0, 32);
-    return box.keyPair.fromSecretKey(privateKey);
+  const privateKey = seedBytes.slice(0, 32);
+  return box.keyPair.fromSecretKey(privateKey);
 };
 
 export const encrypt = (
   secretOrSharedKey: Uint8Array,
-  json: any,
+  message: string,
   key?: Uint8Array,
 ): string => {
   const nonce = newNonce();
-  const messageUint8 = decodeUTF8(JSON.stringify(json));
+  const messageUint8 = decodeUTF8(message);
   const encrypted = key
     ? box(messageUint8, nonce, key, secretOrSharedKey)
     : box.after(messageUint8, nonce, secretOrSharedKey);
@@ -51,5 +51,5 @@ export const decrypt = (
   }
 
   const base64DecryptedMessage = encodeUTF8(decrypted);
-  return JSON.parse(base64DecryptedMessage);
+  return base64DecryptedMessage;
 };

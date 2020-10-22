@@ -1,80 +1,106 @@
-import Box from "3box";
+import * as TBox from '3box';
+import {
+  Alert, Box, Button, Heading, Input, InputGroup, InputRightElement,
+} from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { useIPFS } from '../../context/IPFS';
-import NaclIdentity from "../organisms/NaclIdentity";
+import NaclEncryption from '../organisms/NaclEncryption';
 
 interface ChangeDetailsProps {
     name: string,
-    onNameChanged: (name: string) => void,
+    box: any,
 }
 
 const ChangeDetails = (props: ChangeDetailsProps) => {
-    
-    const [name, setName] = useState<string>(props.name || '');
+  const [name, setName] = useState<string>(props.name || '');
+  const [loading, setLoading] = useState<boolean>(false);
 
-    return (
-        <form onSubmit={(e) => {e.preventDefault(); props.onNameChanged(name) } }>
-            <label htmlFor="Name">Change your name</label>
-            <input
-            
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            type="text"
+  const changeName = async (newName: string) => {
+    setLoading(true);
+    await props.box.public.set('name', newName);
+    setLoading(false);
+  };
 
+  return (
+        <form onSubmit={(e) => { e.preventDefault(); changeName(name); } }>
+          <InputGroup size="md">
+
+            <Input
+              onChange={(e: any) => setName(e.target.value)}
+              value={name}
+              name="name"
+              type="text"
+              placeholder="Set your name"
+              isDisabled={loading}
             />
-            <button type="submit">change</button>
+           <InputRightElement width="4.5rem" mr="1rem">
+             <Button variantColor="blue"
+                isLoading={loading}
+                loadingText="Submitting"
+                h="1.75rem"
+                size="sm"
+                type="submit"
+              >
+               change
+             </Button>
+           </InputRightElement>
+
+           </InputGroup>
         </form>
-    )
-}
+  );
+};
 
 const IdentityPage = (props: RouteComponentProps) => {
-  const { account, library: web3, active: web3Active, error: web3Error } = useWeb3React<Web3>();
+  const {
+    account, library: web3, active: web3Active, error: web3Error,
+  } = useWeb3React<Web3>();
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
-    const [box, setBox] = useState<any>();
+  const [box, setBox] = useState<any>();
 
-  const {ipfsNode} = useIPFS();
-  
-  
+  const { ipfsNode } = useIPFS();
+
   const loginWith3box = async () => {
-    const _box = await Box.openBox(account, web3?.currentProvider, {
+    setIsLoggingIn(true);
+    const _box = await TBox.openBox(account, web3?.currentProvider, {
       ipfs: ipfsNode,
-      consentCallback: (val: any) => console.log("consent", val)
+      consentCallback: (val: any) => console.log('consent', val),
     });
     setBox(_box);
-  }
+    setIsLoggingIn(false);
+  };
 
   useEffect(() => {
     if (!box) return;
 
     (async () => {
-        const _profile = await box.public.all();
-        console.log(_profile);
-        setProfile(_profile);
-      })();
-  }, [box])
+      const _profile = await box.public.all();
+      console.log(_profile);
+      setProfile(_profile);
+    })();
+  }, [box]);
 
-  const changeName = (newName: string) => {
-    box.public.set("name", newName);
-  }
-
-  return (!web3Active) ? <p>enable web3 please {web3Error} </p> : (
-    <div>
-      <p>
-        oh hai
-        {' '}
-        <b>{profile ? profile.name : account}</b>
-      </p>
-      <h1>3box</h1>
-      <p><button onClick={loginWith3box}>Login with 3box</button></p>
-      {profile &&
-        <ChangeDetails name={profile.name} onNameChanged={changeName} />
+  return (!web3Active) ? <Alert>enable web3 please {web3Error} </Alert> : (
+    <Box>
+      <Box my="6">
+      {profile
+        ? <ChangeDetails name={profile.name} box={box} />
+        : <Button variantColor="blue"
+          loadingText="logging in"
+          isLoading={isLoggingIn}
+          onClick={loginWith3box}>
+          Login with 3box
+        </Button>
       }
-      <h1>TweetNacl</h1>
-        <NaclIdentity />
-      </div>
+      </Box>
+      <Box my="6">
+        <Heading>TweetNacl</Heading>
+        <NaclEncryption />
+      </Box>
+    </Box>
   );
 };
 
