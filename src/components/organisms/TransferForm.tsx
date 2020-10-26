@@ -1,30 +1,22 @@
-import React, { useState } from 'react';
+import { Button, Flex } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
+import React, { useState } from 'react';
 import Web3 from 'web3';
-import { AbiItem } from 'web3-utils';
+import RecipientForm, { IRecipient } from '../molecules/RecipientForm';
 
-import {
-  FormControl, FormLabel, Input, FormHelperText, Button, Flex,
-} from '@chakra-ui/core';
-import ADIToken from '../../contracts/ADIToken.json';
+const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract: any }) => {
+  const { account } = useWeb3React<Web3>();
 
-const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
-  const { account, library: web3 } = useWeb3React<Web3>();
+  const [recipients, setRecipients] = useState<IRecipient[]>([]);
 
-  const [to, setTo] = useState('');
-  const [amount, setAmount] = useState('');
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>();
 
   const transferADITokens = async (): Promise<void> => {
-    const contract = new web3!.eth.Contract(
-      ADIToken.abi as AbiItem[],
-      process.env.REACT_APP_CONTRACT_ADDRESS,
-    );
-
+    console.log(recipients);
     setIsTransactionPending(true);
     // https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#id36
-    const promiEvent = contract.methods.transfer(to, amount).send({
+    const promiEvent = contract.methods.transfer('0x', 10).send({
       from: account,
       gasPrice: 21 * 1e5,
     });
@@ -33,44 +25,52 @@ const TransferForm = ({ updateBalance }: { updateBalance: Function }) => {
       console.log(receipt);
       setIsTransactionPending(false);
       setTransactionHash('');
-      updateBalance();
+      onFinished();
     });
     promiEvent.on('confirmation', (number: number, confirmation: any) => {
       console.debug(confirmation);
     });
   };
 
+  const addRecipient = (): IRecipient => {
+    const r: IRecipient = {
+      address: '0x',
+      amount: (0).toString(),
+    };
+    setRecipients([...recipients, r]);
+    return r;
+  };
+
+  const changeRecipient = (address: string, r: IRecipient) => {
+    console.log(recipients);
+    console.log(r);
+    const _recipients = [
+      ...recipients.filter((_r) => address !== _r.address),
+      r,
+    ];
+    setRecipients(_recipients);
+  };
+
   return (
-      <Flex direction="row" align="center" justifyContent="center" wrap="wrap">
-        <FormControl isDisabled={isTransactionPending}>
-          <FormLabel htmlFor="address" >Adress</FormLabel>
-          <Input
-            type="text" value={to}
-            onChange={(e: any) => setTo(e.target.value)}
-          />
-          <FormHelperText>
-            The recipient&apos;s Ethereum address
-          </FormHelperText>
-        </FormControl>
+      <Flex direction="column" align="center" justifyContent="stretch" wrap="wrap">
 
-        <FormControl isDisabled={isTransactionPending}>
-          <FormLabel htmlFor="amount">Amount</FormLabel>
-          <Input
-            type="number" value={amount}
-            onChange={(e: any) => setAmount(e.target.value)}
-          />
-          <FormHelperText>
-            The amount to transfer
-          </FormHelperText>
-        </FormControl>
+        {recipients.map((r) => <RecipientForm
+          key={r.address}
+          recipient={r}
+          disabled={isTransactionPending}
+          onChange={changeRecipient}
+        />)}
+        <Flex direction="row">
+          <Button onClick={addRecipient}>add</Button>
 
-        <Button variantColor="red"
-          isLoading={isTransactionPending}
-          loadingText="transacting"
-          isDisabled={!to || !amount || isTransactionPending}
-          onClick={transferADITokens}>
-          Send!
-        </Button>
+          <Button variantColor="red"
+            isLoading={isTransactionPending}
+            loadingText="transacting"
+            isDisabled={ isTransactionPending || recipients.length === 0}
+            onClick={transferADITokens}>
+            Send to {recipients.length} recipients
+          </Button>
+        </Flex>
         {transactionHash}
       </Flex>
   );
