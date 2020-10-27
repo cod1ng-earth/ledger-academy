@@ -1,4 +1,4 @@
-import { Button, Flex } from '@chakra-ui/core';
+import { Button, Flex, Heading } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import React, { useState } from 'react';
 import Web3 from 'web3';
@@ -12,21 +12,36 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>();
 
-  const transferADITokens = async (): Promise<void> => {
-    console.log(recipients);
+  const airdropADITokens = async (): Promise<void> => {
     setIsTransactionPending(true);
-    // https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#id36
-    const promiEvent = contract.methods.transfer('0x', 10).send({
+
+    const recips = [];
+    const amts = [];
+    for (const rec of recipients) {
+      recips.push(rec.address);
+      amts.push(rec.amount);
+    }
+
+    const methodCall = contract.methods.airdrop(recips, amts);
+
+    const gasEstimate = await methodCall.estimateGas();
+    const promiEvent = methodCall.send({
       from: account,
-      gasPrice: 21 * 1e5,
+      gasPrice: gasEstimate,
     });
     promiEvent.on('transactionHash', setTransactionHash);
     promiEvent.on('receipt', (receipt: any) => {
       console.log(receipt);
       setIsTransactionPending(false);
       setTransactionHash('');
+      setRecipients([]);
       onFinished();
     });
+    promiEvent.on('error', (err: any, receipt: any) => {
+      setIsTransactionPending(false);
+      console.error(err, receipt);
+    });
+
     promiEvent.on('confirmation', (number: number, confirmation: any) => {
       console.debug(confirmation);
     });
@@ -35,25 +50,24 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   const addRecipient = (): IRecipient => {
     const r: IRecipient = {
       address: '0x',
-      amount: (0).toString(),
+      amount: 1e12.toString(),
     };
     setRecipients([...recipients, r]);
     return r;
   };
 
   const changeRecipient = (address: string, r: IRecipient) => {
-    console.log(recipients);
-    console.log(r);
     const _recipients = [
       ...recipients.filter((_r) => address !== _r.address),
       r,
     ];
+    console.log(_recipients);
     setRecipients(_recipients);
   };
 
   return (
-      <Flex direction="column" align="center" justifyContent="stretch" wrap="wrap">
-
+      <Flex direction="column" align="flex-start" mt="2">
+        <Heading my="6">Transfer to</Heading>
         {recipients.map((r) => <RecipientForm
           key={r.address}
           recipient={r}
@@ -61,15 +75,16 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
           onChange={changeRecipient}
         />)}
         <Flex direction="row">
-          <Button onClick={addRecipient}>add</Button>
-
-          <Button variantColor="red"
+          <Button onClick={addRecipient}>add recipient</Button>
+          {recipients.length > 0
+          && <Button variantColor="red"
             isLoading={isTransactionPending}
             loadingText="transacting"
             isDisabled={ isTransactionPending || recipients.length === 0}
-            onClick={transferADITokens}>
+            onClick={airdropADITokens}>
             Send to {recipients.length} recipients
           </Button>
+          }
         </Flex>
         {transactionHash}
       </Flex>

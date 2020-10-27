@@ -93,7 +93,7 @@ const EthPage = (props: RouteComponentProps) => {
         </Flex>
       </Flex>
 
-      {adiBalance && (
+      {Number.parseFloat(adiBalance) > 0 && (
         <TransferForm onFinished={queryContractState} contract={contract} />
       )}
 

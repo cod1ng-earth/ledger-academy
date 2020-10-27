@@ -30,3 +30,4 @@ build
 
 # this file is built by yarn run sharedworkers
 public/ipfsWorker.js
+.ganache
