@@ -20,10 +20,6 @@ const RecipientForm = ({ disabled, recipient, onChange }: {
     onChange(recipient.address, _recipient);
   };
 
-  // useEffect(() => {
-  //   if (_recipient.address !== '') { onChange(recipient.address, _recipient); }
-  // }, [_recipient]);
-
   return <Flex direction="row" justify="space-between" w="100%" gridGap="2" bg="gray.200" p="3" mb="3" borderBottomWidth="2px" borderBottomColor="gray.400">
         <FormControl isDisabled={disabled} w="100%">
           <FormLabel htmlFor="address">Address</FormLabel>

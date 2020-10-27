@@ -19,16 +19,19 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
     const amts = [];
     for (const rec of recipients) {
       recips.push(rec.address);
-      amts.push(rec.amount);
+      amts.push(Web3.utils.toBN(rec.amount));
     }
 
     const methodCall = contract.methods.airdrop(recips, amts);
+    const gasEstimate = await methodCall.estimateGas({
+      from: account,
+    });
 
-    const gasEstimate = await methodCall.estimateGas();
     const promiEvent = methodCall.send({
       from: account,
       gasPrice: gasEstimate,
     });
+
     promiEvent.on('transactionHash', setTransactionHash);
     promiEvent.on('receipt', (receipt: any) => {
       console.log(receipt);
