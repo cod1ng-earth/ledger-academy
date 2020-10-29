@@ -1,5 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react';
 
+import {
+  Flex, Box, Heading, FormControl, FormLabel, Input, FormHelperText, Button, InputGroup, InputRightElement, Text,
+} from '@chakra-ui/core';
 import { useIPFS } from '../../context/IPFS';
 
 interface IIpfsPubSubInterface {
@@ -12,7 +15,7 @@ interface MessageDisplayProps {
 
 function MessageDisplay({ data }: MessageDisplayProps) {
   const [binaryUrl, setBinaryUrl] = useState<string>();
-  const {ipfsNode} = useIPFS();
+  const { ipfsNode } = useIPFS();
 
   function isCid(_data: string) {
     return _data.startsWith('Qm');
@@ -44,17 +47,42 @@ function MessageDisplay({ data }: MessageDisplayProps) {
     <p>{data}</p>
     {binaryUrl && <img src={binaryUrl} alt="binary" /> }
   </div>);
-
 }
-  
+
+const NewMessage = ({ onSubmitted }: {onSubmitted: Function}) => {
+  const [message, setMessage] = useState<string>('');
+
+  function onSubmit(e: any) {
+    e.preventDefault();
+    onSubmitted(message);
+    setMessage('');
+  }
+
+  return <form onSubmit={onSubmit}>
+     <InputGroup size="md">
+     <Input
+          name="Message"
+          onChange={(e: any) => setMessage(e.target.value)} value={message}
+          type="text"
+          placeholder="New Message"
+        />
+          <InputRightElement width="6.5rem">
+            <Button h="1.75rem" size="sm" type="submit">
+            send
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+    </form>;
+};
+
 const textDecoder = new TextDecoder('utf-8');
 
-const PubSub = (props: IIpfsPubSubInterface) => {
+const IpfsPubSub = (props: IIpfsPubSubInterface) => {
   const [topic, setTopic] = useState<string>('');
-  const [newTopic, setNewTopic] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+  const [newTopic, setNewTopic] = useState<string>(' ');
+
   const [messages, setMessages] = useState<any[]>([]);
-  const {ipfsNode} = useIPFS();
+  const { ipfsNode } = useIPFS();
 
   async function publish(_message: string): Promise<void> {
     return ipfsNode?.pubsub.publish(topic, _message);
@@ -75,7 +103,6 @@ const PubSub = (props: IIpfsPubSubInterface) => {
   }, []);
 
   async function subscribe(_topic: string): Promise<void> {
-    
     if (topic) {
       ipfsNode!.pubsub.unsubscribe(topic);
     }
@@ -88,43 +115,34 @@ const PubSub = (props: IIpfsPubSubInterface) => {
         console.error(err);
       },
     });
-    
   }
 
-  return (<div>
-    <form onSubmit={(e) => { e.preventDefault(); subscribe(newTopic); } }>
-        <div>
-        <input
-            name="Topic"
-            onChange={(e) => setNewTopic(e.target.value)} value={newTopic}
+  return (<Flex direction="column" >
+    <Heading as="h2" size="md" my="2">Publish - Subscribe</Heading>
+    <Box p="2" bg="gray.200">
+      <form onSubmit={(e) => { e.preventDefault(); subscribe(newTopic); }}>
+        <InputGroup size="md">
+          <Input
+            name="topic"
+            onChange={(e: any) => setNewTopic(e.target.value)} value={newTopic}
             type="text"
             placeholder="topic"
-        />
-        <button type="submit">subscribe.</button>
-        </div>
-    </form>
-
-    {topic && <form onSubmit={(e) => { e.preventDefault(); publish(message); } }>
-        <div>
-            <input
-                name="Message"
-                onChange={(e) => setMessage(e.target.value)} value={message} 
-                type="text"
-                placeholder="message"
-            />
-            <button type="submit">send.</button>
-        </div>
-    </form>}
-
-    {topic && <div>
-        <h2>Messages on {topic}</h2>
-        {messages.map((m, i) => <div key={`msg-${m.from}-${i}`}>
-            <p><b>{m.from}.{i}</b></p>
-            <span><MessageDisplay data={m.data} /></span>
-        </div>)}
-    </div>}
-
-  </div>)
+          />
+          <InputRightElement width="6.5rem">
+            <Button h="1.75rem" size="sm" type="submit">
+            subscribe
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </form>
+    </Box>
+    {messages && messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
+            <Text as="b">{msg.from}.{i}</Text>
+            <MessageDisplay data={msg.data} />
+    </Box>)}
+    {topic && <NewMessage onSubmitted={publish} /> }
+  </Flex>
+  );
 };
 
-export default PubSub;
+export default IpfsPubSub;
