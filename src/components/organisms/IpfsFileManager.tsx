@@ -1,7 +1,9 @@
 import {
-  Box, Button, Flex, Heading, Link, List, ListItem, Textarea,
+  Box, Button, Flex, Heading, IconButton, List, SimpleGrid, Textarea,
 } from '@chakra-ui/core';
+import DownloadFile from 'components/molecules/DownloadFile';
 import DropZone from 'components/molecules/DropZone';
+import FileListItem from 'components/molecules/FileListItem';
 import { Ipfs } from 'ipfs';
 import React, { useEffect, useState } from 'react';
 import { useIPFS } from '../../context/IPFS';
@@ -9,6 +11,7 @@ import { useIPFS } from '../../context/IPFS';
 const IpfsFileManager = () => {
   const { ipfsNode } = useIPFS();
   const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
+  const [folderCid, setFolderCid] = useState<string>('');
 
   const FOLDER_NAME = '/dropzone';
 
@@ -23,14 +26,13 @@ const IpfsFileManager = () => {
       if (!ipfsNode) return;
 
       const stats = await ipfsNode.files.stat(FOLDER_NAME);
-      console.log(stats);
+      setFolderCid(stats.cid.toString());
 
       const res = ipfsNode.files.ls(FOLDER_NAME);
       const _files = [];
       for await (const file of res) {
         _files.push(file);
       }
-      console.log(_files);
       setFiles(_files);
     } catch (e) {
       console.error(e);
@@ -50,50 +52,40 @@ const IpfsFileManager = () => {
     refreshDirectory();
   };
 
-  // async function loadFile(path: string) {
-  //   const res = ipfsNode!.files.read(path);
-  //   for await (const r of res) {
-  //     console.log(r);
-  //   }
-  // }
-
   useEffect(() => {
     if (ipfsNode) { refreshDirectory(); }
   }, [ipfsNode]);
 
   return (<Flex direction="column" >
-    <Box p="2" bg="gray.200">
+    <Box p="2" bg="gray.200" my="2">
       <Heading as="h2" size="md" my="2">Add anything to IPFS</Heading>
-      <Flex direction="row" gridGap="2">
-        <Box width={{ base: 1, sm: 1 / 2 }}>
+      <SimpleGrid columns={[1, 2]} spacing="2" >
+        <Box w="100%">
           <form onSubmit={submitText}>
               <Textarea name="thecontent" defaultValue="test" />
-              <Button variantColor="red" type="submit">
+              <Button variantColor="red" type="submit" mt="1">
                 store!
               </Button>
           </form>
         </Box>
-        <Box width={{ base: 1, sm: 1 / 2 }}>
+        <Flex >
           <DropZone addData={addData} onUpdated={refreshDirectory} />
-        </Box>
-      </Flex>
-
+        </Flex>
+      </SimpleGrid>
     </Box>
-    <Box>
-      <Heading as="h2" size="md" my="2">Uploaded so far:</Heading>
-      <List>
-        {files.map((f) => (
-          <ListItem key={f.cid.toString()} p="3" bg="gray.200">
 
-            <Link
-              fontWeight="bold"
-              href={`https://ipfs.io/ipfs/${f.cid.toString()}`}
-              target="_blank"
-            >
-              {f.name}
-            </Link>
-          </ListItem>
-        ))}
+    <Box>
+      <Heading as="h2" size="md" my="2">Download anything</Heading>
+      <DownloadFile />
+    </Box>
+
+    <Box>
+      <Flex justify="space-between" mt="2">
+        <Heading as="h2" size="md" my="2">Uploaded so far</Heading>
+        <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` } } icon="external-link" aria-label="show on gateway" />
+      </Flex>
+      <List>
+        {files.map((f) => <FileListItem file={f} key={f.cid.toString()} />)}
       </List>
     </Box>
 

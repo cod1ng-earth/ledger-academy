@@ -11,7 +11,7 @@ import IpfsPubSub from '../organisms/IpfsPubSub';
 const IpfsPage = (props: RouteComponentProps) => {
   const [pubsubTopic, setPubsubTopic] = useState<string>('');
 
-  return <Tabs isFitted size="md" variant="enclosed-colored" variantColor="green" defaultIndex={1}>
+  return <Tabs isFitted size="md" variant="enclosed-colored" variantColor="green">
       <TabList>
         <Tab>Files</Tab>
         <Tab>Pubsub</Tab>

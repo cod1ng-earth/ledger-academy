@@ -61,11 +61,16 @@ declare module 'ipfs' {
             signal?: AbortSignal;
         }): AsyncIterable<Buffer>;
 
-        get(ipfsPath: string | Ipfs.CID, options: any): AsyncIterable<Ipfs.UnixFSEntryWithContent>;
+        get(ipfsPath: string | Ipfs.CID, options?: any): AsyncIterable<Ipfs.UnixFSEntryWithContent>;
         
         ls(ipfsPath: string | Ipfs.CID): AsyncIterable<Ipfs.UnixFSLsResult>;
         
     }
+
+    export class CID {
+        constructor(baseEncodedString: string);
+        constructor(uint8Array: Uint8Array);
+    };
 
     namespace Ipfs {
 
@@ -98,7 +103,7 @@ declare module 'ipfs' {
         }
 
         export type Multihash = any | string;
-        export type CID = any;
+        
 
         export interface Types {
             Buffer: any;
