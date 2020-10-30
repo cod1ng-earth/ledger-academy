@@ -93,7 +93,8 @@ declare module 'ipfs' {
         }
 
         export interface Multiaddr {
-            buffer: Uint8Array;
+            
+            toString: () => string;
         }
 
         export type Multihash = any | string;
@@ -116,10 +117,10 @@ declare module 'ipfs' {
 
         export interface Id {
             id: string;
+            protocolVersion: string;
             publicKey: string;
             addresses: Multiaddr[];
             agentVersion: string;
-            protocolVersion: string;
         }
 
         export interface RepoAPI {
@@ -225,16 +226,13 @@ declare module 'ipfs' {
         export type PeerId = any;
 
         export interface PeerInfo {
-            id: PeerId;
-            _idB58String: string;
-            multiaddr: Multiaddr;
-            multiaddrs: Multiaddr[];
-            distinctMultiaddr(): Multiaddr[];
+            id: string;
+            addrs: Multiaddr[];
         }
 
         export interface Peer {
             addr: Multiaddr;
-            peer: PeerInfo;
+            peer: string;
         }
 
         export interface SwarmAPI {

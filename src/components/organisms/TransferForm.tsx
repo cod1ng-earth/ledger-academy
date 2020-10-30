@@ -69,8 +69,8 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   };
 
   return (
-      <Flex direction="column" align="flex-start" mt="2">
-        <Heading my="6">Transfer to</Heading>
+      <Flex direction="column" align="flex-start" my="6">
+        <Heading size="md">Transfer to</Heading>
         {recipients.map((r) => <RecipientForm
           key={r.address}
           recipient={r}
