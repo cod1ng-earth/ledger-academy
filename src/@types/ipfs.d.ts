@@ -61,11 +61,16 @@ declare module 'ipfs' {
             signal?: AbortSignal;
         }): AsyncIterable<Buffer>;
 
-        get(ipfsPath: string | Ipfs.CID, options: any): AsyncIterable<Ipfs.UnixFSEntryWithContent>;
+        get(ipfsPath: string | Ipfs.CID, options?: any): AsyncIterable<Ipfs.UnixFSEntryWithContent>;
         
         ls(ipfsPath: string | Ipfs.CID): AsyncIterable<Ipfs.UnixFSLsResult>;
         
     }
+
+    export class CID {
+        constructor(baseEncodedString: string);
+        constructor(uint8Array: Uint8Array);
+    };
 
     namespace Ipfs {
 
@@ -93,11 +98,12 @@ declare module 'ipfs' {
         }
 
         export interface Multiaddr {
-            buffer: Uint8Array;
+            
+            toString: () => string;
         }
 
         export type Multihash = any | string;
-        export type CID = any;
+        
 
         export interface Types {
             Buffer: any;
@@ -116,10 +122,10 @@ declare module 'ipfs' {
 
         export interface Id {
             id: string;
+            protocolVersion: string;
             publicKey: string;
             addresses: Multiaddr[];
             agentVersion: string;
-            protocolVersion: string;
         }
 
         export interface RepoAPI {
@@ -225,16 +231,13 @@ declare module 'ipfs' {
         export type PeerId = any;
 
         export interface PeerInfo {
-            id: PeerId;
-            _idB58String: string;
-            multiaddr: Multiaddr;
-            multiaddrs: Multiaddr[];
-            distinctMultiaddr(): Multiaddr[];
+            id: string;
+            addrs: Multiaddr[];
         }
 
         export interface Peer {
             addr: Multiaddr;
-            peer: PeerInfo;
+            peer: string;
         }
 
         export interface SwarmAPI {

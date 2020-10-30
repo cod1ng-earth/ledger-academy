@@ -7,6 +7,7 @@
   "dependencies": {
     "3box": "^1.22.0",
     "@chakra-ui/core": "^0.8.0",
+    "@download/blockies": "^1.0.3",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "@openzeppelin/cli": "^2.8.2",
@@ -21,11 +22,13 @@
     "ipfs-message-port-client": "^0.2.2",
     "ipfs-message-port-protocol": "^0.2.0",
     "ipfs-message-port-server": "^0.2.2",
+    "multiaddr": "^8.0.0",
     "react": "^16.8",
     "react-dom": "^16.8",
     "react-dropzone": "^11.2.0",
     "react-scripts": "3.4.3",
     "tweetnacl": "^1.0.3",
+    "uint8arrays": "^1.1.0",
     "web3": "^1.2.7",
     "web3-utils": "^1.3.0"
   },

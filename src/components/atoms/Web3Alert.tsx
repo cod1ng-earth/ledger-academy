@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton,
+  Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton, Flex, Box, Text, Badge,
 } from '@chakra-ui/core';
+import Blockie from './Blockie';
 
 const Web3Alert: React.FC<any> = () => (
         <Alert status="error">
@@ -12,4 +13,23 @@ const Web3Alert: React.FC<any> = () => (
         </Alert>
 );
 
+export const ConnectedAlert = ({ account, networkType }: {
+  account: string,
+  networkType: string
+}) => (<Alert status="success" flexDirection="row" justifyContent="space-between">
+      <Flex flexDirection="row" alignItems="center">
+        <AlertTitle mr={2}>
+          You&apos;re connected!
+        </AlertTitle>
+        <AlertDescription>
+          <Flex align="center">
+            <Blockie seed={account} mr="2" w="1rem" h="1rem" />
+            <Text>{account}</Text>
+          </Flex>
+        </AlertDescription>
+      </Flex>
+      <Box>
+          <Badge>{networkType}</Badge>
+      </Box>
+  </Alert>);
 export default Web3Alert;

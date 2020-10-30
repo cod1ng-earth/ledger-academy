@@ -1,13 +1,12 @@
-import {
-  Alert, AlertDescription, AlertTitle, Badge, Box, Flex, Text, Link,
-} from '@chakra-ui/core';
+import { Box, SimpleGrid } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
-import Web3Alert from 'components/atoms/Web3Alert';
+import Web3Alert, { ConnectedAlert } from 'components/atoms/Web3Alert';
+import MintForm from 'components/organisms/MintForm';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import MintForm from 'components/organisms/MintForm';
+import { EthBalance, AdiBalance } from 'components/atoms/Balances';
 import ADIToken from '../../contracts/ADIToken.json';
 import TransferForm from '../organisms/TransferForm';
 
@@ -67,31 +66,14 @@ const EthPage = (props: RouteComponentProps) => {
     queryMinterRole();
   }, [contract]);
 
-  const networkExplorerUrl = `https://${networkType === 'main' ? '' : networkType}.etherscan.io`;
-
   return (!web3Active) ? <Web3Alert /> : (
     <Box>
-      <Alert status="success" flexDirection="row" justifyContent="space-between">
-        <Flex flexDirection="row" alignItems="center">
-          <AlertTitle mr={2}>You're connected!</AlertTitle>
-          <AlertDescription>{account}</AlertDescription>
-        </Flex>
+      {account && <ConnectedAlert account={account} networkType={networkType} />}
 
-        <Badge>{networkType}</Badge>
-
-      </Alert>
-
-      <Flex mt={2} wrap="wrap" >
-        <Flex p={2} width={['100%', 1 / 2]} bg="blue.300" color="white" align="center" justify="center">
-          <Text fontSize="3xl" fontWeight="bold">{ethBalance} Ξ</Text>
-        </Flex>
-        <Flex p={2} width={['100%', 1 / 2]} bg="pink.300" color="white" align="center" direction="column">
-
-          <Text fontSize="3xl" fontWeight="bold">{adiBalance} Å</Text>
-          {contract && <Link href={`${networkExplorerUrl}/address/${contract.options.address}`} isExternal fontSize="xs">{contract.options.address}</Link>}
-
-        </Flex>
-      </Flex>
+      <SimpleGrid minChildWidth="400px" spacing="2" mt="2">
+        <EthBalance balance={ethBalance} />
+        {contract && <AdiBalance balance={adiBalance} network={networkType} contract={contract} />}
+      </SimpleGrid>
 
       {Number.parseFloat(adiBalance) > 0 && (
         <TransferForm onFinished={queryContractState} contract={contract} />

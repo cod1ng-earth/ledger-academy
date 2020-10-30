@@ -39,8 +39,8 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
   };
 
   return (
-      <Flex direction="column" align="center" justifyContent="stretch" wrap="wrap">
-        <Heading>Mint to: </Heading>
+      <Flex direction="column" justifyContent="stretch" my="6">
+        <Heading size="md">Mint to</Heading>
         <RecipientForm
           recipient={recipient}
           disabled={isTransactionPending}
