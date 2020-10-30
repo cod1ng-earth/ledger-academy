@@ -4,12 +4,12 @@ import {
 } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
+import SignForm from 'components/organisms/identity/SignForm';
+import VerifyForm from 'components/organisms/identity/VerifyForm';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
-import SignForm from 'components/organisms/SignForm';
-import VerifyForm from 'components/organisms/VerifyForm';
+import NaclEncryption from '../organisms/identity/NaclEncryption';
 import { useIPFS } from '../../context/IPFS';
-import NaclEncryption from '../organisms/NaclEncryption';
 
 interface ChangeDetailsProps {
     name: string,

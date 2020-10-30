@@ -3,10 +3,10 @@ import {
   Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
-import IpfsFileManager from 'components/organisms/IpfsFileManager';
-import IpfsInfo from 'components/organisms/IpfsInfo';
+import IpfsFileManager from 'components/organisms/storage/IpfsFileManager';
+import IpfsInfo from 'components/organisms/storage/IpfsInfo';
 import React, { useState } from 'react';
-import IpfsPubSub from '../organisms/IpfsPubSub';
+import IpfsPubSub from '../organisms/storage/IpfsPubSub';
 
 const IpfsPage = (props: RouteComponentProps) => {
   const [pubsubTopic, setPubsubTopic] = useState<string>('');

@@ -1,12 +1,12 @@
 import {
   Box, Button, Flex, Heading, IconButton, List, SimpleGrid, Textarea,
 } from '@chakra-ui/core';
-import DownloadFile from 'components/molecules/DownloadFile';
-import DropZone from 'components/molecules/DropZone';
-import FileListItem from 'components/molecules/FileListItem';
+import DownloadFile from 'components/molecules/storage/DownloadFile';
+import DropZone from 'components/molecules/storage/DropZone';
+import FileListItem from 'components/molecules/storage/FileListItem';
 import { Ipfs } from 'ipfs';
 import React, { useEffect, useState } from 'react';
-import { useIPFS } from '../../context/IPFS';
+import { useIPFS } from '../../../context/IPFS';
 
 const IpfsFileManager = () => {
   const { ipfsNode } = useIPFS();

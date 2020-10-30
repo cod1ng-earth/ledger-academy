@@ -1,6 +1,6 @@
 import { Button, Flex, Heading } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
-import RecipientForm, { IRecipient } from 'components/molecules/RecipientForm';
+import RecipientForm, { IRecipient } from 'components/molecules/blockchain/RecipientForm';
 import React, { useState } from 'react';
 import Web3 from 'web3';
 

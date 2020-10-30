@@ -4,7 +4,7 @@ import { AbiItem } from 'web3-utils';
 import {
   Box, FormControl, FormLabel, Input, FormHelperText, Button, Flex, Alert, Text,
 } from '@chakra-ui/core';
-import VerifierABI from '../../contracts/Verifier.json';
+import VerifierABI from 'contracts/Verifier.json';
 
 const VerificationResult = ({ label, result, resultText }: {
   label: string,

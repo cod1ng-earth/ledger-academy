@@ -2,7 +2,7 @@ import { Button, Flex, Heading } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import React, { useState } from 'react';
 import Web3 from 'web3';
-import RecipientForm, { IRecipient } from '../molecules/RecipientForm';
+import RecipientForm, { IRecipient } from '../../molecules/blockchain/RecipientForm';
 
 const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract: any }) => {
   const { account } = useWeb3React<Web3>();

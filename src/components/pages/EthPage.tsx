@@ -2,13 +2,13 @@ import { Box, SimpleGrid } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import Web3Alert, { ConnectedAlert } from 'components/atoms/Web3Alert';
-import MintForm from 'components/organisms/MintForm';
+import MintForm from 'components/organisms/blockchain/MintForm';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { EthBalance, AdiBalance } from 'components/atoms/Balances';
 import ADIToken from '../../contracts/ADIToken.json';
-import TransferForm from '../organisms/TransferForm';
+import TransferForm from '../organisms/blockchain/TransferForm';
 
 const EthPage = (props: RouteComponentProps) => {
   const MINTER_ROLE = Web3.utils.keccak256('MINTER_ROLE');

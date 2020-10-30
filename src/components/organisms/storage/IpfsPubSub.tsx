@@ -2,7 +2,7 @@ import {
   Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIPFS } from '../../context/IPFS';
+import { useIPFS } from '../../../context/IPFS';
 
 interface IIpfsPubSubInterface {
   onTopic: (topic: string) => void;
