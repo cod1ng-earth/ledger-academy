@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
-
 import {
-  Flex, Box, Heading, FormControl, FormLabel, Input, FormHelperText, Button, InputGroup, InputRightElement, Text,
+  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../context/IPFS';
 
 interface IIpfsPubSubInterface {
@@ -96,20 +95,19 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
   }
 
   const handleNewMessage = useCallback((newMessage) => {
-    setMessages((prvMessages) => [
+    console.log(newMessage);
+    setMessages((prevMessages) => [
       decodeMessageToUtf8(newMessage),
-      ...prvMessages,
+      ...prevMessages,
     ]);
-  }, []);
+  }, [topic]);
 
   async function subscribe(_topic: string): Promise<void> {
     if (topic) {
       ipfsNode!.pubsub.unsubscribe(topic);
     }
     setTopic(_topic);
-    props.onTopic(_topic);
     setMessages([]);
-
     ipfsNode!.pubsub.subscribe(_topic, handleNewMessage, {
       onError: (err: any) => {
         console.error(err);
@@ -136,7 +134,7 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
         </InputGroup>
       </form>
     </Box>
-    {messages && messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
+    {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
             <Text as="b">{msg.from}.{i}</Text>
             <MessageDisplay data={msg.data} />
     </Box>)}

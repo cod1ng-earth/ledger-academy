@@ -8,8 +8,6 @@ import { useIPFS } from '../../context/IPFS';
 
 const IpfsFileManager = () => {
   const { ipfsNode } = useIPFS();
-
-  const [topic, setTopic] = useState<string>();
   const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
 
   const FOLDER_NAME = '/dropzone';
@@ -52,12 +50,12 @@ const IpfsFileManager = () => {
     refreshDirectory();
   };
 
-  async function loadFile(path: string) {
-    const res = ipfsNode!.files.read(path);
-    for await (const r of res) {
-      console.log(r);
-    }
-  }
+  // async function loadFile(path: string) {
+  //   const res = ipfsNode!.files.read(path);
+  //   for await (const r of res) {
+  //     console.log(r);
+  //   }
+  // }
 
   useEffect(() => {
     if (ipfsNode) { refreshDirectory(); }

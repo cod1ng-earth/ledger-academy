@@ -1,5 +1,4 @@
-import { Box, Button } from '@chakra-ui/core';
-import { useIPFS } from 'context/IPFS';
+import { Box } from '@chakra-ui/core';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -7,8 +6,6 @@ export default function DropZone({ addData, onUpdated }: {
   addData: (fileName: string, data: ArrayBuffer | string | null) => Promise<void>,
   onUpdated: () => Promise<void>
 }) {
-  const { ipfsNode } = useIPFS();
-
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     for await (const file of acceptedFiles) {
       const reader = new FileReader();
@@ -19,7 +16,7 @@ export default function DropZone({ addData, onUpdated }: {
       };
       reader.readAsArrayBuffer(file);
     }
-  }, [ipfsNode, addData]);
+  }, [addData, onUpdated]);
 
   const {
     getRootProps, getInputProps, isDragActive,
