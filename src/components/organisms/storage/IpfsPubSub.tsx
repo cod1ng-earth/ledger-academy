@@ -2,77 +2,14 @@ import {
   Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
+import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
+import NewMessageForm from 'components/atoms/NewMessage';
+import PubsubPeers from 'components/molecules/storage/PubsubPeers';
 import { useIPFS } from '../../../context/IPFS';
 
 interface IIpfsPubSubInterface {
   onTopic: (topic: string) => void;
 }
-
-interface MessageDisplayProps {
-  data: string;
-}
-
-function MessageDisplay({ data }: MessageDisplayProps) {
-  const [binaryUrl, setBinaryUrl] = useState<string>();
-  const { ipfsNode } = useIPFS();
-
-  function isCid(_data: string) {
-    return _data.startsWith('Qm');
-  }
-
-  useEffect(() => {
-    if (!isCid(data)) {
-      return;
-    }
-    try {
-      (async () => {
-        const res = await ipfsNode?.files.read(`/ipfs/${data}`);
-        const chunks = [];
-        for await (const r of res) {
-          chunks.push(r);
-        }
-        const blob = new Blob(chunks, { type: 'image/jpg' });
-
-        const url = window.URL.createObjectURL(blob);
-        setBinaryUrl(url);
-      })();
-    } catch (e) {
-      console.error(e);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-  return (<div>
-    <p>{data}</p>
-    {binaryUrl && <img src={binaryUrl} alt="binary" /> }
-  </div>);
-}
-
-const NewMessage = ({ onSubmitted }: {onSubmitted: Function}) => {
-  const [message, setMessage] = useState<string>('');
-
-  function onSubmit(e: any) {
-    e.preventDefault();
-    onSubmitted(message);
-    setMessage('');
-  }
-
-  return <form onSubmit={onSubmit}>
-     <InputGroup size="md">
-     <Input
-          name="Message"
-          onChange={(e: any) => setMessage(e.target.value)} value={message}
-          type="text"
-          placeholder="New Message"
-        />
-          <InputRightElement width="6.5rem">
-            <Button h="1.75rem" size="sm" type="submit">
-            send
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-    </form>;
-};
 
 const textDecoder = new TextDecoder('utf-8');
 
@@ -136,9 +73,10 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
     </Box>
     {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
             <Text as="b">{msg.from}.{i}</Text>
-            <MessageDisplay data={msg.data} />
+            <PubsubMessageDisplay data={msg.data} />
     </Box>)}
-    {topic && <NewMessage onSubmitted={publish} /> }
+    {topic && <NewMessageForm onSubmitted={publish} /> }
+    {topic && <PubsubPeers topic={topic} /> }
   </Flex>
   );
 };
