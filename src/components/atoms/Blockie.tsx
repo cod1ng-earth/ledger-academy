@@ -1,6 +1,6 @@
+import { Box } from '@chakra-ui/core';
 import { createIcon } from '@download/blockies';
 import React, { useEffect, useRef } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
 
 const Blockie = (props: any) => {
   const { seed } = props;

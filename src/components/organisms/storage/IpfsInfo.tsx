@@ -3,7 +3,6 @@ import {
 } from '@chakra-ui/core';
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
-import multiaddr from 'multiaddr';
 import React, { useEffect, useState } from 'react';
 
 const ConnectPeer = ({ onConnected }: {onConnected: () => Promise<void>}) => {
@@ -12,9 +11,7 @@ const ConnectPeer = ({ onConnected }: {onConnected: () => Promise<void>}) => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const mula = multiaddr(peer);
-    console.debug(mula);
-    const res = await ipfsNode!.swarm.connect(mula);
+    const res = await ipfsNode!.swarm.connect(peer);
     console.debug(res);
     onConnected();
 
@@ -50,7 +47,9 @@ const IpfsInfo = () => {
 
   const refresh = async () => {
     if (!ipfsNode) return;
-    setPeers(await ipfsNode.swarm.peers());
+    const _peers = await ipfsNode.swarm.peers();
+
+    setPeers(_peers.sort());
     setAddrs(await ipfsNode.swarm.addrs());
     setLocalAddrs(await ipfsNode.swarm.localAddrs());
     setIpfsIdentity(await ipfsNode.id());

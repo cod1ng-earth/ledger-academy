@@ -32,6 +32,8 @@ const IPFSProvider = ({ children }: any) => {
           },
         },
       });
+      // _ipfsNode.swarm.connect('/ip4/167.71.52.88/tcp/4002/wss/p2p/QmXAghnP7DqmAEE7Zx4SxMo3UcUVSn8f1xDCT6x1ysYMSj');
+      _ipfsNode.swarm.connect('/dns4/ipfs.depa.digital/tcp/4002/wss/p2p/QmXAghnP7DqmAEE7Zx4SxMo3UcUVSn8f1xDCT6x1ysYMSj');
       _ipfsNode.swarm.connect('/dnsaddr/ipfs.3box.io/tcp/443/wss/p2p/QmZvxEpiVNjmNbEKyQGvFzAY1BwmGuuvdUTmcTstQPhyVC');
       // _ipfsNode.libp2p.transportManager.listen(multiaddr('/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/')).catch(console.warn);
 

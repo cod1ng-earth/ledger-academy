@@ -85,7 +85,7 @@ const IpfsFileManager = () => {
         <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` } } icon="external-link" aria-label="show on gateway" />
       </Flex>
       <List>
-        {files.map((f) => <FileListItem file={f} key={f.cid.toString()} />)}
+        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} />)}
       </List>
     </Box>
 

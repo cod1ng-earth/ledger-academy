@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import {
-  Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton, Flex, Box, Text, Badge,
+  Alert, AlertDescription, AlertIcon, AlertTitle, Badge, Box, CloseButton, Flex, Text,
 } from '@chakra-ui/core';
+import React from 'react';
 import Blockie from './Blockie';
 
 const Web3Alert: React.FC<any> = () => (
