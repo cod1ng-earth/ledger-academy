@@ -16,6 +16,7 @@ const IPFSProvider = ({ children }: any) => {
   const [ipfsNode, setIpfsNode] = useState<Ipfs>();
 
   useEffect(() => {
+    if (!window.SharedWorker) { return; }
     const worker = new SharedWorker('/ipfsWorker.js', { type: 'module', name: 'ipfs-worker' });
     const client = IPFSClient.from(worker.port);
     setIpfsClient(client);
