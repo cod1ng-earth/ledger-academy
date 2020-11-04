@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-ethereum-package/contracts/presets/ERC20PresetMi
 
 contract ADIToken is ERC20PresetMinterPauserUpgradeSafe {
     function greet() public pure returns (string memory) {
-        string memory g = "Bom Dia";
+        string memory g = "Bom Dia!";
         return g;
     }
 

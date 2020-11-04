@@ -7,7 +7,7 @@ services:
       - /app/ganache-core.docker.cli.js
       - --deterministic
       - --db=/ganache_data
-      - --mnemonic=minimum symptom minute gloom tragic situate silver mechanic salad amused elite hotel
+      - --mnemonic=${MNEMONIC}
       - --networkId=5779
       - --gasPrice=5e9
     volumes:

@@ -4,32 +4,36 @@ This project illustrates various aspects of decentralized apps (Dapps). It has n
 
 - connecting a React app with Ethereum wallets and networks
 - playing with ERC20 tokens and their transfers, particularly
-    - airdropping
-    - escrowing
-    - collateralizing
-    - gas optimiziation
+  - airdropping
+  - escrowing
+  - collateralizing
+  - gas optimiziation
 - demonstrating ERC721 / 777 / 1155 usage scenarios (tbd)
 - implement, test & debug decentralized storage systems
-    - IPFS (shared workers / debugging / Pubsub)
-    - Arweave
-    - Filecoin
-    - SpaceDaemon
-    - 3box threads
-    - Textile Buckets
-    - OrbitDB
+  - IPFS (shared workers / debugging / Pubsub)
+  - Arweave
+  - Filecoin
+  - SpaceDaemon
+  - 3box threads
+  - Textile Buckets
+  - OrbitDB
 - adding / verifying identities
-    - 3box
-    - ceramic
-    - Jolocom
-    - nacl-did
-    - ether-did
+  - 3box
+  - ceramic
+  - Jolocom
+  - nacl-did
+  - ether-did
 - encryption
-    - NaCL
-    - FrodoKEM
-    - on/off chain signature verification
+  - NaCL
+  - FrodoKEM
+  - on/off chain signature verification
 - creating and validating zero knowledge proofs
 - demonstrating Oracle usage
 - demonstrating TheGraph chain queries
+
+## reuse a your local bip39 mnemonic in docker-compose
+
+`docker-compose --env-file ./.env.local up`
 
 ## auto deploys
 
@@ -42,6 +46,7 @@ https://ledger-academy.on.fleek.co/
 `yarn run contracts`
 create a mnemonic for you (`npx mnemonics`)
 `cp .env .env.local`
+
 ```
 {
     "MNEMONIC": <`npx mnemonics`>,
@@ -82,4 +87,3 @@ goerli: `0x7c9BeD2220B6A7545d31ad8911BAeB7003483337`
 ## styles:
 
 https://chakra-ui.com/
-
