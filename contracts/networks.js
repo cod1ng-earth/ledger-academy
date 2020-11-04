@@ -30,5 +30,10 @@ module.exports = {
       networkId: 5, // Goerli's id
       gas: 7500000,
     },
+    txbchain: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, 'https://txbchain.depa.digital:8545'),
+      networkId: 6874585,
+      gas: 4700000,
+    },
   },
 };
