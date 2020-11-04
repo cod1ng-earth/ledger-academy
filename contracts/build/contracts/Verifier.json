@@ -23,7 +23,8 @@
         }
       ],
       "stateMutability": "pure",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -47,7 +48,8 @@
         }
       ],
       "stateMutability": "pure",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.6.7+commit.b8d736ae\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"msgHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"recoverAddr\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"msgHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"recoverAddrFromNonEthHash\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/stadolf/work/ledger-academy/contracts/contracts/Verifier.sol\":\"Verifier\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/stadolf/work/ledger-academy/contracts/contracts/Verifier.sol\":{\"keccak256\":\"0x81bf4a6c0a68e783a9c29895b4297a946cc03298d1958fd5caec5668734bb2c3\",\"urls\":[\"bzz-raw://fd03c15dd2a3974cd35752b83a320df86b3ac49c5906c119ec8011e2c3af84f1\",\"dweb:/ipfs/QmQsmhtvaAk4skqYPEVuQFRTV9npTGL6mpcTuKDDHbRksi\"]},\"@openzeppelin/contracts-ethereum-package/contracts/cryptography/ECDSA.sol\":{\"keccak256\":\"0x0c4a4883483cd70c6541aa55ae609483d65d457f160963da29acfc39f9a555ec\",\"urls\":[\"bzz-raw://8fa01aeec715a6ee596e68809306717f9343f175058217f85761161bfc832dfd\",\"dweb:/ipfs/QmTRt1sA3PQjiBV8Hka4jQ5hmAY8CJrujz2TMt5PqdNKjc\"]}},\"version\":1}",
@@ -1188,9 +1190,22 @@
     "name": "solc",
     "version": "0.6.7+commit.b8d736ae.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5779": {
+      "events": {},
+      "links": {},
+      "address": "0x8Bed7D18ECf9DE5138E3902eBDC38551115918eD",
+      "transactionHash": "0xbc32499e9706834be4ef0a5cf668ba975b3d6d5727380116d4fab0579a98e13d"
+    },
+    "6874585": {
+      "events": {},
+      "links": {},
+      "address": "0xEaDdAAeC8e57F1A35C1537d715eB1eA7c7849741"
+    }
+  },
   "schemaVersion": "3.3.1",
-  "updatedAt": "2020-11-04T22:03:46.510Z",
+  "updatedAt": "2020-11-04T22:47:04.917Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },
