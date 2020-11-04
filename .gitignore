@@ -22,8 +22,8 @@ sketch
 contracts/.openzeppelin/.session
 
 contracts/.openzeppelin/dev-*
-contracts/build
-build
+#contracts/build
+/build
 
 .secrets*.json
 .env.*
