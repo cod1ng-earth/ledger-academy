@@ -1,11 +1,11 @@
 {
   "contracts": {
     "ADIToken": {
-      "address": "0x18E7D4b9AD5197D84a6f458aF689B8a22210245a",
-      "constructorCode": "608060405234801561001057600080fd5b506136ac806100206000396000f3fe",
-      "bodyBytecodeHash": "3c07eead914809340e2b8c53ee6fcb4d613dda89c622c4a1096b5f9d182c0344",
-      "localBytecodeHash": "518e843e18dab2b4900f3ab7e8b6bf8a18eb1595053494c0c90e34d10e7b914c",
-      "deployedBytecodeHash": "518e843e18dab2b4900f3ab7e8b6bf8a18eb1595053494c0c90e34d10e7b914c",
+      "address": "0x0E8fdCBC006fC9cD9f89a26139d88F1e4C75bdA5",
+      "constructorCode": "608060405234801561001057600080fd5b50613a1f806100206000396000f3fe",
+      "bodyBytecodeHash": "a2dd526d8ab7b9cd55332a5ae3f87a07bbdaf9bc15f30c9fda02c54da41ae400",
+      "localBytecodeHash": "62c24c107eb2bb2d58c179158c180642fa838687618fc8dc5626acdd6aa7305d",
+      "deployedBytecodeHash": "62c24c107eb2bb2d58c179158c180642fa838687618fc8dc5626acdd6aa7305d",
       "types": {
         "t_bool": {
           "id": "t_bool",
@@ -268,6 +268,14 @@
           "astId": 889,
           "type": "t_array:50<t_uint256>",
           "src": "3454:25:5"
+        },
+        {
+          "contract": "ADIToken",
+          "path": "contracts/ADIToken.sol",
+          "label": "ethBalance",
+          "astId": 2225,
+          "type": "t_uint256",
+          "src": "223:25:13"
         }
       ],
       "warnings": {
@@ -286,7 +294,20 @@
             "src": "1727:44:2"
           }
         ],
-        "storageDiff": []
+        "storageDiff": [
+          {
+            "action": "append",
+            "updated": {
+              "index": 18,
+              "contract": "ADIToken",
+              "path": "contracts/ADIToken.sol",
+              "label": "ethBalance",
+              "astId": 2225,
+              "type": "t_uint256",
+              "src": "223:25:13"
+            }
+          }
+        ]
       }
     }
   },
@@ -296,7 +317,7 @@
       {
         "address": "0x7c9BeD2220B6A7545d31ad8911BAeB7003483337",
         "version": "1.0.0",
-        "implementation": "0x18E7D4b9AD5197D84a6f458aF689B8a22210245a",
+        "implementation": "0x0E8fdCBC006fC9cD9f89a26139d88F1e4C75bdA5",
         "admin": "0x5c19BF66CC2c9386Cdf06d346F32F140A4559be9",
         "kind": "Upgradeable"
       },
