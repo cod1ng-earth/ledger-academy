@@ -12,12 +12,11 @@
     "@emotion/styled": "^10.0.27",
     "@openzeppelin/contracts-ethereum-package": "^3.0.0",
     "@reach/router": "^1.3.3",
-    "@truffle/hdwallet-provider": "^1.1.1",
     "@web3-react/core": "^6.0.9",
     "@web3-react/injected-connector": "^6.0.7",
     "dotenv-flow": "^3.2.0",
     "emotion-theming": "^10.0.27",
-    "ethers": "^4.0.47",
+    "ethers": "^5.0.0",
     "ipfs": "~0.47",
     "ipfs-message-port-client": "^0.2.2",
     "ipfs-message-port-protocol": "^0.2.0",
@@ -48,7 +47,9 @@
     "last 3 Chrome versions"
   ],
   "devDependencies": {
-    "@openzeppelin/truffle-upgrades": "^1.2.2",
+    "@nomiclabs/buidler": "^1.4.8",
+    "@nomiclabs/buidler-ethers": "^2.0.2",
+    "@openzeppelin/buidler-upgrades": "^1.2.1",
     "@types/reach__router": "^1.3.5",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
@@ -63,7 +64,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "truffle": "^5.1.51",
     "typescript": "^3.9.2",
     "webpack-cli": "^3.3.12"
   }

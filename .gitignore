@@ -31,3 +31,6 @@ contracts/.openzeppelin/dev-*
 # this file is built by yarn run sharedworkers
 public/ipfsWorker.js
 .ganache
+
+contracts/artifacts
+contracts/cache
