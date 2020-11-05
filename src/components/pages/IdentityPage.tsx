@@ -3,7 +3,7 @@ import {
 } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import NaCLTools from 'components/organisms/identity/NaCLTools';
-import ThreeBoxTools from 'components/organisms/identity/ThreeBoxTools';
+import ThreeBox from 'components/organisms/identity/ThreeBox';
 import React from 'react';
 
 const IdentityPage = (props: RouteComponentProps) => (
@@ -14,7 +14,7 @@ const IdentityPage = (props: RouteComponentProps) => (
       </TabList>
       <TabPanels>
         <TabPanel>
-          <ThreeBoxTools />
+          <ThreeBox />
         </TabPanel>
         <TabPanel>
           <NaCLTools />
