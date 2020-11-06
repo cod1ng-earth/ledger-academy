@@ -5,9 +5,9 @@ import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
 
 //https://medium.com/@pranav.89/smart-contracting-simplified-escrow-in-solidity-ethereum-b19761e8fe74
-// a contract that escrows tokens and releases them on final call.
-// and calls an anonymous function on the target contract
-// once the seller (daccord contract) has "agreed" on the conditions
+// collects an arbitrary amt of a given ERC20 token and releases it to a beneficiary
+// Doesn't know anything about the "daccord" contract, except its address.
+// the seller (daccord contract) has "agreed" on the conditions
 
 contract TokenEscrow is OwnableUpgradeSafe {
     IERC20 theToken;
@@ -37,10 +37,11 @@ contract TokenEscrow is OwnableUpgradeSafe {
         return theToken.balanceOf(address(this));
     }
 
+    // do whatever you need to "fulfill" the escrow after an agreement
     function fulfill() external returns (bool) {
         require(msg.sender == daccord, "can only be called by daccord");
-        // do what you must do.
-        bool res = theToken.transfer(beneficiary, 5000);
+        uint256 amount = getEscrowedTokenBalance();
+        bool res = theToken.transfer(beneficiary, amount);
         return res;
     }
 }

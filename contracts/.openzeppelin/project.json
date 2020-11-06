@@ -1,7 +1,9 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "ADIToken": "ADIToken"
+    "ADIToken": "ADIToken",
+    "TokenEscrow": "TokenEscrow",
+    "Daccord": "Daccord"
   },
   "dependencies": {
     "@openzeppelin/contracts-ethereum-package": "^3.0.0"
