@@ -1,14 +1,8 @@
 const AdiToken = artifacts.require('ADIToken');
 
 contract('AdiToken', (accounts) => {
-  let adiToken;
-
-  before(async () => {
-    adiToken = await AdiToken.new();
-    await adiToken.initialize('Addi Token', 'ADI');
-  });
-
   it('should greet us with a message', async () => {
+    const adiToken = await AdiToken.deployed();
     const message = await adiToken.greet.call();
     assert.equal(
       message.valueOf(), 'Bom Dia', 'wrong greeting',
@@ -16,12 +10,14 @@ contract('AdiToken', (accounts) => {
   });
 
   it('owner can mint tokens', async () => {
+    const adiToken = await AdiToken.deployed();
     await adiToken.mint(accounts[1], 1e9);
     const balance = await adiToken.balanceOf.call(accounts[1]);
     assert.equal(balance.valueOf(), 1e9);
   });
 
   it('can exchange eth value', async () => {
+    const adiToken = await AdiToken.deployed();
     const initialBalanceOfContract = await web3.eth.getBalance(adiToken.address);
     assert.equal(0, initialBalanceOfContract);
 
@@ -43,6 +39,7 @@ contract('AdiToken', (accounts) => {
   });
 
   it('can airdrop a token to several recipients', async () => {
+    const adiToken = await AdiToken.deployed();
     assert.equal(0, await adiToken.balanceOf(accounts[5]).valueOf());
     assert.equal(0, await adiToken.balanceOf(accounts[6]).valueOf());
 
