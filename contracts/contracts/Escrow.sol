@@ -22,7 +22,7 @@ contract TokenEscrow is OwnableUpgradeSafe {
         __Ownable_init();
         theToken = erc20;
         beneficiary = beneficiary_address;
-        start = now;
+        start = block.timestamp;
     }
 
     function setDaccord(address daccord_address) public onlyOwner {

@@ -63,6 +63,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
+    "truffle": "^5.1.52",
     "typescript": "^3.9.2",
     "webpack-cli": "^3.3.12"
   }
