@@ -50,6 +50,14 @@ module.exports = {
       network_id: '*', // Any network (default: none)
       gasPrice: 10000,
     },
+    develop: { // unique to truffle
+      network_id: 1337,
+      accounts: 10,
+      defaultEtherBalance: 500,
+      gasPrice: 10000,
+      host: '127.0.0.1',
+      port: 9545,
+    },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port

@@ -36,6 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build && yarn run sharedworkers",
     "test": "react-scripts test",
+    "test:contracts": "cd contracts && truffle test",
     "eject": "react-scripts eject",
     "contracts": "cd contracts && oz compile",
     "sharedworkers": "webpack-cli --mode development --entry ./src/workers/ipfsWorker.js --output ./public/ipfsWorker.js",

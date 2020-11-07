@@ -35,7 +35,10 @@ contract('AdiToken', (accounts) => {
 
     // the withdraw call costs gas, hence we cannot compare the real values here
     // might be flaky when your gas price is larger than ~10000wei
-    assert.isTrue((new web3.utils.BN(newBalanceOfOwner)).gt(new web3.utils.BN(initialBalanceOfOwner)));
+    assert.isTrue(
+      (new web3.utils.BN(newBalanceOfOwner))
+        .gt(new web3.utils.BN(initialBalanceOfOwner)), 'check your gas price...',
+    );
   });
 
   it('can airdrop a token to several recipients', async () => {
