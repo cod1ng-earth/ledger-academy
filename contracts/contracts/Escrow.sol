@@ -29,10 +29,11 @@ contract TokenEscrow is OwnableUpgradeSafe {
         daccord = daccord_address;
     }
 
-    function depositTokens() public {
-        theToken.transferFrom(msg.sender, address(this), 5000);
+    function depositTokens(uint256 amount) public {
+        theToken.transferFrom(msg.sender, address(this), amount);
     }
 
+    //convenience
     function getEscrowedTokenBalance() public view returns (uint256) {
         return theToken.balanceOf(address(this));
     }
