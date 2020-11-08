@@ -6,7 +6,7 @@ contract('TokenEscrow', (accounts) => {
   const beneficiary = accounts[5];
   before(async () => {
     const adiToken = await AdiToken.deployed();
-    // mint some tokens to us that we can use for demonstratation
+    // mint some tokens to us that we can use for demonstration
     await adiToken.mint(accounts[0], 1e9);
 
     tokenEscrow = await TokenEscrow.new();
@@ -53,7 +53,6 @@ contract('TokenEscrow', (accounts) => {
     assert.equal(beneficiaryBalanceBefore.valueOf(), 0);
 
     const res = await tokenEscrow.fulfill({ from: accounts[1] });
-    //    assert.isTrue(res);
 
     const escrowBalanceAfter = await adiToken.balanceOf(tokenEscrow.address);
     assert.equal(0, escrowBalanceAfter.valueOf());
