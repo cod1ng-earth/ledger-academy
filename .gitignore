@@ -22,6 +22,8 @@ sketch
 contracts/.openzeppelin/.session
 
 contracts/.openzeppelin/dev-*
+contracts/.openzeppelin/unknown-*
+
 contracts/build
 build
 
