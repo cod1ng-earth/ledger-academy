@@ -1,9 +1,9 @@
-import { Alert, Box, Flex } from '@chakra-ui/core';
+import { Alert, AlertDescription, AlertTitle, Box, Flex, Heading } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import LoginWith3Box from 'components/atoms/LoginWith3box';
 import ThreeBoxProfile from 'components/molecules/identity/3box/ThreeBoxProfile';
 import ThreeBoxSpace from 'components/molecules/identity/3box/ThreeBoxSpace';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 
 const ThreeBox = () => {
@@ -14,19 +14,24 @@ const ThreeBox = () => {
   } = useWeb3React<Web3>();
 
   return <Flex>
-      {(!web3Active)
-        ? <Alert>enable web3 please {web3Error} </Alert>
-        : <Box my="6" w="100%">
-            {box
-              ? <>
-                  <ThreeBoxProfile box={box} />
-                  <ThreeBoxSpace box={box} />
-                </>
-              : <LoginWith3Box setBox={setBox} />
-            }
-          </Box>
-      }
-    </Flex>;
+    {(!web3Active)
+      ? <Alert>enable web3 please {web3Error} </Alert>
+      : <Box my="6" w="100%">
+        {box
+          ? <>
+            <Alert status="success" mb="6">
+              <AlertTitle mr={2}>3box connected!</AlertTitle>
+              <AlertDescription>{box.DID}</AlertDescription>
+            </Alert>
+
+            <ThreeBoxProfile box={box} />
+            <ThreeBoxSpace box={box} />
+          </>
+          : <LoginWith3Box setBox={setBox} />
+        }
+      </Box>
+    }
+  </Flex>;
 };
 
 export default ThreeBox;
