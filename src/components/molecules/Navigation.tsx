@@ -13,7 +13,7 @@ const Navigation = () => {
   return (
     <>
       <Button onClick={onOpen} background="black">
-          {account ? <Blockie seed={account} /> : <svg
+          {account ? <Blockie address={account} /> : <svg
             fill="white"
             width="12px"
             viewBox="0 0 20 20"

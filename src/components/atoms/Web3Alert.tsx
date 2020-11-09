@@ -23,7 +23,7 @@ export const ConnectedAlert = ({ account, networkType }: {
         </AlertTitle>
         <AlertDescription>
           <Flex align="center">
-            <Blockie seed={account} mr="2" w="1rem" h="1rem" />
+            <Blockie address={account} mr="2" w="1rem" h="1rem" />
             <Text>{account}</Text>
           </Flex>
         </AlertDescription>
