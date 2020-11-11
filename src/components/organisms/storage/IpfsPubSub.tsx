@@ -1,10 +1,10 @@
 import {
-  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
+  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text
 } from '@chakra-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import NewMessageForm from 'components/atoms/NewMessageForm';
 import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
-import NewMessageForm from 'components/atoms/NewMessage';
 import PubsubPeers from 'components/molecules/storage/PubsubPeers';
+import React, { useCallback, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
 interface IIpfsPubSubInterface {
@@ -65,18 +65,18 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
           />
           <InputRightElement width="6.5rem">
             <Button h="1.75rem" size="sm" type="submit">
-            subscribe
+              subscribe
             </Button>
           </InputRightElement>
         </InputGroup>
       </form>
     </Box>
     {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
-            <Text as="b">{msg.from}.{i}</Text>
-            <PubsubMessageDisplay data={msg.data} />
+      <Text as="b">{msg.from}.{i}</Text>
+      <PubsubMessageDisplay data={msg.data} />
     </Box>)}
-    {topic && <NewMessageForm onSubmitted={publish} /> }
-    {topic && <PubsubPeers topic={topic} /> }
+    {topic && <NewMessageForm onSubmitted={publish} />}
+    {topic && <PubsubPeers topic={topic} />}
   </Flex>
   );
 };

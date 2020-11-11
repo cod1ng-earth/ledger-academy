@@ -20,29 +20,24 @@ const Header = () => {
         as="nav"
         align="center"
         justify="space-between"
-        wrap="wrap"
         padding="1.5rem"
         bg="black"
         color="white"
-
       >
-        <Flex align="center" mr={5}>
-          <Heading as="h1" size="lg">
+        <Flex>
+          <Heading as="h1" size="lg" mr={5}>
             L
           </Heading>
+
+          <Box
+            display={['none', 'flex']}
+            alignItems="center"
+          >
+              <MainMenu as={React.Fragment} />
+          </Box>
         </Flex>
-
         <Box
-          display={{ sm: 'none', md: 'flex' }}
-          width={{ sm: 'full', md: 'auto' }}
-          alignItems="center"
-          flexGrow={1}
-        >
-            <MainMenu as={React.Fragment} />
-        </Box>
 
-        <Box
-          mt={{ base: 4, md: 0 }}
         >
           {!web3Active && <Button bg="transparent" border="1px" onClick={onLogin}>
             Login
