@@ -8,7 +8,7 @@ import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
-const IpfsFileManager = () => {
+const IpfsFileManager = (props: any) => {
   const { ipfsNode } = useIPFS();
   const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
   const [folderCid, setFolderCid] = useState<string>('');
@@ -92,7 +92,7 @@ const IpfsFileManager = () => {
         <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` }} icon="external-link" aria-label="show on gateway" />
       </Flex>
       <List>
-        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} />)}
+        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} arweave={props.arweave} arweaveWallet={props.arweaveWallet} />)}
       </List>
     </Box>
 

@@ -20,3 +20,25 @@ export const download = async ({ ipfsNode, cid, fileName }: {
     link.click();
   }
 };
+
+export const downloadFromArweave = async ({ arweave, transactionId }: {
+  arweave: any, transactionId: string
+}) => {
+  const data = await arweave.transactions.getData(transactionId, {decode: true, string: true});
+  const blob = new Blob([data], { type: 'application/binary' });
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(blob);
+  link.download = 'arweave-download.txt';
+  link.click();
+};
+
+export const content = async ({ ipfsNode, cid }: {
+    ipfsNode: any, cid: CID
+  }) => {
+  const results = ipfsNode.cat(cid);
+  const chunks = [];
+  for await (const chunk of results) {
+    chunks.push(chunk);
+  }
+  return uint8ArrayConcat(chunks);
+};

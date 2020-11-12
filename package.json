@@ -16,6 +16,8 @@
     "@web3-react/core": "^6.0.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.1.6",
+    "arql-ops": "^1.0.0",
+    "arweave": "^1.10.0",
     "dotenv-flow": "^3.2.0",
     "emotion-theming": "^10.0.27",
     "ethers": "^4.0.47",
