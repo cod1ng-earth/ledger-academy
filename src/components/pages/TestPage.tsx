@@ -12,9 +12,9 @@ const TestPage = (props: RouteComponentProps) => {
 
   return (
     <ul>
-    {evts.map((evt: string, idx: number) => (
+      {evts.map((evt: string, idx: number) => (
         <li key={idx}>{evt}</li>
-    ))}
+      ))}
     </ul>
   );
 };

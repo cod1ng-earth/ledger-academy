@@ -1,3 +1,4 @@
+import * as TBox from '3box';
 import {
   Alert,
   AlertDescription,
@@ -5,11 +6,10 @@ import {
   Box,
   Button, Flex, IconButton, Input, InputGroup, InputRightElement, Text, useClipboard,
 } from '@chakra-ui/core';
-import React, { useEffect, useState } from 'react';
-import * as TBox from '3box';
-import InputFlex from 'components/atoms/InputFlex';
+import { InputBase } from 'components/atoms/InputFlex';
 import NewMessageForm from 'components/atoms/NewMessageForm';
 import { useIPFS } from 'context/IPFS';
+import React, { useEffect, useState } from 'react';
 
 export const OPEN_THREAD_NAME = 'ledger-academy-open-thread';
 
@@ -24,7 +24,7 @@ export interface ThreadPost {
 
 const JoinThread = ({ joinThread }: { joinThread: (thread: string) => any }) => {
   const [thread, setThread] = useState<string>('');
-  return <InputFlex >
+  return <InputBase >
     <InputGroup size="md" w="100%">
       <Input
         name="thread"
@@ -41,7 +41,7 @@ const JoinThread = ({ joinThread }: { joinThread: (thread: string) => any }) => 
         </Button>
       </InputRightElement>
     </InputGroup>
-  </InputFlex>;
+  </InputBase>;
 };
 
 const ThreadMessageDisplay = ({ post }: { post: ThreadPost }) => {

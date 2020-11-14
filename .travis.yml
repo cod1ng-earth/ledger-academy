@@ -7,10 +7,8 @@ cache:
   directories:
     - node_modules
 
-before_script: cd contracts && npx truffle develop &
-
 script:
   - yarn run contracts
-  - cd contracts && npx truffle test --network=develop
+  - cd contracts && npx truffle develop & && npx truffle test --network=develop
   - yarn run test
   - yarn run build

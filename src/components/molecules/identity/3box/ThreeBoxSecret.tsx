@@ -2,9 +2,9 @@ import {
   Button, Input, InputGroup, InputRightElement,
 } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
-import InputFlex from 'components/atoms/InputFlex';
+import { InputBase } from 'components/atoms/InputFlex';
 
-const ThreeBoxSecret = ({ space }: {space: any}) => {
+const ThreeBoxSecret = ({ space }: { space: any }) => {
   const [secretValue, setSecretValue] = useState<string>('');
 
   const updateSecretValue = async () => {
@@ -19,28 +19,28 @@ const ThreeBoxSecret = ({ space }: {space: any}) => {
     })();
   }, []);
 
-  return (<InputFlex >
+  return (<InputBase >
     <InputGroup size="md" w="100%">
-        <Input
+      <Input
         onChange={(e: any) => setSecretValue(e.target.value)}
         value={secretValue}
         name="name"
         type="text"
         placeholder="shhhhhh"
-        />
-        <InputRightElement width="10rem" mr="1.5rem">
+      />
+      <InputRightElement width="10rem" mr="1.5rem">
         <Button variantColor="blue"
-        onClick={updateSecretValue}
-            loadingText="Submitting"
-            h="1.75rem"
-            size="sm"
-            type="submit"
+          onClick={updateSecretValue}
+          loadingText="Submitting"
+          h="1.75rem"
+          size="sm"
+          type="submit"
         >
-        store a private secret
+          store a private secret
         </Button>
-        </InputRightElement>
+      </InputRightElement>
     </InputGroup>
-  </InputFlex>);
+  </InputBase>);
 };
 
 export default ThreeBoxSecret;
