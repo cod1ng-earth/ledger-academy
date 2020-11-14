@@ -25,7 +25,14 @@ const IpfsFileManager = () => {
     try {
       if (!ipfsNode) return;
 
-      const stats = await ipfsNode.files.stat(FOLDER_NAME);
+      let stats;
+      try {
+        stats = await ipfsNode.files.stat(FOLDER_NAME);
+      } catch (e) {
+        ipfsNode.files.mkdir(FOLDER_NAME);
+        stats = await ipfsNode.files.stat(FOLDER_NAME);
+      }
+
       setFolderCid(stats.cid.toString());
 
       const res = ipfsNode.files.ls(FOLDER_NAME);

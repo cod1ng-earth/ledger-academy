@@ -23,7 +23,7 @@
     "ipfs-message-port-protocol": "^0.2.0",
     "ipfs-message-port-server": "^0.2.2",
     "multiaddr": "^8.0.0",
-    "orbit-db": "^0.26.0",
+    "orbit-db": "0.25.1",
     "react": "^16.8",
     "react-dom": "^16.8",
     "react-dropzone": "^11.2.0",
