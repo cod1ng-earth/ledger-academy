@@ -62,9 +62,9 @@ const IpfsFileManager = () => {
       <SimpleGrid columns={[1, 2]} spacing="2" >
         <Box w="100%">
           <form onSubmit={submitText}>
-              <Textarea name="thecontent" defaultValue="test" />
-              <Button variantColor="red" type="submit" mt="1">
-                store!
+            <Textarea name="thecontent" defaultValue="test" />
+            <Button variantColor="red" type="submit" mt="1">
+              store!
               </Button>
           </form>
         </Box>
@@ -82,7 +82,7 @@ const IpfsFileManager = () => {
     <Box>
       <Flex justify="space-between" mt="2">
         <Heading as="h2" size="md" my="2">Uploaded so far</Heading>
-        <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` } } icon="external-link" aria-label="show on gateway" />
+        <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` }} icon="external-link" aria-label="show on gateway" />
       </Flex>
       <List>
         {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} />)}

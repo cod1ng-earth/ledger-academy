@@ -7,17 +7,18 @@ import { InputBase } from 'components/atoms/InputFlex';
 const ThreeBoxSecret = ({ space }: { space: any }) => {
   const [secretValue, setSecretValue] = useState<string>('');
 
+  const privateSpace = space.private;
   const updateSecretValue = async () => {
-    await space.private.set('secret-value', secretValue);
+    await privateSpace.set('secret-value', secretValue);
     setSecretValue(secretValue);
   };
 
   useEffect(() => {
     (async () => {
-      const _storedSecret = await space.private.get('secret-value');
+      const _storedSecret = await privateSpace.get('secret-value');
       setSecretValue(_storedSecret || '');
     })();
-  }, []);
+  }, [privateSpace]);
 
   return (<InputBase >
     <InputGroup size="md" w="100%">

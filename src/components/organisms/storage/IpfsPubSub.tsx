@@ -1,5 +1,5 @@
 import {
-  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text
+  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import NewMessageForm from 'components/atoms/NewMessageForm';
 import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
 interface IIpfsPubSubInterface {
-  onTopic: (topic: string) => void;
+  onTopic?: (topic: string) => void;
 }
 
 const textDecoder = new TextDecoder('utf-8');
@@ -37,7 +37,7 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
       decodeMessageToUtf8(newMessage),
       ...prevMessages,
     ]);
-  }, [topic]);
+  }, []);
 
   async function subscribe(_topic: string): Promise<void> {
     if (topic) {

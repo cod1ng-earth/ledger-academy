@@ -1,10 +1,10 @@
 import {
-  Box, Button, Heading, Text,
+  Box, Button, Heading,
 } from '@chakra-ui/core';
-import React, { useEffect, useState } from 'react';
-import ThreeBoxSecret from './ThreeBoxSecret';
-import ThreeBoxPublic from './ThreeBoxPublic';
+import React, { useState } from 'react';
 import ThreeBoxOpenThread from './ThreeBoxOpenThread';
+import ThreeBoxPublic from './ThreeBoxPublic';
+import ThreeBoxSecret from './ThreeBoxSecret';
 
 export const SPACE_NAME = 'the-ledger-academy';
 
@@ -16,7 +16,7 @@ const ThreeBoxSpace = ({ box }: { box: any }) => {
     await _space.syncDone;
     setSpace(_space);
   };
-  console.log(box)
+  console.log(box);
   return (
     <Box>
       <Heading size="md" my={2}>Space </Heading>

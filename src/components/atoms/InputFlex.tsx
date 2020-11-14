@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import React, { Children, useState } from 'react';
 import {
   Button, Flex, FormLabel, Input, InputGroup, InputRightElement,
 } from '@chakra-ui/core';
 import { FlexProps } from '@chakra-ui/core/dist/Flex';
+import React, { useState } from 'react';
 
 export const InputBase: React.FC<FlexProps> = (props) => (
   <Flex {...props}

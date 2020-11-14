@@ -1,9 +1,11 @@
-import { Alert, AlertDescription, AlertTitle, Box, Flex, Heading } from '@chakra-ui/core';
+import {
+  Alert, AlertDescription, AlertTitle, Box, Flex,
+} from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import LoginWith3Box from 'components/atoms/LoginWith3box';
 import ThreeBoxProfile from 'components/molecules/identity/3box/ThreeBoxProfile';
 import ThreeBoxSpace from 'components/molecules/identity/3box/ThreeBoxSpace';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Web3 from 'web3';
 
 const ThreeBox = () => {

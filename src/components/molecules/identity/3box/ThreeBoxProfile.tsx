@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import {
-  InputGroup, InputRightElement, Button, Input, Box, Flex,
+  Button, Input, InputGroup, InputRightElement,
 } from '@chakra-ui/core';
 import { InputBase } from 'components/atoms/InputFlex';
+import React, { useEffect, useState } from 'react';
 
 const ThreeBoxProfile = ({ box }: { box: any }) => {
   const [profile, setProfile] = useState<any>();
