@@ -1,6 +1,7 @@
 import {
-  Box, Button, Flex, Heading, Input, InputGroup, InputRightElement, Text,
+  Box, Flex, Heading, Text,
 } from '@chakra-ui/core';
+import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import NewMessageForm from 'components/atoms/NewMessageForm';
 import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
 import PubsubPeers from 'components/molecules/storage/PubsubPeers';
@@ -15,7 +16,6 @@ const textDecoder = new TextDecoder('utf-8');
 
 const IpfsPubSub = (props: IIpfsPubSubInterface) => {
   const [topic, setTopic] = useState<string>('');
-  const [newTopic, setNewTopic] = useState<string>(' ');
 
   const [messages, setMessages] = useState<any[]>([]);
   const { ipfsNode } = useIPFS();
@@ -54,23 +54,16 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
 
   return (<Flex direction="column" >
     <Heading as="h2" size="md" my="2">Publish - Subscribe</Heading>
-    <Box p="2" bg="gray.200">
-      <form onSubmit={(e) => { e.preventDefault(); subscribe(newTopic); }}>
-        <InputGroup size="md">
-          <Input
-            name="topic"
-            onChange={(e: any) => setNewTopic(e.target.value)} value={newTopic}
-            type="text"
-            placeholder="topic"
-          />
-          <InputRightElement width="6.5rem">
-            <Button h="1.75rem" size="sm" type="submit">
-              subscribe
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </form>
-    </Box>
+
+    <InputBase>
+      <OneLineTextInput
+        onSubmit={subscribe}
+        label="topic"
+        placeholder="subscribe to topic updates"
+        submitLabel="subscribe"
+      />
+    </InputBase>
+
     {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
       <Text as="b">{msg.from}.{i}</Text>
       <PubsubMessageDisplay data={msg.data} />

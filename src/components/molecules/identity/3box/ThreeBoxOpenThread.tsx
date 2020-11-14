@@ -9,7 +9,7 @@ import {
 import { InputBase } from 'components/atoms/InputFlex';
 import NewMessageForm from 'components/atoms/NewMessageForm';
 import { useIPFS } from 'context/IPFS';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 export const OPEN_THREAD_NAME = 'ledger-academy-open-thread';
 
@@ -56,7 +56,7 @@ const ThreadMessageDisplay = ({ post }: { post: ThreadPost }) => {
       });
       setUserName(profile.name);
     })();
-  }, []);
+  }, [ipfsNode, post.author]);
 
   return <Box py={2}>
     <Text as="b">{userName}</Text>
@@ -85,17 +85,17 @@ const ThreeBoxOpenThread = ({ space }: { space: any }) => {
     })();
   }, [thread]);
 
-  const joinOwnThread = async () => {
+  const joinOwnThread = useCallback(async () => {
     setThread(await space.joinThread(OPEN_THREAD_NAME));
-  };
+  }, [space]);
 
-  const joinThread = async (_threadAddress: string) => {
+  const joinThread = useCallback(async (_threadAddress: string) => {
     setThread(await space.joinThreadByAddress(_threadAddress));
-  };
+  }, [space]);
 
   useEffect(() => {
     joinOwnThread();
-  }, []);
+  }, [joinOwnThread]);
 
   return (thread ? <Flex direction="column">
     <Alert status="success" mb="6">

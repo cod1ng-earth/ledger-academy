@@ -5,7 +5,6 @@ import { InputBase } from 'components/atoms/InputFlex';
 import React, { useEffect, useState } from 'react';
 
 const ThreeBoxProfile = ({ box }: { box: any }) => {
-  const [profile, setProfile] = useState<any>();
   const [name, setName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -18,10 +17,9 @@ const ThreeBoxProfile = ({ box }: { box: any }) => {
   useEffect(() => {
     (async () => {
       const _profile = await box.public.all();
-      setProfile(_profile);
       setName(_profile.name);
     })();
-  }, []);
+  }, [box.public]);
 
   return <InputBase >
     <InputGroup size="md" w="100%">

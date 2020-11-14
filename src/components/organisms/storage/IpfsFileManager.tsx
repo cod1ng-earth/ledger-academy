@@ -5,7 +5,7 @@ import DownloadFile from 'components/molecules/storage/DownloadFile';
 import DropZone from 'components/molecules/storage/DropZone';
 import FileListItem from 'components/molecules/storage/FileListItem';
 import { Ipfs } from 'ipfs';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
 const IpfsFileManager = () => {
@@ -21,7 +21,7 @@ const IpfsFileManager = () => {
     });
   }
 
-  const refreshDirectory = async () => {
+  const refreshDirectory = useCallback(async () => {
     try {
       if (!ipfsNode) return;
 
@@ -44,7 +44,7 @@ const IpfsFileManager = () => {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [ipfsNode]);
 
   const submitText = async (e: any) => {
     if (!ipfsNode) {
@@ -61,7 +61,7 @@ const IpfsFileManager = () => {
 
   useEffect(() => {
     if (ipfsNode) { refreshDirectory(); }
-  }, [ipfsNode]);
+  }, [ipfsNode, refreshDirectory]);
 
   return (<Flex direction="column" >
     <Box p="2" bg="gray.200" my="2">

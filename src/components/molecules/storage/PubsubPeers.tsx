@@ -19,8 +19,8 @@ const PubsubPeers = ({ topic }: { topic: string }) => {
     };
   }, [ipfsNode, topic]);
 
-  return <Box mt="2">
-    <Heading size="sm">Subscribed Peers</Heading>
+  return <Box my="3">
+    <Heading size="md">Subscribed Peers</Heading>
     <List>
       {subscribedPeers.map((p) => (<ListItem key={p}>{p}</ListItem>))}
     </List>

@@ -3,7 +3,7 @@ import {
 } from '@chakra-ui/core';
 import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import { default as ODB } from 'orbit-db';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
 interface LogMessage {
@@ -19,13 +19,13 @@ const OrbitDB = () => {
 
   const [messages, setMessages] = useState<LogMessage[]>([]);
 
-  const reload = async () => {
+  const reload = useCallback(async () => {
     console.debug('reload called');
     const _messages = db.iterator({ limit: 20, reverse: true })
       .collect()
       .map((e: any) => e.payload.value);
     setMessages(_messages);
-  };
+  }, [db]);
 
   const addMessage = async (msg: string) => {
     const hash = await db.add({ message: msg });
@@ -50,7 +50,7 @@ const OrbitDB = () => {
         db.events.removeAllListeners();
       };
     }
-  }, [db]);
+  }, [db, reload]);
 
   const connectDb = async (dbname: string) => {
     const orbitDb = await ODB.createInstance(ipfsNode);

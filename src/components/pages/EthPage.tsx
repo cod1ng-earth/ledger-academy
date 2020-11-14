@@ -3,7 +3,7 @@ import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import Web3Alert, { ConnectedAlert } from 'components/atoms/Web3Alert';
 import MintForm from 'components/organisms/blockchain/MintForm';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { EthBalance, AdiBalance } from 'components/atoms/Balances';
@@ -24,7 +24,7 @@ const EthPage = (props: RouteComponentProps) => {
   const [isMinter, setIsMinter] = useState<string>('');
 
   // https://github.com/OpenZeppelin/openzeppelin-contracts-ethereum-package/blob/master/contracts/presets/ERC20PresetMinterPauser.sol
-  const queryContractState = async (): Promise<string> => {
+  const queryContractState = useCallback(async (): Promise<string> => {
     let balance = '0';
     try {
       balance = await contract.methods
@@ -37,11 +37,11 @@ const EthPage = (props: RouteComponentProps) => {
       console.error('ohoh - no eth provider found');
     }
     return balance;
-  };
+  }, [account, contract]);
 
-  const queryMinterRole = async (): Promise<void> => {
+  const queryMinterRole = useCallback(async (): Promise<void> => {
     setIsMinter(await contract.methods.hasRole(MINTER_ROLE, account).call());
-  };
+  }, [MINTER_ROLE, account, contract]);
 
   useEffect(() => {
     (async () => {
@@ -57,14 +57,13 @@ const EthPage = (props: RouteComponentProps) => {
         setContract(_contract);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, web3]);
 
   useEffect(() => {
     if (!contract) return;
     queryContractState();
     queryMinterRole();
-  }, [contract]);
+  }, [contract, queryContractState, queryMinterRole]);
 
   return (!web3Active) ? <Web3Alert /> : (
     <Box>

@@ -3,9 +3,9 @@ import {
 } from '@chakra-ui/core';
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-const ConnectPeer = ({ onConnected }: {onConnected: () => Promise<void>}) => {
+const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
   const [peer, setPeer] = useState<string>('');
 
@@ -29,7 +29,7 @@ const ConnectPeer = ({ onConnected }: {onConnected: () => Promise<void>}) => {
         />
         <InputRightElement width="6.5rem">
           <Button h="1.75rem" size="sm" type="submit">
-          connect
+            connect
           </Button>
         </InputRightElement>
       </InputGroup>
@@ -45,7 +45,7 @@ const IpfsInfo = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localAddrs, setLocalAddrs] = useState<Ipfs.Multiaddr[]>([]);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!ipfsNode) return;
     const _peers = await ipfsNode.swarm.peers();
 
@@ -53,55 +53,55 @@ const IpfsInfo = () => {
     setAddrs(await ipfsNode.swarm.addrs());
     setLocalAddrs(await ipfsNode.swarm.localAddrs());
     setIpfsIdentity(await ipfsNode.id());
-  };
+  }, [ipfsNode]);
 
   useEffect(() => {
     refresh();
-  }, [ipfsNode]);
+  }, [ipfsNode, refresh]);
 
   return <Box>
-      <Accordion allowToggle>
-        <AccordionItem>
-            <AccordionHeader>
-                Identity <AccordionIcon />
-            </AccordionHeader>
-            <AccordionPanel>
-                <Text><b>ID</b> {ipfsIdentity?.id}</Text>
-                <Text isTruncated><b>Public Key</b> {ipfsIdentity?.publicKey}</Text>
-            </AccordionPanel>
-        </AccordionItem>
+    <Accordion allowToggle>
+      <AccordionItem>
+        <AccordionHeader>
+          Identity <AccordionIcon />
+        </AccordionHeader>
+        <AccordionPanel>
+          <Text><b>ID</b> {ipfsIdentity?.id}</Text>
+          <Text isTruncated><b>Public Key</b> {ipfsIdentity?.publicKey}</Text>
+        </AccordionPanel>
+      </AccordionItem>
 
-        <AccordionItem>
-            <AccordionHeader>Peers <AccordionIcon /></AccordionHeader>
-            <AccordionPanel>
-                <Button onClick={refresh}>refresh</Button>
-                <List>
-                    {peers.map((p: Ipfs.Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
-                </List>
+      <AccordionItem>
+        <AccordionHeader>Peers <AccordionIcon /></AccordionHeader>
+        <AccordionPanel>
+          <Button onClick={refresh}>refresh</Button>
+          <List>
+            {peers.map((p: Ipfs.Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
+          </List>
 
-                <ConnectPeer onConnected={refresh}/>
-            </AccordionPanel>
-        </AccordionItem>
+          <ConnectPeer onConnected={refresh} />
+        </AccordionPanel>
+      </AccordionItem>
 
-        <AccordionItem>
-            <AccordionHeader>
-            Addresses <AccordionIcon />
-            </AccordionHeader>
-            <AccordionPanel>
-                <List>
-                    {addrs.map((addr: Ipfs.PeerInfo) => <ListItem key={addr.id}>
-                        <Text as="b">{addr.id}</Text>
-                        <List ml="3">
-                            {addr.addrs.map((_addr: Ipfs.Multiaddr, i: number) => <ListItem key={`${addr}-${i}`}>
-                                {_addr.toString()}
-                            </ListItem>)}
-                        </List>
-                    </ListItem>)}
-                </List>
-            </AccordionPanel>
-        </AccordionItem>
-        </Accordion>
-    </Box>;
+      <AccordionItem>
+        <AccordionHeader>
+          Addresses <AccordionIcon />
+        </AccordionHeader>
+        <AccordionPanel>
+          <List>
+            {addrs.map((addr: Ipfs.PeerInfo) => <ListItem key={addr.id}>
+              <Text as="b">{addr.id}</Text>
+              <List ml="3">
+                {addr.addrs.map((_addr: Ipfs.Multiaddr, i: number) => <ListItem key={`${addr}-${i}`}>
+                  {_addr.toString()}
+                </ListItem>)}
+              </List>
+            </ListItem>)}
+          </List>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  </Box>;
 };
 
 export default IpfsInfo;
