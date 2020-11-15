@@ -7,8 +7,11 @@ cache:
   directories:
     - node_modules
 
+install:
+  - bash ./.travis/install.sh
+
 script:
   - yarn run contracts
-  - cd contracts && npx truffle develop & && npx truffle test --network=develop
-  - yarn run test
-  - yarn run build
+  - bash ./.travis/test-truffle.sh
+  #- yarn run test
+  #- yarn run build
