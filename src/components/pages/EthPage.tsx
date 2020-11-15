@@ -40,7 +40,9 @@ const EthPage = (props: RouteComponentProps) => {
   }, [account, contract]);
 
   const queryMinterRole = useCallback(async (): Promise<void> => {
-    setIsMinter(await contract.methods.hasRole(MINTER_ROLE, account).call());
+    if (account && contract) {
+      setIsMinter(await contract.methods.hasRole(MINTER_ROLE, account).call());
+    }
   }, [MINTER_ROLE, account, contract]);
 
   useEffect(() => {
