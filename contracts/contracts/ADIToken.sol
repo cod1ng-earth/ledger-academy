@@ -7,7 +7,7 @@ contract ADIToken is ERC20PresetMinterPauserUpgradeable {
     uint256 public ethBalance;
 
     function greet() public pure returns (string memory) {
-        string memory g = "Bom Dia!!";
+        string memory g = "Bom Dia";
         return g;
     }
 
