@@ -8,7 +8,7 @@ module.exports = async function (callback) {
     const adiToken = await ADIToken.deployed();
 
     const amount = web3.utils.numberToHex(1e19);
-    const minted = await adiToken.mint(accounts[0], amount);
+    const minted = await adiToken.mint(adiToken.address, amount);
     const totalSupply = await adiToken.totalSupply();
 
     console.log('total supply', totalSupply.toString());

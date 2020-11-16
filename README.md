@@ -97,10 +97,24 @@ src/contracts/ADIToken.json -> contracts/build/truffle/ADIToken.json
 
 now you can access their ABIs from Javascript
 
-## live instances:
+## public network instances:
+
+if you'd like to deploy your very own live instance of the contracts, feel free to use a command like:
+
+```
+npx truffle migrate --network goerli
+```
+
+note, that Infura might have problems keeping up the connection. This is a known issue: https://github.com/trufflesuite/truffle/issues/3356, hence we switched to a websocket provider in `truffle-config.js`. 
+
+If you deployed some contracts you can check their addresses using
+
+```
+npx truffle networks
+```
 
 ### ADI Token
-goerli: `0x7c9BeD2220B6A7545d31ad8911BAeB7003483337`
+goerli: `0xb65b87423455ac85f9A308C282528f8C25d252F9`
 
 ## Styles:
 
