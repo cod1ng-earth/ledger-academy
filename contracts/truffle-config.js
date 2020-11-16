@@ -50,6 +50,12 @@ module.exports = {
       network_id: '*', // Any network (default: none)
       gasPrice: 10000,
     },
+    ci: {
+      host: '127.0.0.1',
+      port: 8545,
+      network_id: 5779,
+      gasPrice: 10000,
+    },
     develop: { // unique to truffle
       network_id: 1337,
       accounts: 10,

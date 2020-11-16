@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import {
-  InputGroup, InputRightElement, Button, Input, Box, Flex,
+  Button, Input, InputGroup, InputRightElement,
 } from '@chakra-ui/core';
-import InputFlex from 'components/atoms/InputFlex';
+import { InputBase } from 'components/atoms/InputFlex';
+import React, { useEffect, useState } from 'react';
 
 const ThreeBoxProfile = ({ box }: { box: any }) => {
-  const [profile, setProfile] = useState<any>();
   const [name, setName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -18,12 +17,11 @@ const ThreeBoxProfile = ({ box }: { box: any }) => {
   useEffect(() => {
     (async () => {
       const _profile = await box.public.all();
-      setProfile(_profile);
       setName(_profile.name);
     })();
-  }, []);
+  }, [box.public]);
 
-  return <InputFlex >
+  return <InputBase >
     <InputGroup size="md" w="100%">
       <Input
         onChange={(e: any) => setName(e.target.value)}
@@ -47,7 +45,7 @@ const ThreeBoxProfile = ({ box }: { box: any }) => {
       </InputRightElement>
 
     </InputGroup>
-  </InputFlex>;
+  </InputBase>;
 };
 
 export default ThreeBoxProfile;
