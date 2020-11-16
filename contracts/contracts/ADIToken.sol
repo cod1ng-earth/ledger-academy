@@ -1,13 +1,13 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/presets/ERC20PresetMinterPauser.sol";
+import "@openzeppelin/contracts-upgradeable/presets/ERC20PresetMinterPauserUpgradeable.sol";
 
-contract ADIToken is ERC20PresetMinterPauserUpgradeSafe {
+contract ADIToken is ERC20PresetMinterPauserUpgradeable {
     uint256 public ethBalance;
 
     function greet() public pure returns (string memory) {
-        string memory g = "Bom Dia";
+        string memory g = "Bom Dia!!";
         return g;
     }
 
