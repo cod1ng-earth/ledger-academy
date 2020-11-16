@@ -9,7 +9,7 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
 
   const [recipient, setRecipient] = useState<IRecipient>({
     address: '0x',
-    amount: 1e18.toString(),
+    amount: 1.0,
   });
 
   const [isTransactionPending, setIsTransactionPending] = useState(false);
@@ -39,25 +39,25 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
   };
 
   return (
-      <Flex direction="column" justifyContent="stretch" my="6">
-        <Heading size="md">Mint to</Heading>
-        <RecipientForm
-          recipient={recipient}
-          disabled={isTransactionPending}
-          onChange={(addr, recip) => setRecipient(recip)}
-        />
+    <Flex direction="column" justifyContent="stretch" my="6">
+      <Heading size="md">Mint to</Heading>
+      <RecipientForm
+        recipient={recipient}
+        disabled={isTransactionPending}
+        onChange={setRecipient}
+      />
 
-        <Flex direction="row">
-          <Button variantColor="red"
-            isLoading={isTransactionPending}
-            loadingText="transacting"
-            isDisabled={ isTransactionPending || !isValid(recipient) }
-            onClick={() => mintADITokens(recipient)}>
-           Mint
+      <Flex direction="row">
+        <Button variantColor="red"
+          isLoading={isTransactionPending}
+          loadingText="transacting"
+          isDisabled={isTransactionPending || !isValid(recipient)}
+          onClick={() => mintADITokens(recipient)}>
+          Mint
           </Button>
-        </Flex>
-        {transactionHash}
       </Flex>
+      {transactionHash}
+    </Flex>
   );
 };
 

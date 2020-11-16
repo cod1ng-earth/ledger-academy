@@ -27,11 +27,11 @@ const ExchangeForm = ({ contract, onFinished }: {
   return (
     <InputBase>
       <OneLineTextInput
-      label="amount"
-      initialValue="0.01"
-      placeholder="enter an eth amount to exchange (0.01)"
-      submitLabel="exchange"
-      onSubmit={(amount: string) => exchangeEthForADI(amount) }
+        label="amount"
+        initialValue="0.01"
+        placeholder="enter an eth amount to exchange (e.g. 0.01)"
+        submitLabel="exchange"
+        onSubmit={(amount: string) => exchangeEthForADI(amount)}
       />
     </InputBase>
   );
