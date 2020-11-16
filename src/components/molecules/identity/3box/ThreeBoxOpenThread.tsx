@@ -6,7 +6,7 @@ import {
   Box,
   Button, Flex, IconButton, Input, InputGroup, InputRightElement, Text, useClipboard,
 } from '@chakra-ui/core';
-import { InputBase } from 'components/atoms/InputFlex';
+import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import NewMessageForm from 'components/atoms/NewMessageForm';
 import { useIPFS } from 'context/IPFS';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -25,22 +25,17 @@ export interface ThreadPost {
 const JoinThread = ({ joinThread }: { joinThread: (thread: string) => any }) => {
   const [thread, setThread] = useState<string>('');
   return <InputBase >
-    <InputGroup size="md" w="100%">
-      <Input
-        name="thread"
-        onChange={(e: any) => setThread(e.target.value)} value={thread}
-        type="text"
-        placeholder="Thread Address"
-      />
-      <InputRightElement width="4.5rem">
-        <Button h="1.75rem" size="sm" onClick={() => {
-          joinThread(thread);
-          setThread('');
-        }}>
-          join
-        </Button>
-      </InputRightElement>
-    </InputGroup>
+    <OneLineTextInput
+      label="join a thread"
+      onSubmit={() => {
+        joinThread(thread);
+        setThread('');
+      }}
+      initialValue={thread}
+      placeholder="thread name"
+      submitLabel="join"
+    />
+
   </InputBase>;
 };
 
