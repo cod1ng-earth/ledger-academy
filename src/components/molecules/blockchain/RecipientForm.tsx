@@ -6,28 +6,28 @@ import React, { useState } from 'react';
 
 export interface IRecipient {
   address: string,
-  amount: number,
+  amount: string,
 }
 
-const RecipientForm = ({ disabled, recipient, onChange }: {
-  disabled: boolean,
+const RecipientForm = ({ isDisabled, recipient, onChange }: {
+  isDisabled: boolean,
   recipient: IRecipient,
   onChange: (recipient: IRecipient) => void
 }) => {
   const [recipientAddress, setRecipientAddress] = useState<string>(recipient.address);
-  const [amount, setAmount] = useState<string>(recipient.amount.toString());
+  const [amount, setAmount] = useState<string>(recipient.amount);
 
   const updateRecipient = (e: any) => {
     e.preventDefault();
     onChange({
       address: recipientAddress,
-      amount: parseFloat(amount),
+      amount,
     });
   };
 
   return <form onSubmit={updateRecipient}>
     <InputBase>
-      <FormControl isDisabled={disabled} w="100%">
+      <FormControl isDisabled={isDisabled} w="100%">
         <FormLabel htmlFor="address">Address</FormLabel>
         <Input
           type="text" value={recipientAddress}
@@ -38,7 +38,7 @@ const RecipientForm = ({ disabled, recipient, onChange }: {
           </FormHelperText>
       </FormControl>
 
-      <FormControl isDisabled={disabled}>
+      <FormControl isDisabled={isDisabled}>
         <FormLabel htmlFor="amount">Amount</FormLabel>
         <Input
           type="text" value={amount}

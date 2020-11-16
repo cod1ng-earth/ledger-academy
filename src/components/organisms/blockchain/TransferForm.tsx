@@ -18,9 +18,9 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
 
     const recips = [];
     const amts = [];
-    for (const rec of recipients) {
-      recips.push(rec.address);
-      amts.push(Web3.utils.toBN(rec.amount));
+    for (const recipient of recipients) {
+      recips.push(recipient.address);
+      amts.push(Web3.utils.toWei(recipient.amount));
     }
 
     const methodCall = contract.methods.airdrop(recips, amts);
@@ -54,7 +54,7 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   const addRecipient = (): IRecipient => {
     const r: IRecipient = {
       address: '0x',
-      amount: 0.01,
+      amount: '0.01',
     };
     setRecipients([...recipients, r]);
     return r;
@@ -75,7 +75,7 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
 
   useEffect(() => {
     setValidRecipients(recipients.filter(
-      (r: IRecipient) => Web3.utils.isAddress(r.address) && r.amount > 0,
+      (r: IRecipient) => Web3.utils.isAddress(r.address) && parseFloat(r.amount) > 0,
     ));
   }, [recipients]);
 
@@ -86,7 +86,7 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
         {recipients.map((r) => <RecipientForm
           key={`${r.address}`}
           recipient={r}
-          disabled={isTransactionPending}
+          isDisabled={isTransactionPending}
           onChange={(recipient: IRecipient) => changeRecipient(r.address, recipient)}
         />)}
       </Flex>

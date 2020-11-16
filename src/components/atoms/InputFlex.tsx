@@ -22,6 +22,7 @@ export interface IOneLineTextInput {
   placeholder?: string,
   submitLabel?: string,
   initialValue?: string,
+  isDisabled?: boolean,
 }
 
 const OneLineTextInput: React.FC<IOneLineTextInput> = ({
@@ -30,6 +31,7 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
   placeholder = '',
   submitLabel = 'submit',
   initialValue = '',
+  isDisabled = false,
 }: IOneLineTextInput) => {
   const [value, setValue] = useState<string>(initialValue);
   const inputName = label.toLowerCase().replaceAll(/\W/g, '-');
@@ -46,9 +48,10 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
           onChange={(e: any) => setValue(e.target.value)} value={value}
           type="text"
           placeholder={placeholder}
+          isDisabled={isDisabled}
         />
         <InputRightElement width="6.5rem">
-          <Button variantColor="teal" h="1.75rem" size="sm" type="submit">
+          <Button isDisabled={isDisabled} variantColor="teal" h="1.75rem" size="sm" type="submit">
             {submitLabel}
           </Button>
         </InputRightElement>
