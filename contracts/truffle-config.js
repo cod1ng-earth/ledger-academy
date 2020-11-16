@@ -17,8 +17,11 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
+require('dotenv-flow').config({
+  path: '..',
+});
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
@@ -63,6 +66,23 @@ module.exports = {
       gasPrice: 10000,
       host: '127.0.0.1',
       port: 9545,
+    },
+    ropsten: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/${process.env.PROJECT_ID}`),
+      network_id: 3, // Ropsten's id
+    },
+    rinkeby: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`),
+      network_id: 4, // Rinkeby's id
+    },
+    kovan: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://kovan.infura.io/v3/${process.env.PROJECT_ID}`),
+      network_id: 42, // Kovan's id
+    },
+    goerli: {
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://goerli.infura.io/v3/${process.env.PROJECT_ID}`),
+      network_id: 5, // Goerli's id
+      gas: 7500000,
     },
     // Another network with more advanced options...
     // advanced: {

@@ -2760,10 +2760,10 @@
   resolved "https://registry.yarnpkg.com/@truffle/error/-/error-0.0.11.tgz#2789c0042d7e796dcbb840c7a9b5d2bcd8e0e2d8"
   integrity sha512-ju6TucjlJkfYMmdraYY/IBJaFb+Sa+huhYtOoyOJ+G29KcgytUVnDzKGwC7Kgk6IsxQMm62Mc1E0GZzFbGGipw==
 
-"@truffle/hdwallet-provider@^1.0.35":
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/@truffle/hdwallet-provider/-/hdwallet-provider-1.0.44.tgz#4b61c49ae4d48cd438946aff74e92de83f951be4"
-  integrity sha512-pStsF5me3cxthf6dVjuQV08CzssUneURw9ZZCDknFZIq/kofWuk710VnmSIhDBcT2iSxGzemy0hIuP+3MG3fYQ==
+"@truffle/hdwallet-provider@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@truffle/hdwallet-provider/-/hdwallet-provider-1.2.0.tgz#7d4cc2038e1a2ca5cf08877f72a6383d14aff491"
+  integrity sha512-EPatDbyRuGbB/MLt9ZBokmtjyLjaNpuHfUIWuv4mQMrH1Nu82H5AAZYLh4Z1BZliDZpqB03a0yUMmK/4R0BN9g==
   dependencies:
     "@trufflesuite/web3-provider-engine" "15.0.13-1"
     "@types/web3" "^1.0.20"
