@@ -2,8 +2,10 @@ import {
   Box, CSSReset, Flex, ThemeProvider,
 } from '@chakra-ui/core';
 import {
-  createHistory, HistorySource, LocationProvider, Router,
-} from '@reach/router';
+  HashRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import { Web3ReactProvider } from '@web3-react/core';
 import Header from 'components/molecules/Header';
 import TestPage from 'components/pages/TestPage';
@@ -17,31 +19,34 @@ import customTheme from './theme';
 
 const getLibrary = (provider: any): Web3 => new Web3(provider);
 
-const App: React.FC = () => {
-  const history = createHistory(window as unknown as HistorySource);
-  return (<ThemeProvider theme={customTheme}>
-    <CSSReset />
-    <LocationProvider history={history}>
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <IPFSProvider>
-          <Header />
-          <Flex m={2}>
-            <Box width="full">
-
-              <main>
-                <Router>
-                  <EthPage path="/" />
-                  <IpfsPage path="ipfs" />
-                  <IdentityPage path="identity" />
-                  <TestPage path="test" />
-                </Router>
-              </main>
-            </Box>
-          </Flex>
-        </IPFSProvider>
-      </Web3ReactProvider>
-    </LocationProvider>
-  </ThemeProvider>);
-};
-
+const App: React.FC = () => (<ThemeProvider theme={customTheme}>
+  <CSSReset />
+  <Web3ReactProvider getLibrary={getLibrary}>
+    <IPFSProvider>
+      <Router>
+        <Header />
+        <Flex m={2}>
+          <Box width="full">
+            <main>
+              <Switch>
+                <Route exact path="/">
+                  <EthPage />
+                </Route>
+                <Route path="/ipfs">
+                  <IpfsPage />
+                </Route>
+                <Route path="/identity">
+                  <IdentityPage />
+                </Route>
+                <Route path="/test">
+                  <TestPage />
+                </Route>
+              </Switch>
+            </main>
+          </Box>
+        </Flex>
+      </Router>
+    </IPFSProvider>
+  </Web3ReactProvider>
+</ThemeProvider>);
 export default App;
