@@ -1,8 +1,5 @@
-import {
-  Button, Input, InputGroup, InputRightElement,
-} from '@chakra-ui/core';
-import React, { useEffect, useState } from 'react';
 import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
+import React, { useEffect, useState } from 'react';
 
 const ThreeBoxSecret = ({ space }: { space: any }) => {
   const [secretValue, setSecretValue] = useState<string>('');

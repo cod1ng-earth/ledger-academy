@@ -4,7 +4,7 @@ import {
   AlertDescription,
   AlertTitle,
   Box,
-  Button, Flex, IconButton, Input, InputGroup, InputRightElement, Text, useClipboard,
+  Flex, IconButton, Text, useClipboard,
 } from '@chakra-ui/core';
 import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import NewMessageForm from 'components/atoms/NewMessageForm';
