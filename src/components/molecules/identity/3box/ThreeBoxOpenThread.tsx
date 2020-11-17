@@ -27,8 +27,9 @@ const JoinThread = ({ joinThread }: { joinThread: (thread: string) => any }) => 
   return <InputBase >
     <OneLineTextInput
       label="join a thread"
-      onSubmit={() => {
-        joinThread(thread);
+      onSubmit={(_thread: string) => {
+        console.debug('joining', _thread);
+        joinThread(_thread);
         setThread('');
       }}
       initialValue={thread}
