@@ -16,7 +16,7 @@ const ThreeBoxSpace = ({ box }: { box: any }) => {
     await _space.syncDone;
     setSpace(_space);
   };
-  console.log(box);
+
   return (
     <Box>
       <Heading size="md" my={2}>Space </Heading>

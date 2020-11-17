@@ -8,6 +8,7 @@ services:
       - --deterministic
       - --db=/ganache_data
       - --mnemonic=${MNEMONIC}
+      - --chainId=5779
       - --networkId=5779
       - --gasPrice=5e9
     volumes:

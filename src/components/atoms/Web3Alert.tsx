@@ -3,11 +3,11 @@ import {
 } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import { injected, walletconnect } from 'modules/connectors';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Blockie from './Blockie';
 
 const Web3Alert: React.FC<any> = () => {
-  const { activate, error: web3Error, chainId } = useWeb3React();
+  const { activate } = useWeb3React();
 
   const connect = (connector: any) => {
     activate(connector, console.error);

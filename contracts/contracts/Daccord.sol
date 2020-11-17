@@ -1,10 +1,9 @@
 pragma solidity ^0.6.7;
 
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 
-contract Daccord is OwnableUpgradeSafe {
+contract Daccord is OwnableUpgradeable {
     mapping(address => bool) public votes;
     address[] public voters;
 

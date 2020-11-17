@@ -2,7 +2,7 @@ import { Flex, Link, Text } from '@chakra-ui/core';
 import React from 'react';
 
 export const EthBalance = ({ balance }: {
-    balance: string
+    balance: number
   }) => <Flex p={2} border="1px solid" borderColor="gray.400" direction="column">
       <Text>Your Eth balance</Text>
       <Text fontSize="3xl" fontWeight="bold" isTruncated>{balance} Ξ</Text>

@@ -3,7 +3,7 @@ import {
   Button, Flex, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import { FlexProps } from '@chakra-ui/core/dist/Flex';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const InputBase: React.FC<FlexProps> = (props) => (
   <Flex {...props}
@@ -22,6 +22,7 @@ export interface IOneLineTextInput {
   placeholder?: string,
   submitLabel?: string,
   initialValue?: string,
+  isDisabled?: boolean,
 }
 
 const OneLineTextInput: React.FC<IOneLineTextInput> = ({
@@ -30,30 +31,33 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
   placeholder = '',
   submitLabel = 'submit',
   initialValue = '',
+  isDisabled = false,
 }: IOneLineTextInput) => {
   const [value, setValue] = useState<string>(initialValue);
   const inputName = label.toLowerCase().replaceAll(/\W/g, '-');
+  useEffect(() => setValue(initialValue), [initialValue]);
   return (
-    <>
-      <Flex>
-        <Text whiteSpace="nowrap">{label}</Text>
+    <Flex direction="column" align="flex-start" w="100%">
+      <Text whiteSpace="nowrap" p={1}>{label}</Text>
+      <Flex direction="row" w="100%">
+        <InputGroup as="form" size="md" w="100%"
+          onSubmit={(e) => { e.preventDefault(); onSubmit(value); }}
+        >
+          <Input
+            name={inputName}
+            onChange={(e: any) => setValue(e.target.value)} value={value}
+            type="text"
+            placeholder={placeholder}
+            isDisabled={isDisabled}
+          />
+          <InputRightElement width="6.5rem">
+            <Button isDisabled={isDisabled} variantColor="teal" h="1.75rem" size="sm" type="submit">
+              {submitLabel}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
       </Flex>
-      <InputGroup as="form" size="md" w="100%"
-        onSubmit={(e) => { e.preventDefault(); onSubmit(value); }}
-      >
-        <Input
-          name={inputName}
-          onChange={(e: any) => setValue(e.target.value)} value={value}
-          type="text"
-          placeholder={placeholder}
-        />
-        <InputRightElement width="6.5rem">
-          <Button variantColor="teal" h="1.75rem" size="sm" type="submit">
-            {submitLabel}
-          </Button>
-        </InputRightElement>
-      </InputGroup>
-    </>
+    </Flex>
   );
 };
 export default OneLineTextInput;

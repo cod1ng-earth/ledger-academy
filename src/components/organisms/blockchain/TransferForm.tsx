@@ -1,6 +1,6 @@
 import { Button, Flex, Heading } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import RecipientForm, { IRecipient } from '../../molecules/blockchain/RecipientForm';
 
@@ -8,6 +8,7 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   const { account } = useWeb3React<Web3>();
 
   const [recipients, setRecipients] = useState<IRecipient[]>([]);
+  const [validRecipients, setValidRecipients] = useState<IRecipient[]>([]);
 
   const [isTransactionPending, setIsTransactionPending] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>();
@@ -17,9 +18,9 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
 
     const recips = [];
     const amts = [];
-    for (const rec of recipients) {
-      recips.push(rec.address);
-      amts.push(Web3.utils.toBN(rec.amount));
+    for (const recipient of recipients) {
+      recips.push(recipient.address);
+      amts.push(Web3.utils.toWei(recipient.amount));
     }
 
     const methodCall = contract.methods.airdrop(recips, amts);
@@ -53,44 +54,56 @@ const TransferForm = ({ onFinished, contract }: { onFinished: Function, contract
   const addRecipient = (): IRecipient => {
     const r: IRecipient = {
       address: '0x',
-      amount: 1e12.toString(),
+      amount: '0.01',
     };
     setRecipients([...recipients, r]);
     return r;
   };
 
-  const changeRecipient = (address: string, r: IRecipient) => {
-    const _recipients = [
-      ...recipients.filter((_r) => address !== _r.address),
-      r,
-    ];
-    console.log(_recipients);
-    setRecipients(_recipients);
+  const changeRecipient = (oldAddress: string, r: IRecipient) => {
+    if (r.address.length === 0) {
+      setRecipients(
+        recipients.filter((_r) => oldAddress !== _r.address),
+      );
+    } else {
+      setRecipients([
+        ...recipients.filter((_r) => oldAddress !== _r.address && _r.address !== r.address),
+        r,
+      ]);
+    }
   };
 
+  useEffect(() => {
+    setValidRecipients(recipients.filter(
+      (r: IRecipient) => Web3.utils.isAddress(r.address) && parseFloat(r.amount) > 0,
+    ));
+  }, [recipients]);
+
   return (
-      <Flex direction="column" align="flex-start" my="6">
-        <Heading size="md">Transfer to</Heading>
+    <Flex direction="column" my="6" w="100%">
+      <Heading size="md">Transfer to</Heading>
+      <Flex direction="column" w="100%">
         {recipients.map((r) => <RecipientForm
-          key={r.address}
+          key={`${r.address}`}
           recipient={r}
-          disabled={isTransactionPending}
-          onChange={changeRecipient}
+          isDisabled={isTransactionPending}
+          onChange={(recipient: IRecipient) => changeRecipient(r.address, recipient)}
         />)}
-        <Flex direction="row">
-          <Button onClick={addRecipient}>add recipient</Button>
-          {recipients.length > 0
+      </Flex>
+      <Flex direction="row" align="center" justify="center">
+        <Button onClick={addRecipient}>add recipient</Button>
+        {validRecipients.length > 0
           && <Button variantColor="red"
             isLoading={isTransactionPending}
             loadingText="transacting"
-            isDisabled={ isTransactionPending || recipients.length === 0}
+            isDisabled={isTransactionPending || recipients.length === 0}
             onClick={airdropADITokens}>
-            Send to {recipients.length} recipients
+            Send to {validRecipients.length} recipients
           </Button>
-          }
-        </Flex>
-        {transactionHash}
+        }
       </Flex>
+      {transactionHash}
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from '@chakra-ui/core';
+import { Box, SimpleGrid, Heading } from '@chakra-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import Web3Alert, { ConnectedAlert } from 'components/atoms/Web3Alert';
@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { EthBalance, AdiBalance } from 'components/atoms/Balances';
+import ExchangeForm from 'components/organisms/blockchain/ExchangeForm';
 import ADIToken from '../../contracts/ADIToken.json';
 import TransferForm from '../organisms/blockchain/TransferForm';
 
@@ -18,7 +19,7 @@ const EthPage = (props: RouteComponentProps) => {
   } = useWeb3React<Web3>();
 
   const [contract, setContract] = useState<any>();
-  const [ethBalance, setEthBalance] = useState<string>('');
+  const [ethBalance, setEthBalance] = useState<number>(0.0);
   const [adiBalance, setADIBalance] = useState<string>('');
   const [networkType, setNetworkType] = useState<string>('');
   const [isMinter, setIsMinter] = useState<string>('');
@@ -48,10 +49,13 @@ const EthPage = (props: RouteComponentProps) => {
   useEffect(() => {
     (async () => {
       if (web3 && account) {
+        setNetworkType(await web3.eth.net.getNetworkType());
+
         const _ethBalance = await web3.eth.getBalance(account);
         const readableEthBalance = Web3.utils.fromWei(_ethBalance);
-        setNetworkType(await web3.eth.net.getNetworkType());
-        setEthBalance(readableEthBalance);
+        const floatEthBalance = parseFloat(readableEthBalance);
+        setEthBalance(floatEthBalance);
+
         const _contract = new web3.eth.Contract(
           ADIToken.abi as AbiItem[],
           process.env.REACT_APP_CONTRACT_ADDRESS,
@@ -75,6 +79,13 @@ const EthPage = (props: RouteComponentProps) => {
         <EthBalance balance={ethBalance} />
         {contract && <AdiBalance balance={adiBalance} network={networkType} contract={contract} />}
       </SimpleGrid>
+
+      { (contract && (ethBalance > 0)) && (
+        <>
+          <Heading size="md" mt={2}>exchange Eth for ADI</Heading>
+          <ExchangeForm contract={contract} onFinished={queryContractState} />
+        </>
+      )}
 
       {Number.parseFloat(adiBalance) > 0 && (
         <TransferForm onFinished={queryContractState} contract={contract} />

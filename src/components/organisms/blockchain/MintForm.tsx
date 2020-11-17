@@ -9,7 +9,7 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
 
   const [recipient, setRecipient] = useState<IRecipient>({
     address: '0x',
-    amount: 1e18.toString(),
+    amount: '1.0',
   });
 
   const [isTransactionPending, setIsTransactionPending] = useState(false);
@@ -22,7 +22,10 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
 
     setIsTransactionPending(true);
     // https://web3js.readthedocs.io/en/v1.2.7/web3-eth-contract.html#id36
-    const promiEvent = contract.methods.mint(recipient.address, recipient.amount).send({
+    const promiEvent = contract.methods.mint(
+      recipient.address,
+      Web3.utils.toWei(recipient.amount),
+    ).send({
       from: account,
       gasPrice: 21 * 1e5,
     });
@@ -39,25 +42,25 @@ const MintForm = ({ onFinished, contract }: { onFinished: Function, contract: an
   };
 
   return (
-      <Flex direction="column" justifyContent="stretch" my="6">
-        <Heading size="md">Mint to</Heading>
-        <RecipientForm
-          recipient={recipient}
-          disabled={isTransactionPending}
-          onChange={(addr, recip) => setRecipient(recip)}
-        />
+    <Flex direction="column" justifyContent="stretch" my="6">
+      <Heading size="md">Mint to</Heading>
+      <RecipientForm
+        recipient={recipient}
+        isDisabled={isTransactionPending}
+        onChange={setRecipient}
+      />
 
-        <Flex direction="row">
-          <Button variantColor="red"
-            isLoading={isTransactionPending}
-            loadingText="transacting"
-            isDisabled={ isTransactionPending || !isValid(recipient) }
-            onClick={() => mintADITokens(recipient)}>
-           Mint
+      <Flex direction="row">
+        <Button variantColor="red"
+          isLoading={isTransactionPending}
+          loadingText="transacting"
+          isDisabled={isTransactionPending || !isValid(recipient)}
+          onClick={() => mintADITokens(recipient)}>
+          Mint
           </Button>
-        </Flex>
-        {transactionHash}
       </Flex>
+      {transactionHash}
+    </Flex>
   );
 };
 
