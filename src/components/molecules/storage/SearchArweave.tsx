@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-    InputGroup, Input, InputRightElement, Button, List, IconButton, Flex, Box, Text
+  InputGroup, Input, InputRightElement, Button, List, IconButton, Flex, Box, Text,
 } from '@chakra-ui/core';
 import { and, or, equals } from 'arql-ops';
-import {downloadFromArweave} from "../../../modules/download";
+import { downloadFromArweave } from 'modules/arweave';
 
-const SearchArweave = (props: any) => {
+const SearchArweave = ({ arweave }: {arweave: any}) => {
   const [searchTag, setSearchTag] = useState<string>('');
   const [searchResult, setSearchResult] = useState<[]>([]);
 
@@ -16,9 +16,9 @@ const SearchArweave = (props: any) => {
         equals('cid', searchTag),
         equals('filename', searchTag),
         equals('search', searchTag),
-      )
+      ),
     );
-    const result = await props.arweave.arql(query);
+    const result = await arweave.arql(query);
     setSearchResult(result);
     console.log(searchResult);
   };
@@ -29,7 +29,7 @@ const SearchArweave = (props: any) => {
             name="cid"
             onChange={(e: any) => setSearchTag(e.target.value)} value={searchTag}
             type="text"
-            placeholder="SEARCH TAG"
+            placeholder="filename, cid, type, tag"
         />
         <InputRightElement width="6.5rem">
             <Button h="1.75rem" size="sm" type="submit">
@@ -38,7 +38,8 @@ const SearchArweave = (props: any) => {
         </InputRightElement>
     </InputGroup>
     <List>
-        {searchResult.map((r) => <Flex mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
+        {searchResult.map((r) => (
+        <Flex key={r} mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
             <Box>
                 <Text as="b">
                     {r}
@@ -49,11 +50,11 @@ const SearchArweave = (props: any) => {
                     variantColor="teal"
                     icon="download"
                     aria-label="Download"
-                    onClick={() => downloadFromArweave({ arweave: props.arweave, transactionId: r })}
+                    onClick={() => downloadFromArweave({ arweave, transactionId: r })}
                     size="sm"
                 />
             </Flex>
-        </Flex>)}
+        </Flex>))}
     </List>
   </form>);
 };
