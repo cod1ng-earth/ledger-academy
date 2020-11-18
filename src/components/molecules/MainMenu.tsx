@@ -20,7 +20,7 @@ const MenuItem: React.FC<any> = ({ to, children, as: As = React.Fragment }) => {
 const MainMenu: React.FC<any> = ({ as }) => (
   <List>
     <MenuItem to="/" as={as}>eth</MenuItem>
-    <MenuItem to="/ipfs" as={as}>ipfs</MenuItem>
+    <MenuItem to="/storage" as={as}>storage</MenuItem>
     <MenuItem to="/identity" as={as}>identity</MenuItem>
     <MenuItem to="/test" as={as}>Test</MenuItem>
   </List>

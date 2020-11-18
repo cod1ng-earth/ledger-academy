@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 import ArweaveTab, { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import IpfsPubSub from 'components/organisms/storage/IpfsPubSub';
 
-const IpfsPage = () => {
+const StoragePage = () => {
   const [arweave, setArweave] = useState<any>();
   const [arweaveWallet, setArweaveWallet] = useState<ArweaveWallet>();
 
@@ -46,4 +46,4 @@ const IpfsPage = () => {
   </Tabs>);
 };
 
-export default IpfsPage;
+export default StoragePage;

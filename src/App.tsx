@@ -1,20 +1,20 @@
 import {
   Box, CSSReset, Flex, ThemeProvider,
 } from '@chakra-ui/core';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
 import { Web3ReactProvider } from '@web3-react/core';
+import Footer from 'components/molecules/Footer';
 import Header from 'components/molecules/Header';
 import TestPage from 'components/pages/TestPage';
 import React from 'react';
+import {
+  HashRouter as Router,
+
+  Route, Switch,
+} from 'react-router-dom';
 import Web3 from 'web3';
-import Footer from 'components/molecules/Footer';
 import EthPage from './components/pages/EthPage';
 import IdentityPage from './components/pages/IdentityPage';
-import IpfsPage from './components/pages/IpfsPage';
+import StoragePage from './components/pages/StoragePage';
 import { IPFSProvider } from './context/IPFS';
 import customTheme from './theme';
 
@@ -33,8 +33,8 @@ const App: React.FC = () => (<ThemeProvider theme={customTheme}>
                 <Route exact path="/">
                   <EthPage />
                 </Route>
-                <Route path="/ipfs">
-                  <IpfsPage />
+                <Route path="/storage">
+                  <StoragePage />
                 </Route>
                 <Route path="/identity">
                   <IdentityPage />
