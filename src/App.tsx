@@ -11,6 +11,7 @@ import Header from 'components/molecules/Header';
 import TestPage from 'components/pages/TestPage';
 import React from 'react';
 import Web3 from 'web3';
+import Footer from 'components/molecules/Footer';
 import EthPage from './components/pages/EthPage';
 import IdentityPage from './components/pages/IdentityPage';
 import IpfsPage from './components/pages/IpfsPage';
@@ -24,10 +25,10 @@ const App: React.FC = () => (<ThemeProvider theme={customTheme}>
   <Web3ReactProvider getLibrary={getLibrary}>
     <IPFSProvider>
       <Router>
-        <Header />
-        <Flex m={2}>
-          <Box width="full">
-            <main>
+        <Flex direction="column" minHeight="100vh">
+          <Header />
+          <Flex m={2} flexGrow={1}>
+            <Box width="full">
               <Switch>
                 <Route exact path="/">
                   <EthPage />
@@ -42,8 +43,9 @@ const App: React.FC = () => (<ThemeProvider theme={customTheme}>
                   <TestPage />
                 </Route>
               </Switch>
-            </main>
-          </Box>
+            </Box>
+          </Flex>
+          <Footer />
         </Flex>
       </Router>
     </IPFSProvider>

@@ -3,14 +3,16 @@ import {
 } from '@chakra-ui/core';
 import { useWeb3React } from '@web3-react/core';
 import { injected, walletconnect } from 'modules/connectors';
-import React from 'react';
+import React, { useState } from 'react';
 import Blockie from './Blockie';
 
 const Web3Alert: React.FC<any> = () => {
   const { activate } = useWeb3React();
-
-  const connect = (connector: any) => {
-    activate(connector, console.error);
+  const [error, setError] = useState<string>();
+  const connect = async (connector: any) => {
+    activate(connector, (e) => {
+      setError(e.message);
+    });
   };
 
   return <Alert status="error" my={2}>
@@ -20,6 +22,7 @@ const Web3Alert: React.FC<any> = () => {
       Connect with {' '}
       <Link onClick={() => connect(injected)}>Metamask</Link> or {' '}
       <Link onClick={() => connect(walletconnect)}>Wallet Connect</Link>
+      {error && <Text>{error}</Text>}
     </AlertDescription>
     <CloseButton position="absolute" right="8px" top="8px" />
   </Alert>;
