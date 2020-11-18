@@ -5,11 +5,19 @@ import {
   Flex, Box, Text, IconButton,
 } from '@chakra-ui/core';
 import { download, content } from 'modules/download';
+import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
+import { storeOnArweave } from 'modules/arweave';
 
-const FileListItem = ({ file, arweave, arweaveWallet }: {file: Ipfs.UnixFSLsResult, arweave: any, arweaveWallet: any}) => {
+interface FileListItemProps {
+  file: Ipfs.UnixFSLsResult;
+  arweave: any;
+  arweaveWallet: ArweaveWallet | undefined;
+}
+
+const FileListItem = ({ file, arweave, arweaveWallet }: FileListItemProps) => {
   const { ipfsNode } = useIPFS();
 
-  const [arweaveTransaction, setArweaveTransaction] = useState<any>(null);
+  const [arweaveTransaction, setArweaveTransaction] = useState<any>();
 
   const sCid = file.cid.toString();
   const linkProps = {
@@ -18,14 +26,20 @@ const FileListItem = ({ file, arweave, arweaveWallet }: {file: Ipfs.UnixFSLsResu
   };
 
   const addToArweave = async (cid: string, filename: string) => {
-    const ipfsContent = await content({ipfsNode: ipfsNode, cid: cid});
-    let transaction = await arweave.createTransaction({data: ipfsContent}, arweaveWallet.key);
-    transaction.addTag('Content-Type', 'application/text');
-    transaction.addTag('cid', cid);
-    transaction.addTag('filename', filename);
-    transaction.addTag('search', 'eddie-test');
-    await arweave.transactions.sign(transaction, arweaveWallet.key);
-    const response = await arweave.transactions.post(transaction);
+    if (!arweaveWallet) return;
+    const ipfsContent = await content({ ipfsNode, cid });
+
+    const transaction = await storeOnArweave({
+      arweave,
+      wallet: arweaveWallet,
+      data: ipfsContent,
+      tags: {
+        'Content-Type': 'application/text',
+        cid,
+        filename,
+        search: 'eddie-test',
+      },
+    });
 
     setArweaveTransaction(transaction);
   };
@@ -39,7 +53,7 @@ const FileListItem = ({ file, arweave, arweaveWallet }: {file: Ipfs.UnixFSLsResu
         {arweaveTransaction && <Text fontSize="xs">Arweave ID: {arweaveTransaction.id}, Fee: {arweaveTransaction.reward}</Text>}
       </Box>
       <Flex gridGap="2">
-        {arweaveWallet.key && <IconButton
+        {arweaveWallet && <IconButton
           variantColor="teal"
           icon="plus-square"
           aria-label="Add to Arweave"

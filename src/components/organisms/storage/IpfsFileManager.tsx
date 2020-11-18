@@ -7,8 +7,14 @@ import FileListItem from 'components/molecules/storage/FileListItem';
 import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
+import { ArweaveWallet } from './ArweaveTab';
 
-const IpfsFileManager = (props: any) => {
+interface ArweaveProps {
+  arweave: any;
+  arweaveWallet: ArweaveWallet | undefined;
+}
+
+const IpfsFileManager = ({ arweave, arweaveWallet }: ArweaveProps) => {
   const { ipfsNode } = useIPFS();
   const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
   const [folderCid, setFolderCid] = useState<string>('');
@@ -92,7 +98,7 @@ const IpfsFileManager = (props: any) => {
         <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` }} icon="external-link" aria-label="show on gateway" />
       </Flex>
       <List>
-        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} arweave={props.arweave} arweaveWallet={props.arweaveWallet} />)}
+        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} arweave={arweave} arweaveWallet={arweaveWallet} />)}
       </List>
     </Box>
 

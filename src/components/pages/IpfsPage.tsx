@@ -2,24 +2,21 @@
 import {
   Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/core';
-import { RouteComponentProps } from '@reach/router';
+import Arweave from 'arweave';
 import IpfsFileManager from 'components/organisms/storage/IpfsFileManager';
 import IpfsInfo from 'components/organisms/storage/IpfsInfo';
 import OrbitDB from 'components/organisms/storage/OrbitDb';
-import React, { useState } from 'react';
-import IpfsPubSub from '../organisms/storage/IpfsPubSub';
-import IpfsArweave from '../organisms/storage/IpfsArweave';
-import Arweave from 'arweave';
+import React, { useState, useEffect } from 'react';
+import ArweaveTab, { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
+import IpfsPubSub from 'components/organisms/storage/IpfsPubSub';
 
-const IpfsPage = (props: RouteComponentProps) => {
-  const arweave = Arweave.init({});
-  const [arweaveWallet, setArweaveWallet] = useState<any>({key: null, addr: '', balance: 0});
+const IpfsPage = () => {
+  const [arweave, setArweave] = useState<any>();
+  const [arweaveWallet, setArweaveWallet] = useState<ArweaveWallet>();
 
-  const updateWallet = async (key: any) => {
-    const addr = await arweave.wallets.jwkToAddress(key);
-    const balance = await arweave.wallets.getBalance(addr);
-    setArweaveWallet({key: key, addr: addr, balance: arweave.ar.winstonToAr(balance)});
-  };
+  useEffect(() => {
+    setArweave(Arweave.init({}));
+  }, []);
 
   return (<Tabs isFitted size="md" variant="enclosed-colored" variantColor="green">
     <TabList>
@@ -43,10 +40,10 @@ const IpfsPage = (props: RouteComponentProps) => {
         <IpfsInfo />
       </TabPanel>
       <TabPanel>
-        <IpfsArweave arweave={arweave} arweaveWallet={arweaveWallet} updateWallet={updateWallet}/>
+        <ArweaveTab arweave={arweave} wallet={arweaveWallet} setWallet={setArweaveWallet}/>
       </TabPanel>
     </TabPanels>
   </Tabs>);
-}
+};
 
 export default IpfsPage;
