@@ -24,7 +24,7 @@ This project illustrates various aspects of decentralized apps (Dapps). It has n
     - monitoring / debugging
     - circuit relays / NAT hacks
   - [x] OrbitDB
-  - Arweave
+  - [x] Arweave
   - Filecoin
   - SpaceDaemon
   - 3box threads

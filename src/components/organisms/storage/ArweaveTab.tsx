@@ -1,10 +1,11 @@
 import {
   Box, Button, Flex, Heading, SimpleGrid, Text,
 } from '@chakra-ui/core';
-import React from 'react';
+import OneLineTextInput from 'components/atoms/InputFlex';
+import ArweaveSearch from 'components/molecules/storage/ArweaveSearch';
 import ArweaveWalletDropZone from 'components/molecules/storage/ArweaveWalletDropZone';
-import DownloadArweave from 'components/molecules/storage/DownloadArweave';
-import SearchArweave from 'components/molecules/storage/SearchArweave';
+import { downloadFromArweave } from 'modules/arweave';
+import React, { useState } from 'react';
 
 export interface ArweaveWallet {
   privateKey: string;
@@ -19,6 +20,7 @@ interface ArweaveTabProps {
 }
 
 const ArweaveTab = ({ arweave, wallet, setWallet }: ArweaveTabProps) => {
+  const [searchPhrase, setSearchPhrase] = useState<string>();
   const updateWallet = async (privateKey: string) => {
     const address = await arweave.wallets.jwkToAddress(privateKey);
     const balance = await arweave.wallets.getBalance(address);
@@ -37,24 +39,23 @@ const ArweaveTab = ({ arweave, wallet, setWallet }: ArweaveTabProps) => {
     }
   }
 
+  const startDownload = async (transactionId: string) => {
+    downloadFromArweave({ arweave, transactionId });
+  };
+
   return <Flex direction="column" >
     <Box p="2" bg="gray.200" my="2">
-      <Heading as="h2" size="md" my="2">Wallet</Heading>
       <SimpleGrid columns={[1, 2]} spacing="2" >
-          <Box w="100%">
-              <Button variantColor="red" type="submit" mt="1" onClick={createWallet}>
-                  Create a new wallet
-              </Button>
-          </Box>
-          <Flex >
-              <ArweaveWalletDropZone dropped={walletReceived}/>
-          </Flex>
+          <Button variantColor="red" type="submit" mt="1" onClick={createWallet}>
+              Create a new wallet
+          </Button>
+          <ArweaveWalletDropZone dropped={walletReceived}/>
       </SimpleGrid>
       {wallet
       && <>
         <Flex direction="row">
           <Text as="b">Wallet address: </Text>
-          <Text>{wallet.address}</Text>
+          <Text isTruncated>{wallet.address}</Text>
         </Flex>
         <Flex direction="row">
         <Text as="b">AR Balance: </Text>
@@ -64,12 +65,19 @@ const ArweaveTab = ({ arweave, wallet, setWallet }: ArweaveTabProps) => {
       }
     </Box>
     <Box>
-      <Heading size="md" my="2">Download anything</Heading>
-      <DownloadArweave arweave={arweave}/>
+      <OneLineTextInput onSubmit={startDownload}
+        placeholder="some transaction id"
+        label="Dowload from Arweave"
+        submitLabel="download"
+      />
     </Box>
     <Box>
-      <Heading size="md" my="2">Search</Heading>
-      <SearchArweave arweave={arweave}/>
+      <OneLineTextInput onSubmit={setSearchPhrase}
+        placeholder="filename, cid, type, tag"
+        label="Search on Arweave"
+        submitLabel="search"
+      />
+      {searchPhrase && <ArweaveSearch arweave={arweave} searchPhrase={searchPhrase}/>}
     </Box>
   </Flex>;
 };
