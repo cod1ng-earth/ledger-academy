@@ -6,8 +6,17 @@ import "@openzeppelin/contracts-upgradeable/presets/ERC20PresetMinterPauserUpgra
 contract ADIToken is ERC20PresetMinterPauserUpgradeable {
     uint256 public ethBalance;
 
-    function greet() public pure returns (string memory) {
+    uint256 public counter;
+
+    // 1 event Greeted(address to);
+    // 2 event Greeted(address to, uint256 someValue);
+    // 3:
+    event Greeted(address to, uint256 someValue, uint8 anotherValue);
+
+    function greet() public returns (string memory) {
         string memory g = "Bom Dia";
+        counter = counter + 1;
+        emit Greeted(msg.sender, counter, 42);
         return g;
     }
 
