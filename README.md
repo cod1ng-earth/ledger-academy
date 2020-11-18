@@ -3,37 +3,52 @@
 This project illustrates various aspects of decentralized apps (Dapps). It has no real meaning but it might help you figuring out things. We're particularly concentrating on:
 
 - connecting a React app with Ethereum wallets and networks
+  - [x] Metamask
+  - [x] Wallet Connect
+  - Portis
+  - Authereum
 - playing with ERC20 tokens and their transfers, particularly
   - [x] airdropping
   - [x] escrowing
   - collateralizing
   - gas optimization
-- demonstrating ERC721 / 777 / 1155 usage scenarios (tbd)
+- demonstrating ERC token usage scenarios
+  - ERC 721 
+  - ERC 777
+  - ERC 1155
 - implement, test & debug decentralized storage systems
-  - IPFS (shared workers / debugging / Pubsub)
+  -  IPFS
+    - [x] shared workers 
+    - [x] Pubsub
+    - [x] WebRTC star usage
+    - monitoring / debugging
+    - circuit relays / NAT hacks
+  - [x] OrbitDB
   - Arweave
   - Filecoin
   - SpaceDaemon
   - 3box threads
   - Textile Buckets
-  - OrbitDB
+  
 - adding / verifying identities
   - [x] 3box
   - ceramic
   - Jolocom
   - nacl-did
   - ether-did
+
 - encryption
   - [x] NaCL
   - [x] on/off chain signature verification
   - FrodoKEM
+
 - creating and validating zero knowledge proofs
 - demonstrating Oracle usage
 - demonstrating TheGraph chain queries
 
 ## Prerequisites
 
-This is a Typescript based React project. You very likely want to have a node development environment on your machine. We strongly recommend to [use nvm to install](nvm.sh) a clean and controlled local node installation. It's common practice and you'll see that it simplifies your node life **a lot**.
+This is a Typescript based React project. You very likely want to have a node development environment on your machine. We strongly recommend to [use nvm to install](https://github.com/nvm-sh/nvm/blob/master/README.md) a clean and controlled local node installation. It's common practice and you'll see that it simplifies your node life **a lot**.
 
 Start by copying the `.env` to an `.env.local` file 
 
