@@ -3,7 +3,7 @@ import {
   Button, Flex, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import { FlexProps } from '@chakra-ui/core/dist/Flex';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 export const InputBase: React.FC<FlexProps> = (props) => (
   <Flex {...props}
@@ -23,6 +23,7 @@ export interface IOneLineTextInput {
   submitLabel?: string,
   initialValue?: string,
   isDisabled?: boolean,
+  reset?: boolean,
 }
 
 const OneLineTextInput: React.FC<IOneLineTextInput> = ({
@@ -32,16 +33,23 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
   submitLabel = 'submit',
   initialValue = '',
   isDisabled = false,
+  reset = true,
 }: IOneLineTextInput) => {
   const [value, setValue] = useState<string>(initialValue);
   const inputName = label.toLowerCase().replaceAll(/\W/g, '-');
-  useEffect(() => setValue(initialValue), [initialValue]);
   return (
     <Flex direction="column" align="flex-start" w="100%">
       <Text whiteSpace="nowrap" p={1}>{label}</Text>
       <Flex direction="row" w="100%">
         <InputGroup as="form" size="md" w="100%"
-          onSubmit={(e) => { e.preventDefault(); onSubmit(value); }}
+          onSubmit={(e) => {
+            console.log(reset);
+            e.preventDefault();
+            onSubmit(value);
+            if (reset) {
+              setValue('');
+            }
+          }}
         >
           <Input
             name={inputName}

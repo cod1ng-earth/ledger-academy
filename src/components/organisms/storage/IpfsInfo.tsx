@@ -6,48 +6,50 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Input,
-  InputGroup,
-  InputRightElement,
   List,
   ListItem,
   Text,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
+  Alert,
 } from '@chakra-ui/core';
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
 import { IPinningServiceConfiguration } from 'modules/pinning';
+import OneLineTextInput from 'components/atoms/InputFlex';
+import Multiaddr from 'multiaddr';
 
 const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
-  const [peer, setPeer] = useState<string>('');
-
-  const onSubmit = async (e: any) => {
-    e.preventDefault();
-    const res = await ipfsNode!.swarm.connect(peer);
-    console.debug(res);
-    onConnected();
-
-    setPeer('');
+  const [connectionError, setConnectionError] = useState<string>();
+  const addPeer = async (peer: string) => {
+    try {
+      // const res = const res = await ipfsNode!.swarm.connect(_peer);
+      // /dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star
+      const res = ipfsNode!.libp2p.transportManager.listen(Multiaddr(peer));
+      console.debug(res);
+      onConnected();
+      setConnectionError('');
+    } catch (e) {
+      setConnectionError(e.message);
+    }
   };
 
   return <Box p="2" bg="gray.200">
-    <form onSubmit={onSubmit}>
-      <InputGroup size="md">
-        <Input
-          name="peer"
-          onChange={(e: any) => setPeer(e.target.value)} value={peer}
-          type="text"
-          placeholder="/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/p2p/QmYXq7k7zzP4sGiuHjD9YanQsLa1PjPDSj1toh2Z54iDAe"
-        />
-        <InputRightElement width="6.5rem">
-          <Button h="1.75rem" size="sm" type="submit">
-            connect
-          </Button>
-        </InputRightElement>
-      </InputGroup>
-    </form>
+    <OneLineTextInput
+      label="swarm connect any peer"
+      placeholder="/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/<your id>"
+      submitLabel="connect"
+      onSubmit={addPeer}
+    />
+    {connectionError && <Alert status="error">
+      <AlertTitle>Connection Error</AlertTitle>
+      <AlertDescription>{connectionError}</AlertDescription>
+      <CloseButton onClick={() => setConnectionError(undefined)} />
+    </Alert>}
   </Box>;
 };
 
@@ -90,14 +92,18 @@ const IpfsInfo = ({ config, updateConfig }: {
       </AccordionItem>
 
       <AccordionItem>
-        <AccordionHeader>Peers <AccordionIcon /></AccordionHeader>
+        <AccordionHeader>Peers
+          <AccordionIcon />
+        </AccordionHeader>
         <AccordionPanel>
-          <Button onClick={refresh}>refresh</Button>
-          <List>
-            {peers.map((p: Ipfs.Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
-          </List>
 
           <ConnectPeer onConnected={refresh} />
+          <List>
+            {peers.map((p: Ipfs.Peer) => (
+              <ListItem key={p.peer}>{p.addr.toString()}</ListItem>
+            )) }
+          </List>
+          <Button onClick={refresh} variantColor="teal">refresh</Button>
         </AccordionPanel>
       </AccordionItem>
 
