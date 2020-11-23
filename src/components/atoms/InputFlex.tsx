@@ -3,7 +3,7 @@ import {
   Button, Flex, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';
 import { FlexProps } from '@chakra-ui/core/dist/Flex';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 export const InputBase: React.FC<FlexProps> = (props) => (
   <Flex {...props}
@@ -43,7 +43,6 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
       <Flex direction="row" w="100%">
         <InputGroup as="form" size="md" w="100%"
           onSubmit={(e) => {
-            console.log(reset);
             e.preventDefault();
             onSubmit(value);
             if (reset) {
