@@ -1,5 +1,5 @@
 import {
-  Box, Button, Flex, Heading, SimpleGrid, Text,
+  Box, Button, Flex, SimpleGrid, Text,
 } from '@chakra-ui/core';
 import OneLineTextInput from 'components/atoms/InputFlex';
 import ArweaveSearch from 'components/molecules/storage/ArweaveSearch';

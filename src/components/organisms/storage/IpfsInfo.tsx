@@ -1,49 +1,54 @@
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  List,
-  ListItem,
-  Text,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
-  Alert,
+  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, ButtonGroup, CloseButton, Flex, List, ListItem, Text, Tooltip,
 } from '@chakra-ui/core';
+import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
+import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
 import { IPinningServiceConfiguration } from 'modules/pinning';
-import OneLineTextInput from 'components/atoms/InputFlex';
 import Multiaddr from 'multiaddr';
+import React, { useCallback, useEffect, useState } from 'react';
 
-const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
-  const { ipfsNode } = useIPFS();
+const knownPeers = [
+  {
+    name: 'Coding.Earth WSS',
+    address: '/dnsaddr/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC',
+  },
+  {
+    name: 'Depa Digital WSS',
+    address: '/dns4/ipfs.depa.digital/tcp/4002/wss/p2p/QmXAghnP7DqmAEE7Zx4SxMo3UcUVSn8f1xDCT6x1ysYMSj',
+  },
+
+];
+
+const knownTransports = [
+  {
+    name: 'Coding.Earth Web RTC Star',
+    address: '/dns4/ipfs.coding.earth/tcp/9090/wss/p2p-webrtc-star/',
+  },
+  {
+    name: 'Depa.Digital Web RTC Star',
+    address: '/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/',
+  },
+];
+
+const ConnectInput = ({ onSubmitted }: {
+  onSubmitted: (address: string) => Promise<string | void>
+}) => {
   const [connectionError, setConnectionError] = useState<string>();
-  const addPeer = async (peer: string) => {
-    try {
-      // const res = const res = await ipfsNode!.swarm.connect(_peer);
-      // /dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star
-      const res = ipfsNode!.libp2p.transportManager.listen(Multiaddr(peer));
-      console.debug(res);
-      onConnected();
-      setConnectionError('');
-    } catch (e) {
-      setConnectionError(e.message);
-    }
-  };
 
   return <Box p="2" bg="gray.200">
     <OneLineTextInput
-      label="swarm connect any peer"
-      placeholder="/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/<your id>"
+      label="connect"
+      placeholder="<your id>"
       submitLabel="connect"
-      onSubmit={addPeer}
+      onSubmit={async (multiAddress: string) => {
+        try {
+          onSubmitted(multiAddress);
+        } catch (e) {
+          setConnectionError(e.message);
+        }
+      }}
     />
     {connectionError && <Alert status="error">
       <AlertTitle>Connection Error</AlertTitle>
@@ -53,11 +58,28 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   </Box>;
 };
 
+const PeerInfo = ({ addr }: {addr: Ipfs.Multiaddr}) => {
+  const _addr = addr.toString();
+  const components = _addr.split('/');
+
+  return <ListItem>
+    <Flex gridGap={2}>
+    {components.map((c, i) => (
+      <React.Fragment key={`peerinfo-${_addr}-${i}`}>
+        <Text >{c}</Text>
+        <Text>/</Text>
+      </React.Fragment>
+    ))
+    }
+    </Flex>
+  </ListItem>;
+};
+
 const IpfsInfo = ({ config, updateConfig }: {
   config: IPinningServiceConfiguration
   updateConfig: (cfg: IPinningServiceConfiguration) => void,
 }) => {
-  const { ipfsNode } = useIPFS();
+  const { ipfsNode, addSwarmAddress } = useIPFS();
   const [ipfsIdentity, setIpfsIdentity] = useState<Ipfs.Id>();
 
   const [peers, setPeers] = useState<Ipfs.Peer[]>([]);
@@ -67,6 +89,8 @@ const IpfsInfo = ({ config, updateConfig }: {
 
   const refresh = useCallback(async () => {
     if (!ipfsNode) return;
+    console.debug('refresh');
+
     const _peers = await ipfsNode.swarm.peers();
 
     setPeers(_peers.sort());
@@ -79,6 +103,20 @@ const IpfsInfo = ({ config, updateConfig }: {
     refresh();
   }, [ipfsNode, refresh]);
 
+  const swarmConnect = async (peer: string): Promise<string | void> => {
+    await ipfsNode!.swarm.connect(peer);
+    refresh();
+  };
+
+  const addTransport = async (transport: string): Promise<string | void> => {
+    const multiAddr = Multiaddr(transport);
+
+    addSwarmAddress!(multiAddr.toString());
+
+    // this is supposed to work but doesn't (dynamically, ipfs 0.47):
+    // const res = ipfsNode!.libp2p.transportManager.listen(multiAddr);
+  };
+
   return <Box>
     <Accordion allowToggle>
       <AccordionItem>
@@ -88,21 +126,40 @@ const IpfsInfo = ({ config, updateConfig }: {
         <AccordionPanel>
           <Text><b>ID</b> {ipfsIdentity?.id}</Text>
           <Text isTruncated><b>Public Key</b> {ipfsIdentity?.publicKey}</Text>
+          <Text><b>Version</b> {ipfsIdentity?.agentVersion} / <b>Protocol</b>: {ipfsIdentity?.protocolVersion} </Text>
         </AccordionPanel>
       </AccordionItem>
 
       <AccordionItem>
-        <AccordionHeader>Peers
-          <AccordionIcon />
+        <AccordionHeader>
+          Peers <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
 
-          <ConnectPeer onConnected={refresh} />
-          <List>
-            {peers.map((p: Ipfs.Peer) => (
-              <ListItem key={p.peer}>{p.addr.toString()}</ListItem>
-            )) }
+          <ConnectInput onSubmitted={swarmConnect} />
+          <InputBase>
+            <Text>connect to known peers</Text>
+            <ButtonGroup>
+              {
+                knownPeers.map((peer) => <Tooltip
+                key={`connect-${peer.address}`}
+                label={peer.address}
+                aria-label={peer.address}
+                placement="bottom"
+              >
+                <Button
+                  variantColor="teal"
+                  onClick={() => swarmConnect(peer.address)}>
+                  {peer.name}
+                </Button>
+                </Tooltip>)
+              }
+            </ButtonGroup>
+            </InputBase>
+          <List ml="3">
+            {peers.map((p: Ipfs.Peer) => <PeerInfo key={p.addr.toString()} addr={p.addr} />)}
           </List>
+
           <Button onClick={refresh} variantColor="teal">refresh</Button>
         </AccordionPanel>
       </AccordionItem>
@@ -112,13 +169,42 @@ const IpfsInfo = ({ config, updateConfig }: {
           Addresses <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
+          {
+
+            addSwarmAddress && <>
+              <ConnectInput onSubmitted={addTransport} />
+              <InputBase>
+                <Text>announce at known addresses:</Text>
+                <ButtonGroup>
+                  {
+                    knownTransports.map((peer) => <Tooltip
+                      key={`addtransport-${peer.address}`}
+                      label={peer.address}
+                      aria-label={peer.address}
+                      placement="bottom"
+                    >
+                      <Button
+                        variantColor="teal"
+                        onClick={() => addTransport(peer.address)}>
+                        {peer.name}
+                      </Button>
+                    </Tooltip>)
+                  }
+                </ButtonGroup>
+              </InputBase>
+            </>
+          }
+
           <List>
             {addrs.map((addr: Ipfs.PeerInfo) => <ListItem key={addr.id}>
               <Text as="b">{addr.id}</Text>
               <List ml="3">
-                {addr.addrs.map((_addr: Ipfs.Multiaddr, i: number) => <ListItem key={`${addr}-${i}`}>
-                  {_addr.toString()}
-                </ListItem>)}
+                {addr.addrs.map(
+                  (_addr: Ipfs.Multiaddr, i: number) => (
+                    <PeerInfo key={`pi-${addr.id}-${i}`} addr={_addr} />
+                  ),
+                )
+                }
               </List>
             </ListItem>)}
           </List>

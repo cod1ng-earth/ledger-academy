@@ -63,7 +63,7 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
         submitLabel="subscribe"
       />
     </InputBase>
-
+    {topic && <Heading size="md">Subscribed to {topic}</Heading>}
     {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
       <Text as="b">{msg.from}.{i}</Text>
       <PubsubMessageDisplay data={msg.data} />
