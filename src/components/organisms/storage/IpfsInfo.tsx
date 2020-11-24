@@ -1,50 +1,23 @@
 import {
-  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, ButtonGroup, CloseButton, Flex, List, ListItem, Text, Tooltip,
+  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, CloseButton, Flex, List, ListItem, Text,
 } from '@chakra-ui/core';
-import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
+import OneLineTextInput, { InputBase, IOneLineTextInput } from 'components/atoms/InputFlex';
+import IPFSConnectKnownAddress, { knownSwarmPeers, knownTransports } from 'components/molecules/storage/IPFSConnectKnownAddress';
 import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
 import { IPinningServiceConfiguration } from 'modules/pinning';
-import Multiaddr from 'multiaddr';
 import React, { useCallback, useEffect, useState } from 'react';
 
-const knownPeers = [
-  {
-    name: 'Coding.Earth WSS',
-    address: '/dnsaddr/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC',
-  },
-  {
-    name: 'Depa Digital WSS',
-    address: '/dns4/ipfs.depa.digital/tcp/4002/wss/p2p/QmXAghnP7DqmAEE7Zx4SxMo3UcUVSn8f1xDCT6x1ysYMSj',
-  },
-
-];
-
-const knownTransports = [
-  {
-    name: 'Coding.Earth Web RTC Star',
-    address: '/dns4/ipfs.coding.earth/tcp/9090/wss/p2p-webrtc-star/',
-  },
-  {
-    name: 'Depa.Digital Web RTC Star',
-    address: '/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/',
-  },
-];
-
-const ConnectInput = ({ onSubmitted }: {
-  onSubmitted: (address: string) => Promise<string | void>
-}) => {
+const ConnectInput = (props: IOneLineTextInput) => {
   const [connectionError, setConnectionError] = useState<string>();
 
   return <Box p="2" bg="gray.200">
     <OneLineTextInput
-      label="connect"
-      placeholder="<your id>"
-      submitLabel="connect"
+      {...props}
       onSubmit={async (multiAddress: string) => {
         try {
-          onSubmitted(multiAddress);
+          props.onSubmit(multiAddress);
         } catch (e) {
           setConnectionError(e.message);
         }
@@ -108,15 +81,6 @@ const IpfsInfo = ({ config, updateConfig }: {
     refresh();
   };
 
-  const addTransport = async (transport: string): Promise<string | void> => {
-    const multiAddr = Multiaddr(transport);
-
-    addSwarmAddress!(multiAddr.toString());
-
-    // this is supposed to work but doesn't (dynamically, ipfs 0.47):
-    // const res = ipfsNode!.libp2p.transportManager.listen(multiAddr);
-  };
-
   return <Box>
     <Accordion allowToggle>
       <AccordionItem>
@@ -135,27 +99,15 @@ const IpfsInfo = ({ config, updateConfig }: {
           Peers <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
-
-          <ConnectInput onSubmitted={swarmConnect} />
+          <ConnectInput onSubmit={swarmConnect}
+            label="connect swarm peer"
+            placeholder="/dns4/<domain>/tcp/<4002>/wss/p2p/<peer-id>"
+            submitLabel="connect"
+          />
           <InputBase>
             <Text>connect to known peers</Text>
-            <ButtonGroup>
-              {
-                knownPeers.map((peer) => <Tooltip
-                key={`connect-${peer.address}`}
-                label={peer.address}
-                aria-label={peer.address}
-                placement="bottom"
-              >
-                <Button
-                  variantColor="teal"
-                  onClick={() => swarmConnect(peer.address)}>
-                  {peer.name}
-                </Button>
-                </Tooltip>)
-              }
-            </ButtonGroup>
-            </InputBase>
+            <IPFSConnectKnownAddress knownAddresses={knownSwarmPeers} connect={swarmConnect} />
+          </InputBase>
           <List ml="3">
             {peers.map((p: Ipfs.Peer) => <PeerInfo key={p.addr.toString()} addr={p.addr} />)}
           </List>
@@ -169,28 +121,17 @@ const IpfsInfo = ({ config, updateConfig }: {
           Addresses <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
-          {
-
-            addSwarmAddress && <>
-              <ConnectInput onSubmitted={addTransport} />
+          { addSwarmAddress
+            && <>
+              <ConnectInput
+                onSubmit={addSwarmAddress}
+                label="add transport"
+                placeholder="/dns4/<domain>/tcp/<9090>/wss/p2p-webrtc-star/"
+                submitLabel="add"
+              />
               <InputBase>
                 <Text>announce at known addresses:</Text>
-                <ButtonGroup>
-                  {
-                    knownTransports.map((peer) => <Tooltip
-                      key={`addtransport-${peer.address}`}
-                      label={peer.address}
-                      aria-label={peer.address}
-                      placement="bottom"
-                    >
-                      <Button
-                        variantColor="teal"
-                        onClick={() => addTransport(peer.address)}>
-                        {peer.name}
-                      </Button>
-                    </Tooltip>)
-                  }
-                </ButtonGroup>
+                <IPFSConnectKnownAddress knownAddresses={knownTransports} connect={addSwarmAddress} />
               </InputBase>
             </>
           }
@@ -203,8 +144,7 @@ const IpfsInfo = ({ config, updateConfig }: {
                   (_addr: Ipfs.Multiaddr, i: number) => (
                     <PeerInfo key={`pi-${addr.id}-${i}`} addr={_addr} />
                   ),
-                )
-                }
+                )}
               </List>
             </ListItem>)}
           </List>
