@@ -4,6 +4,7 @@ import {
 import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import { default as ODB } from 'orbit-db';
 import React, { useCallback, useEffect, useState } from 'react';
+import IPFSSwarmAddressAlert from 'components/molecules/storage/IPFSSwarmAddressAlert';
 import { useIPFS } from '../../../context/IPFS';
 
 interface LogMessage {
@@ -65,6 +66,7 @@ const OrbitDB = () => {
   };
 
   return (<Flex direction="column">
+    <IPFSSwarmAddressAlert />
     <Heading as="h2" size="md" my="2">OrbitDB</Heading>
 
     <InputBase>

@@ -3,12 +3,12 @@ import {
   Tab, TabList, TabPanel, TabPanels, Tabs,
 } from '@chakra-ui/core';
 import Arweave from 'arweave';
+import ArweaveTab, { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import IpfsFileManager from 'components/organisms/storage/IpfsFileManager';
 import IpfsInfo from 'components/organisms/storage/IpfsInfo';
-import OrbitDB from 'components/organisms/storage/OrbitDb';
-import React, { useState, useEffect } from 'react';
-import ArweaveTab, { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import IpfsPubSub from 'components/organisms/storage/IpfsPubSub';
+import OrbitDB from 'components/organisms/storage/OrbitDb';
+import React, { useEffect, useState } from 'react';
 
 const StoragePage = () => {
   const [arweave, setArweave] = useState<any>();

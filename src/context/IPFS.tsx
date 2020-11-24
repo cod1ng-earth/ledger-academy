@@ -3,12 +3,13 @@ import IPFSClient from 'ipfs-message-port-client';
 import React, { useContext, useEffect, useState } from 'react';
 
 interface IIpfsContext {
-  ipfsClient?: IPFSClient | null,
-  ipfsNode?: Ipfs,
-  addSwarmAddress?: (address: string) => any
+  ipfsClient?: IPFSClient | null;
+  ipfsNode?: Ipfs;
+  addSwarmAddress?: (address: string) => any;
+  swarmAddresses: string[];
 }
 
-const IpfsContext = React.createContext<IIpfsContext>({});
+const IpfsContext = React.createContext<IIpfsContext>({ swarmAddresses: [] });
 
 const useIPFS = () => useContext(IpfsContext);
 
@@ -17,10 +18,11 @@ const IPFSProvider = ({ children }: any) => {
   const [ipfsNode, setIpfsNode] = useState<Ipfs>();
   const [swarmAddresses, setSwarmAddresses] = useState<string[]>([]);
 
-  const addSwarmAddress = async (addr: string) => {
-    if (ipfsNode) {
-      await ipfsNode.stop();
-    }
+  // this is supposed to work but doesn't (dynamically add swarm addresses)
+  // ipfs 0.47, see https://jira.votum.info:7443/browse/DECNT-38):
+  // const res = ipfsNode!.libp2p.transportManager.listen(multiAddr);
+
+  const addSwarmAddress = async (addr: string): Promise<void> => {
     console.log('restarting with new address', addr);
     setSwarmAddresses((oldAddresses: string[]) => [
       ...oldAddresses,
@@ -37,6 +39,9 @@ const IPFSProvider = ({ children }: any) => {
 
   useEffect(() => {
     (async () => {
+      if (ipfsNode) {
+        await ipfsNode.stop();
+      }
       const _ipfsNode = await createIpfs({
         repo: 'ipfs-node',
         config: {
@@ -45,15 +50,6 @@ const IPFSProvider = ({ children }: any) => {
           },
         },
       });
-      // '/dns4/ipfs.coding.earth/tcp/9090/wss/p2p-webrtc-star/',
-      // _ipfsNode.swarm.connect('/ip4/167.71.52.88/tcp/4002/wss/p2p/QmXAghnP7DqmAEE7Zx4SxMo3UcUVSn8f1xDCT6x1ysYMSj');
-
-      // _ipfsNode.swarm.connect('/dnsaddr/ipfs.3box.io/tcp/443/wss/p2p/QmZvxEpiVNjmNbEKyQGvFzAY1BwmGuuvdUTmcTstQPhyVC');
-      // _ipfsNode.swarm.connect('/dnsaddr/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC');
-
-      /// dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star
-      // _ipfsNode.libp2p.transportManager.listen(multiaddr('/dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/')).catch(console.warn);
-      // /dns4/ipfs.depa.digital/tcp/9091/wss/p2p-webrtc-star/QmPLjRDFb8YgjMsP4XpccWT9EwPGvfSw87KCgMWa2haFCi
       const _ipfsId = await _ipfsNode.id();
       console.log('ipfs node (v%s) is running [id: %s]', _ipfsId.agentVersion, _ipfsId.id);
       setIpfsNode(_ipfsNode);
@@ -61,7 +57,9 @@ const IPFSProvider = ({ children }: any) => {
   }, [swarmAddresses]);
 
   return (
-    <IpfsContext.Provider value={{ ipfsClient, ipfsNode, addSwarmAddress }}>
+    <IpfsContext.Provider value={{
+      ipfsClient, ipfsNode, addSwarmAddress, swarmAddresses,
+    }}>
       {children}
     </IpfsContext.Provider>
   );
