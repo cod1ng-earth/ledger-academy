@@ -23,7 +23,7 @@
     "dotenv-flow": "^3.2.0",
     "emotion-theming": "^10.0.27",
     "ethers": "^4.0.47",
-    "ipfs": "~0.47",
+    "ipfs": "^0.47.0",
     "ipfs-message-port-client": "^0.2.2",
     "ipfs-message-port-protocol": "^0.2.0",
     "ipfs-message-port-server": "^0.2.2",

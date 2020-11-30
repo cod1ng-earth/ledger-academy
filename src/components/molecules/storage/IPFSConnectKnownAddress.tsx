@@ -12,7 +12,7 @@ export interface IKnownAddress {
 export const knownSwarmPeers: IKnownAddress[] = [
   {
     name: 'Coding.Earth WSS',
-    address: '/dnsaddr/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC',
+    address: '/dns4/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC',
   },
   {
     name: 'Depa Digital WSS',

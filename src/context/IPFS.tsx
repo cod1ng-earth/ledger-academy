@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 interface IIpfsContext {
   ipfsClient?: IPFSClient | null;
   ipfsNode?: Ipfs;
-  addSwarmAddress?: (address: string) => any;
+  addSwarmAddress?: (address: string) => void;
   swarmAddresses: string[];
 }
 
@@ -22,8 +22,9 @@ const IPFSProvider = ({ children }: any) => {
   // ipfs 0.47, see https://jira.votum.info:7443/browse/DECNT-38):
   // const res = ipfsNode!.libp2p.transportManager.listen(multiAddr);
 
-  const addSwarmAddress = async (addr: string): Promise<void> => {
-    console.log('restarting with new address', addr);
+  const addSwarmAddress = (addr: string) => {
+    console.log('adding new address', addr);
+
     setSwarmAddresses((oldAddresses: string[]) => [
       ...oldAddresses,
       addr,
@@ -47,6 +48,22 @@ const IPFSProvider = ({ children }: any) => {
         config: {
           Addresses: {
             Swarm: swarmAddresses,
+          },
+          // Bootstrap: [
+          //   '/dns4/ipfs.coding.earth/tcp/4002/wss/p2p/12D3KooWPMH57dcaZPjw9MjF7q8hZgf446s6g4s9BbX1BGRztwTC',
+          // ],
+        },
+        // preload: {
+        //   enabled: true,
+        //   addresses: [
+        //     '/dns4/ipfs.coding.earth/https',
+        //   ],
+        // },
+        // https://github.com/ipfs/js-ipfs/blob/master/docs/MODULE.md#optionsrelay
+        relay: {
+          enabled: true,
+          hop: {
+            enabled: false,
           },
         },
       });

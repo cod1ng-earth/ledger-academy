@@ -1,5 +1,5 @@
 import {
-  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, CloseButton, Flex, List, ListItem, Text,
+  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, CloseButton, ListItem, Text, useClipboard,
 } from '@chakra-ui/core';
 import OneLineTextInput, { InputBase, IOneLineTextInput } from 'components/atoms/InputFlex';
 import IPFSConnectKnownAddress, { knownSwarmPeers, knownTransports } from 'components/molecules/storage/IPFSConnectKnownAddress';
@@ -17,7 +17,7 @@ const ConnectInput = (props: IOneLineTextInput) => {
       {...props}
       onSubmit={async (multiAddress: string) => {
         try {
-          props.onSubmit(multiAddress);
+          await props.onSubmit(multiAddress);
         } catch (e) {
           setConnectionError(e.message);
         }
@@ -33,19 +33,10 @@ const ConnectInput = (props: IOneLineTextInput) => {
 
 const PeerInfo = ({ addr }: {addr: Ipfs.Multiaddr}) => {
   const _addr = addr.toString();
-  const components = _addr.split('/');
+  // const components = _addr.split('/');
+  const { onCopy } = useClipboard(_addr);
 
-  return <ListItem>
-    <Flex gridGap={2}>
-    {components.map((c, i) => (
-      <React.Fragment key={`peerinfo-${_addr}-${i}`}>
-        <Text >{c}</Text>
-        <Text>/</Text>
-      </React.Fragment>
-    ))
-    }
-    </Flex>
-  </ListItem>;
+  return <Text isTruncated onClick={onCopy}>{_addr}</Text>;
 };
 
 const IpfsInfo = ({ config, updateConfig }: {
@@ -62,7 +53,6 @@ const IpfsInfo = ({ config, updateConfig }: {
 
   const refresh = useCallback(async () => {
     if (!ipfsNode) return;
-    console.debug('refresh');
 
     const _peers = await ipfsNode.swarm.peers();
 
@@ -76,7 +66,7 @@ const IpfsInfo = ({ config, updateConfig }: {
     refresh();
   }, [ipfsNode, refresh]);
 
-  const swarmConnect = async (peer: string): Promise<string | void> => {
+  const swarmConnect = async (peer: string): Promise<any> => {
     await ipfsNode!.swarm.connect(peer);
     refresh();
   };
@@ -104,15 +94,15 @@ const IpfsInfo = ({ config, updateConfig }: {
             placeholder="/dns4/<domain>/tcp/<4002>/wss/p2p/<peer-id>"
             submitLabel="connect"
           />
-          <InputBase>
+          <InputBase justifyContent="flex-end">
             <Text>connect to known peers</Text>
             <IPFSConnectKnownAddress knownAddresses={knownSwarmPeers} connect={swarmConnect} />
           </InputBase>
-          <List ml="3">
+          <Box>
             {peers.map((p: Ipfs.Peer) => <PeerInfo key={p.addr.toString()} addr={p.addr} />)}
-          </List>
+          </Box>
 
-          <Button onClick={refresh} variantColor="teal">refresh</Button>
+          <Button leftIcon="repeat" onClick={refresh} variantColor="teal" >refresh</Button>
         </AccordionPanel>
       </AccordionItem>
 
@@ -129,25 +119,25 @@ const IpfsInfo = ({ config, updateConfig }: {
                 placeholder="/dns4/<domain>/tcp/<9090>/wss/p2p-webrtc-star/"
                 submitLabel="add"
               />
-              <InputBase>
+              <InputBase justifyContent="flex-end">
                 <Text>announce at known addresses:</Text>
                 <IPFSConnectKnownAddress knownAddresses={knownTransports} connect={addSwarmAddress} />
               </InputBase>
             </>
           }
 
-          <List>
+          <Box>
             {addrs.map((addr: Ipfs.PeerInfo) => <ListItem key={addr.id}>
               <Text as="b">{addr.id}</Text>
-              <List ml="3">
+
                 {addr.addrs.map(
                   (_addr: Ipfs.Multiaddr, i: number) => (
                     <PeerInfo key={`pi-${addr.id}-${i}`} addr={_addr} />
                   ),
                 )}
-              </List>
+
             </ListItem>)}
-          </List>
+          </Box>
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

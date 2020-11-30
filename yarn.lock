@@ -9850,7 +9850,7 @@ ipfs@^0.46.0:
     prom-client "^12.0.0"
     prometheus-gc-stats "^0.6.0"
 
-ipfs@~0.47:
+ipfs@^0.47.0:
   version "0.47.0"
   resolved "https://registry.yarnpkg.com/ipfs/-/ipfs-0.47.0.tgz#a9fc62b552856c3743c435c6d9790d70f4bd92e0"
   integrity sha512-2eW+0yRvDo3Lrm6RXpbzR2YqReeEo4noNoKhq+6wVg2Q5dSwcjuxWscSq0l7bARxegA73Hy6xWnDtFAQXrNQOA==
