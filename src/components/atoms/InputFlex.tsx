@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import {
-  Button, Flex, Input, InputGroup, InputRightElement, Text,
+  Button, Flex, Input, Text,
 } from '@chakra-ui/core';
 import { FlexProps } from '@chakra-ui/core/dist/Flex';
 import React, { useState } from 'react';
@@ -37,32 +37,33 @@ const OneLineTextInput: React.FC<IOneLineTextInput> = ({
 }: IOneLineTextInput) => {
   const [value, setValue] = useState<string>(initialValue);
   const inputName = label.toLowerCase().replaceAll(/\W/g, '-');
+
+  const submit = (e: any) => {
+    e.preventDefault();
+    onSubmit(value);
+    if (reset) {
+      setValue('');
+    }
+  };
+
   return (
     <Flex direction="column" align="flex-start" w="100%">
       <Text whiteSpace="nowrap" p={1}>{label}</Text>
-      <Flex direction="row" w="100%">
-        <InputGroup as="form" size="md" w="100%"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit(value);
-            if (reset) {
-              setValue('');
-            }
-          }}
-        >
-          <Input
-            name={inputName}
-            onChange={(e: any) => setValue(e.target.value)} value={value}
-            type="text"
-            placeholder={placeholder}
-            isDisabled={isDisabled}
-          />
-          <InputRightElement width="6.5rem">
-            <Button isDisabled={isDisabled} variantColor="teal" h="1.75rem" size="sm" type="submit">
-              {submitLabel}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
+      <Flex direction="row" w="100%" as="form" onSubmit={submit}>
+      <Input
+        name={inputName}
+        onChange={(e: any) => setValue(e.target.value)} value={value}
+        type="text"
+        placeholder={placeholder}
+        isDisabled={isDisabled}
+      />
+      <Button
+        isDisabled={isDisabled}
+        variantColor="teal"
+
+        type="submit">
+        {submitLabel}
+      </Button>
       </Flex>
     </Flex>
   );

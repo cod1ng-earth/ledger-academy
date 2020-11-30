@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-import { Ipfs } from 'ipfs';
-import { useIPFS } from 'context/IPFS';
 import {
-  Flex, Box, Text, IconButton,
+  Box, Flex, IconButton, Text,
 } from '@chakra-ui/core';
-import { download, content } from 'modules/download';
 import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
+import { useIPFS } from 'context/IPFS';
 import { storeOnArweave } from 'modules/arweave';
+import { content, download } from 'modules/download';
+import React, { useState } from 'react';
 
 interface FileListItemProps {
-  file: Ipfs.UnixFSLsResult;
+  file: any;
   arweave: any;
   arweaveWallet: ArweaveWallet | undefined;
 }

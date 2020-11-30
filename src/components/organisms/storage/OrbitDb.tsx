@@ -75,6 +75,7 @@ const OrbitDB = () => {
         initialValue="foo"
         onSubmit={connectDb}
         submitLabel="connect"
+        reset={false}
       />
     </InputBase>
     {messages.map((msg: LogMessage, i) => <Box p={2} key={`msg-${i}`}>

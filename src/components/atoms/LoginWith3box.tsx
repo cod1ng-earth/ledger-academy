@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useIPFS } from 'context/IPFS';
 import * as TBox from '3box';
 import Web3 from 'web3';
-import { Button } from '@chakra-ui/core';
+import { Button, Box } from '@chakra-ui/core';
 
 const LoginWith3Box = ({ setBox }: {setBox: Function}) => {
   const {
@@ -14,8 +14,15 @@ const LoginWith3Box = ({ setBox }: {setBox: Function}) => {
 
   const loginWith3box = async () => {
     setIsLoggingIn(true);
-    const box = await TBox.openBox(account, web3?.currentProvider, {
+
+    const box = await TBox.create(web3?.currentProvider, {
       ipfs: ipfsNode,
+      iframeCache: false,
+    });
+
+    await box.auth([], {
+      address: account,
+      provider: web3?.currentProvider,
       consentCallback: (val: any) => console.log('consent', val),
     });
 
