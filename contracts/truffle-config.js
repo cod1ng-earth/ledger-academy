@@ -72,8 +72,10 @@ module.exports = {
       network_id: 3, // Ropsten's id
     },
     rinkeby: {
-      provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`),
+      provider: () => new HDWalletProvider(process.env.MNEMONIC, `wss://rinkeby.infura.io/ws/v3/${process.env.PROJECT_ID}`),
       network_id: 4, // Rinkeby's id
+      gasPrice: 50000000000,
+      websockets: true,
     },
     kovan: {
       provider: () => new HDWalletProvider(process.env.MNEMONIC, `https://kovan.infura.io/v3/${process.env.PROJECT_ID}`),
