@@ -7,6 +7,7 @@ import {
 import { download, content } from 'modules/download';
 import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import { storeOnArweave } from 'modules/arweave';
+import fetch from 'cross-fetch';
 
 interface FileListItemProps {
   file: Ipfs.UnixFSLsResult;
@@ -44,6 +45,21 @@ const FileListItem = ({ file, arweave, arweaveWallet }: FileListItemProps) => {
     setArweaveTransaction(transaction);
   };
 
+  const pin = async (node: any, cid: string) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Basic aXBmcy1jbHVzdGVyOmZqZHNha2ZsZHNhZjk4ZndqZTczMg==');
+
+    fetch('https://ipfs-cluster.akropolis.turbinekreuzberg.io/pins/' + cid, {
+      method: 'POST',
+      headers: myHeaders,
+      mode: 'no-cors',
+      redirect: 'follow',
+    })
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  };
+
   return <Flex mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
       <Box>
         <Text as="b">
@@ -59,6 +75,13 @@ const FileListItem = ({ file, arweave, arweaveWallet }: FileListItemProps) => {
           aria-label="Add to Arweave"
           onClick={() => addToArweave(sCid, file.name)}
           size="sm"
+        ></IconButton>}
+        {ipfsNode && <IconButton
+            variantColor="teal"
+            icon="check"
+            aria-label="Pin"
+            onClick={() => pin(ipfsNode, sCid)}
+            size="sm"
         ></IconButton>}
         {ipfsNode && <IconButton
         variantColor="teal"
