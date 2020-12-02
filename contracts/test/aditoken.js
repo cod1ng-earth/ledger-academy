@@ -41,6 +41,28 @@ contract('AdiToken', (accounts) => {
     );
   });
 
+  it('can exchange ADI by simply sending Eth', async () => {
+    const adiToken = await AdiToken.deployed();
+    const initialBalanceOfContract = await web3.eth.getBalance(adiToken.address);
+    assert.equal(0, initialBalanceOfContract);
+
+    const initialTokenBalanceOfUser = await adiToken.balanceOf(accounts[2]);
+
+    await adiToken.mint(adiToken.address, 1e10);
+    await web3.eth.sendTransaction({
+      from: accounts[2],
+      to: adiToken.address,
+      value: 1e9 + 1,
+      gas: 100000,
+    });
+
+    const tokenBalance = await adiToken.balanceOf.call(accounts[2]);
+
+    assert.equal(tokenBalance.toNumber(), initialTokenBalanceOfUser.toNumber() + 1e9 + 1);
+    const newBalanceOfContract = await web3.eth.getBalance(adiToken.address);
+    assert.equal(1e9 + 1, newBalanceOfContract);
+  });
+
   it('can airdrop a token to several recipients', async () => {
     const adiToken = await AdiToken.deployed();
     assert.equal(0, await adiToken.balanceOf(accounts[5]).valueOf());

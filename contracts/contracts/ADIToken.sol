@@ -11,6 +11,10 @@ contract ADIToken is ERC20PresetMinterPauserUpgradeable {
         return g;
     }
 
+    receive() external payable {
+        exchange();
+    }
+
     /*
      * converts "ETH" to "ADI"
      */

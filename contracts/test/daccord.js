@@ -36,7 +36,7 @@ contract('Daccord', (accounts) => {
 
   it('can add candidates to ballot until closed', async () => {
     const daccord = await Daccord.new();
-    daccord.initialize(tokenEscrow.address, fulfillSignature);
+    await daccord.initialize(tokenEscrow.address, fulfillSignature);
 
     await daccord.addVoter(accounts[1]);
     await daccord.addVoter(accounts[2]);
