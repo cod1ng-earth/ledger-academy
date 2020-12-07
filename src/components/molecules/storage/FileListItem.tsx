@@ -47,17 +47,24 @@ const FileListItem = ({ file, arweave, arweaveWallet }: FileListItemProps) => {
 
   const pin = async (node: any, cid: string) => {
     const myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Basic aXBmcy1jbHVzdGVyOmZqZHNha2ZsZHNhZjk4ZndqZTczMg==');
+    myHeaders.append('Authorization', 'Basic ${process.env.REACT_APP_PIN_SERVICE_AUTHORIZATION}');
+    try {
+      const response = await fetch(process.env.REACT_APP_PIN_SERVICE_HOST + '/pins/' + cid, {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'no-cors',
+        redirect: 'follow',
+      });
 
-    fetch('https://ipfs-cluster.akropolis.turbinekreuzberg.io/pins/' + cid, {
-      method: 'POST',
-      headers: myHeaders,
-      mode: 'no-cors',
-      redirect: 'follow',
-    })
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+      if (response.status >= 400) {
+        throw new Error('Bad response from server');
+      }
+
+      const result = await response.json();
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return <Flex mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
