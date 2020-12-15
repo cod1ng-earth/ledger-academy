@@ -4,7 +4,6 @@ import {
 import DownloadFile from 'components/molecules/storage/DownloadFile';
 import DropZone from 'components/molecules/storage/DropZone';
 import FileListItem from 'components/molecules/storage/FileListItem';
-import PinCid from 'components/molecules/storage/PinCid';
 import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
@@ -89,13 +88,8 @@ const IpfsFileManager = ({ arweave, arweaveWallet }: IpfsFileManagerProps) => {
     </Box>
 
     <Box>
-      <Heading as="h2" size="md" my="2">Download anything</Heading>
+      <Heading as="h2" size="md" my="2">Do anything</Heading>
       <DownloadFile />
-    </Box>
-
-    <Box>
-      <Heading as="h2" size="md" my="2">Pin anything (pin service)</Heading>
-      <PinCid />
     </Box>
 
     <Box>

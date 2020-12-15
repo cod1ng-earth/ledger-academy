@@ -6,8 +6,6 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Flex,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -18,8 +16,6 @@ import {
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { checkPin } from 'modules/pinservice';
-import {downloadFromArweave} from "../../../modules/arweave";
 
 const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
@@ -51,47 +47,6 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
       </InputGroup>
     </form>
   </Box>;
-};
-
-const PinChecker = () => {
-  const [sCid, setSCid] = useState<string>('');
-  const [peerMap, setPeerMap] = useState<any[]>([]);
-
-  const showPinInfo = async () => {
-    const pinResult = await checkPin(sCid);
-    setPeerMap([]);
-    if (pinResult != null) {
-      setPeerMap(pinResult.peer_map);
-    }
-  };
-
-  return (<form onSubmit={(e) => { e.preventDefault(); showPinInfo(); }}>
-    <InputGroup size="md">
-      <Input
-          name="cid"
-          onChange={(e: any) => setSCid(e.target.value)} value={sCid}
-          type="text"
-          placeholder="CID"
-      />
-      <InputRightElement width="6.5rem">
-        <Button h="1.75rem" size="sm" type="submit">
-          check
-        </Button>
-      </InputRightElement>
-    </InputGroup>
-    <List>
-      {Object.values(peerMap).map((peer) => (
-          <Flex key={peer.peername} mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
-            <Box>
-              <Text as="b">
-                {peer.peername}
-              </Text>
-              <Text fontSize="xs">Status: {peer.status}</Text>
-              <Text fontSize="xs">Timestamp: {peer.timestamp}</Text>
-            </Box>
-          </Flex>))}
-    </List>
-  </form>);
 };
 
 const IpfsInfo = () => {
@@ -138,13 +93,6 @@ const IpfsInfo = () => {
           </List>
 
           <ConnectPeer onConnected={refresh} />
-        </AccordionPanel>
-      </AccordionItem>
-
-      <AccordionItem>
-        <AccordionHeader>Pins <AccordionIcon /></AccordionHeader>
-        <AccordionPanel>
-          <PinChecker />
         </AccordionPanel>
       </AccordionItem>
 

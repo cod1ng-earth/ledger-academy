@@ -1,15 +1,21 @@
 /* eslint-disable import/prefer-default-export */
 import fetch from "cross-fetch";
 
+const requestPinServer = (method: string, url: string) => {
+  return fetch(url, {
+    method: method,
+    headers: {
+      'Authorization': `Basic ${process.env.REACT_APP_PIN_SERVICE_AUTHORIZATION}`,
+    },
+    redirect: 'follow',
+  });
+};
+
 export const pin = async (cid: string) => {
   try {
-    const response = await fetch(process.env.REACT_APP_PIN_SERVICE_HOST + '/pins/' + cid, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${process.env.REACT_APP_PIN_SERVICE_AUTHORIZATION}`,
-      },
-      redirect: 'follow',
-    });
+    const response = await requestPinServer(
+      'POST', process.env.REACT_APP_PIN_SERVICE_HOST + '/pins/' + cid
+    );
 
     if (response.status >= 400) {
       throw new Error('Bad response from server');
@@ -22,15 +28,11 @@ export const pin = async (cid: string) => {
   }
 };
 
-export const checkPin = async (cid: string) => {
+export const checkPinStatus = async (cid: string) => {
   try {
-    const response = await fetch(process.env.REACT_APP_PIN_SERVICE_HOST + '/pins/' + cid, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Basic ${process.env.REACT_APP_PIN_SERVICE_AUTHORIZATION}`,
-      },
-      redirect: 'follow',
-    });
+    const response = await requestPinServer(
+      'GET', process.env.REACT_APP_PIN_SERVICE_HOST + '/pins/' + cid
+    );
 
     if (response.status >= 400) {
       throw new Error('Bad response from server');

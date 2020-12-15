@@ -63,7 +63,7 @@ const FileListItem = ({ file, arweave, arweaveWallet }: FileListItemProps) => {
         ></IconButton>}
         {ipfsNode && <IconButton
             variantColor="teal"
-            icon="check"
+            icon="attachment"
             aria-label="Pin"
             onClick={() => pin(sCid)}
             size="sm"
