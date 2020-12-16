@@ -1,11 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import fetch from "cross-fetch";
+import { encode } from "base-64";
 
 const requestPinServer = (method: string, url: string) => {
   return fetch(url, {
     method: method,
     headers: {
-      'Authorization': `Basic ${process.env.REACT_APP_PIN_SERVICE_AUTHORIZATION}`,
+      'Authorization': `Basic ${encode(process.env.REACT_APP_PIN_SERVICE_AUTH_USER + ':' + process.env.REACT_APP_PIN_SERVICE_AUTH_PASSWORD)}`,
     },
     redirect: 'follow',
   });
