@@ -1,10 +1,11 @@
 import {
-  Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, ListItem, useDisclosure,
+  Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, ListItem, useDisclosure, Heading, Box,
 } from '@chakra-ui/core';
 import React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import Blockie from 'components/atoms/Blockie';
 import MainMenu from './MainMenu';
+import ConfigurationDialog from './ConfigurationDialog';
 
 const Navigation = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,15 +34,20 @@ const Navigation = () => {
           <DrawerCloseButton />
           <DrawerHeader>Drawer.</DrawerHeader>
 
-          <DrawerBody>
+          <DrawerBody
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
             <MainMenu as={ListItem} />
+            <Box>
+              <Heading size="md" my={4}>Settings</Heading>
+              <ConfigurationDialog />
+            </Box>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button color="blue">Save</Button>
+
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
