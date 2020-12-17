@@ -16,6 +16,8 @@ import {
 import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
+import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
+import { IPinningServiceConfiguration } from 'modules/pinning';
 
 const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
@@ -49,7 +51,10 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   </Box>;
 };
 
-const IpfsInfo = () => {
+const IpfsInfo = ({ config, updateConfig }: {
+  config: IPinningServiceConfiguration
+  updateConfig: (cfg: IPinningServiceConfiguration) => void,
+}) => {
   const { ipfsNode } = useIPFS();
   const [ipfsIdentity, setIpfsIdentity] = useState<Ipfs.Id>();
 
@@ -114,6 +119,9 @@ const IpfsInfo = () => {
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
+    <Box mt={12}>
+      <ConfigurationDialog config={config} updateConfig={updateConfig} />
+    </Box>
   </Box>;
 };
 

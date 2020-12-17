@@ -9,10 +9,16 @@ import OrbitDB from 'components/organisms/storage/OrbitDb';
 import React, { useState, useEffect } from 'react';
 import ArweaveTab, { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import IpfsPubSub from 'components/organisms/storage/IpfsPubSub';
+import { useConfiguration } from 'components/organisms/storage/PinningConfiguration';
+import usePinning from 'modules/pinning';
 
 const StoragePage = () => {
   const [arweave, setArweave] = useState<any>();
   const [arweaveWallet, setArweaveWallet] = useState<ArweaveWallet>();
+
+  const configuration = useConfiguration();
+
+  const pinningApi = usePinning(configuration.pinningServiceConfiguration);
 
   useEffect(() => {
     setArweave(Arweave.init({
@@ -34,7 +40,11 @@ const StoragePage = () => {
     </TabList>
     <TabPanels>
       <TabPanel>
-        <IpfsFileManager arweave={arweave} arweaveWallet={arweaveWallet}/>
+        <IpfsFileManager
+          arweave={arweave}
+          arweaveWallet={arweaveWallet}
+          pinningApi={pinningApi}
+        />
       </TabPanel>
       <TabPanel>
         <OrbitDB />
@@ -43,7 +53,10 @@ const StoragePage = () => {
         <IpfsPubSub />
       </TabPanel>
       <TabPanel>
-        <IpfsInfo />
+        <IpfsInfo
+          config={configuration.pinningServiceConfiguration}
+          updateConfig={configuration.updatePinningServiceConfiguration}
+        />
       </TabPanel>
       <TabPanel>
         <ArweaveTab arweave={arweave} wallet={arweaveWallet} setWallet={setArweaveWallet}/>

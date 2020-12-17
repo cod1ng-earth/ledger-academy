@@ -1,5 +1,5 @@
 import {
-  Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, ListItem, useDisclosure,
+  Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, ListItem, useDisclosure, Heading, Box,
 } from '@chakra-ui/core';
 import React from 'react';
 import { useWeb3React } from '@web3-react/core';
@@ -33,15 +33,19 @@ const Navigation = () => {
           <DrawerCloseButton />
           <DrawerHeader>Drawer.</DrawerHeader>
 
-          <DrawerBody>
+          <DrawerBody
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
             <MainMenu as={ListItem} />
+            <Box>
+              <Heading size="md" my={4}>Settings</Heading>
+            </Box>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button color="blue">Save</Button>
+
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
