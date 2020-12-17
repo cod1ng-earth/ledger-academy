@@ -8,11 +8,9 @@ import TestPage from 'components/pages/TestPage';
 import React from 'react';
 import {
   HashRouter as Router,
-
   Route, Switch,
 } from 'react-router-dom';
 import Web3 from 'web3';
-import { ConfigurationProvider } from 'context/ConfigurationContext';
 import EthPage from './components/pages/EthPage';
 import IdentityPage from './components/pages/IdentityPage';
 import StoragePage from './components/pages/StoragePage';
@@ -23,7 +21,7 @@ const getLibrary = (provider: any): Web3 => new Web3(provider);
 
 const App: React.FC = () => (<ThemeProvider theme={customTheme}>
   <CSSReset />
-  <ConfigurationProvider>
+
     <Web3ReactProvider getLibrary={getLibrary}>
       <IPFSProvider>
         <Router>
@@ -52,6 +50,6 @@ const App: React.FC = () => (<ThemeProvider theme={customTheme}>
         </Router>
       </IPFSProvider>
     </Web3ReactProvider>
-  </ConfigurationProvider>
+
 </ThemeProvider>);
 export default App;

@@ -1,18 +1,45 @@
 import {
   Box, FormControl, FormLabel, Heading, Input, Button,
 } from '@chakra-ui/core';
-import { useConfiguration } from 'context/ConfigurationContext';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { IPinningServiceConfiguration } from 'modules/pinning';
 
-const ConfigurationDialog = () => {
-  const {
-    pinningServiceConfiguration: config,
-    updatePinningServiceConfiguration: setConfig,
-  } = useConfiguration();
+export const useConfiguration = () => {
+  const [
+    pinningServiceConfiguration,
+    setPinningServiceConfiguration,
+  ] = useState<IPinningServiceConfiguration>({
+    url: process.env.REACT_APP_PIN_SERVICE_HOST || '',
+    username: null,
+    password: null,
+  });
 
+  useEffect(() => {
+    const storedConfig = localStorage.getItem('pin_config');
+    if (storedConfig) {
+      const parsed = JSON.parse(storedConfig);
+      setPinningServiceConfiguration(parsed as IPinningServiceConfiguration);
+    }
+  }, []);
+
+  const updatePinningServiceConfiguration = (newConfig: IPinningServiceConfiguration) => {
+    localStorage.setItem('pin_config', JSON.stringify(newConfig));
+    setPinningServiceConfiguration(newConfig);
+  };
+
+  return {
+    pinningServiceConfiguration,
+    updatePinningServiceConfiguration,
+  };
+};
+
+export const ConfigurationDialog = ({ config, updateConfig }: {
+  config: IPinningServiceConfiguration
+  updateConfig: (cfg: IPinningServiceConfiguration) => void,
+}) => {
   const updatePinningServiceSettings = (e: any) => {
     e.preventDefault();
-    setConfig({
+    updateConfig({
       url: e.target.url.value,
       username: e.target.username.value,
       password: e.target.password.value,

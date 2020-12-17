@@ -5,7 +5,6 @@ import React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import Blockie from 'components/atoms/Blockie';
 import MainMenu from './MainMenu';
-import ConfigurationDialog from './ConfigurationDialog';
 
 const Navigation = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,7 +41,6 @@ const Navigation = () => {
             <MainMenu as={ListItem} />
             <Box>
               <Heading size="md" my={4}>Settings</Heading>
-              <ConfigurationDialog />
             </Box>
           </DrawerBody>
 
