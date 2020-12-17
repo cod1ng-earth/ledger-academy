@@ -8,7 +8,6 @@ import TestPage from 'components/pages/TestPage';
 import React from 'react';
 import {
   HashRouter as Router,
-
   Route, Switch,
 } from 'react-router-dom';
 import Web3 from 'web3';
@@ -22,33 +21,35 @@ const getLibrary = (provider: any): Web3 => new Web3(provider);
 
 const App: React.FC = () => (<ThemeProvider theme={customTheme}>
   <CSSReset />
-  <Web3ReactProvider getLibrary={getLibrary}>
-    <IPFSProvider>
-      <Router>
-        <Flex direction="column" minHeight="100vh">
-          <Header />
-          <Flex m={2} flexGrow={1}>
-            <Box width="full">
-              <Switch>
-                <Route exact path="/">
-                  <EthPage />
-                </Route>
-                <Route path="/storage">
-                  <StoragePage />
-                </Route>
-                <Route path="/identity">
-                  <IdentityPage />
-                </Route>
-                <Route path="/test">
-                  <TestPage />
-                </Route>
-              </Switch>
-            </Box>
+
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <IPFSProvider>
+        <Router>
+          <Flex direction="column" minHeight="100vh">
+            <Header />
+            <Flex m={2} flexGrow={1}>
+              <Box width="full">
+                <Switch>
+                  <Route exact path="/">
+                    <EthPage />
+                  </Route>
+                  <Route path="/storage">
+                    <StoragePage />
+                  </Route>
+                  <Route path="/identity">
+                    <IdentityPage />
+                  </Route>
+                  <Route path="/test">
+                    <TestPage />
+                  </Route>
+                </Switch>
+              </Box>
+            </Flex>
+            <Footer />
           </Flex>
-          <Footer />
-        </Flex>
-      </Router>
-    </IPFSProvider>
-  </Web3ReactProvider>
+        </Router>
+      </IPFSProvider>
+    </Web3ReactProvider>
+
 </ThemeProvider>);
 export default App;
