@@ -5,6 +5,7 @@ import DownloadFile from 'components/molecules/storage/DownloadFile';
 import DropZone from 'components/molecules/storage/DropZone';
 import FileListItem from 'components/molecules/storage/FileListItem';
 import { Ipfs } from 'ipfs';
+import { PinningApi } from 'modules/pinning';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 import { ArweaveWallet } from './ArweaveTab';
@@ -12,9 +13,10 @@ import { ArweaveWallet } from './ArweaveTab';
 interface IpfsFileManagerProps {
   arweave: any;
   arweaveWallet: ArweaveWallet | undefined;
+  pinningApi: PinningApi;
 }
 
-const IpfsFileManager = ({ arweave, arweaveWallet }: IpfsFileManagerProps) => {
+const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManagerProps) => {
   const { ipfsNode } = useIPFS();
   const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
   const [folderCid, setFolderCid] = useState<string>('');
@@ -98,7 +100,13 @@ const IpfsFileManager = ({ arweave, arweaveWallet }: IpfsFileManagerProps) => {
         <IconButton as="a" {...{ target: '_blank', href: `https://ipfs.io/ipfs/${folderCid}` }} icon="external-link" aria-label="show on gateway" />
       </Flex>
       <List>
-        {files.map((f) => <FileListItem file={f} key={`${f.cid.toString()}`} arweave={arweave} arweaveWallet={arweaveWallet} />)}
+        {files.map((f) => <FileListItem
+          file={f}
+          key={`${f.cid.toString()}`}
+          arweave={arweave}
+          arweaveWallet={arweaveWallet}
+          pinningApi={pinningApi}
+        />)}
       </List>
     </Box>
 
