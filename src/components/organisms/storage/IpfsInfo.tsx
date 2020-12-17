@@ -119,8 +119,9 @@ const IpfsInfo = ({ config, updateConfig }: {
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
-
-    <ConfigurationDialog config={config} updateConfig={updateConfig} />
+    <Box mt={12}>
+      <ConfigurationDialog config={config} updateConfig={updateConfig} />
+    </Box>
   </Box>;
 };
 

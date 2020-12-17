@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Ipfs } from 'ipfs';
 import { useIPFS } from 'context/IPFS';
 import {
-  Flex, Box, Text, IconButton, List,
+  Flex, Box, Text, IconButton, List, useToast,
 } from '@chakra-ui/core';
 import { download, content } from 'modules/download';
 import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
@@ -36,7 +36,7 @@ const FileItemDetails = ({
     })();
   }, []);
 
-  return <List>
+  return <List ml={4}>
     {Object.values(pinStatus).map((pinningPeer: IPinningPeer) => (
         <Flex key={pinningPeer.peername} mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
           <Box>
@@ -58,9 +58,11 @@ const FileListItem = ({
 
   const [arweaveTransaction, setArweaveTransaction] = useState<any>();
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const toast = useToast();
 
   const sCid = file.cid.toString();
-  const linkProps = {
+
+  const gatewayLinkProps = {
     href: `https://ipfs.io/ipfs/${sCid}`,
     target: '_blank',
   };
@@ -84,6 +86,17 @@ const FileListItem = ({
     setArweaveTransaction(transaction);
   };
 
+  const requestPin = async () => {
+    const res = await pinningApi.pin(sCid);
+    toast({
+      title: `Pinning of ${sCid} requested`,
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
+    console.log(res);
+  };
+
   return <><Flex mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
       <Box>
         <Text>
@@ -104,7 +117,7 @@ const FileListItem = ({
           variantColor="teal"
           icon="attachment"
           aria-label="Pin"
-          onClick={() => pinningApi.pin(sCid)}
+          onClick={requestPin}
           size="sm"
         ></IconButton>}
         {ipfsNode && <IconButton
@@ -120,7 +133,7 @@ const FileListItem = ({
           aria-label="open on gateway"
           as="a"
           size="sm"
-          {...linkProps}
+          {...gatewayLinkProps}
         />
       </Flex>
     </Flex>

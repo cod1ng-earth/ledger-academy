@@ -12,7 +12,7 @@ export interface PinningApi {
   checkPin: (cid: string) => Promise<any>,
 }
 
-const usePinning = (config : IPinningServiceConfiguration): PinningApi => {
+const usePinning = (config: IPinningServiceConfiguration): PinningApi => {
   const credentials = encode(`${config.username}:${config.password}`);
 
   const request = async (method: string, endpoint: string): Promise<any> => {

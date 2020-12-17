@@ -90,7 +90,7 @@ const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManager
     </Box>
 
     <Box>
-      <Heading as="h2" size="md" my="2">Do anything</Heading>
+      <Heading as="h2" size="md" my="2">Download anything</Heading>
       <DownloadFile />
     </Box>
 
