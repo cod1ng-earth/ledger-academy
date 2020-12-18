@@ -1,5 +1,5 @@
 import {
-  Box, FormControl, FormLabel, Heading, Input, Button,
+  Box, FormControl, FormLabel, Heading, Input, Button, InputGroup, InputRightElement,
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
 import { IPinningServiceConfiguration } from 'modules/pinning';
@@ -46,6 +46,8 @@ export const ConfigurationDialog = ({ config, updateConfig }: {
     });
   };
 
+  const [disclosePassword, setDisclosePassword] = useState<boolean>();
+
   return (
         <Box>
             <Heading size="sm" my={3}>IPFS Pinning Settings</Heading>
@@ -72,12 +74,18 @@ export const ConfigurationDialog = ({ config, updateConfig }: {
 
                 <FormControl>
                     <FormLabel htmlFor="url">Password</FormLabel>
-                    <Input
-                        name="password"
-                        type="password"
-                        id="password"
-                        defaultValue={config.password || ''}
-                    />
+                    <InputGroup>
+                      <Input
+                          pr="4.5rem"
+                          name="password"
+                          type={disclosePassword ? 'text' : 'password'}
+                          id="password"
+                          defaultValue={config.password || ''}
+                      />
+                      <InputRightElement width="4.5rem">
+                        <Button h="1.75rem" mr={2} size="sm" onClick={() => setDisclosePassword(!disclosePassword)}>show</Button>
+                      </InputRightElement>
+                    </InputGroup>
                 </FormControl>
                 <Button type="submit" variantColor="teal" my={3}>save</Button>
             </form>

@@ -11,8 +11,12 @@ const PubsubPeers = ({ topic }: { topic: string }) => {
   useEffect(() => {
     if (!ipfsNode) return () => { };
     const intvl = setInterval(async () => {
-      const peerIds = await ipfsNode.pubsub.peers(topic);
-      setSubscribedPeers(peerIds);
+      if (ipfsNode?.pubsub) {
+        const peerIds = await ipfsNode.pubsub.peers(topic);
+        setSubscribedPeers(peerIds);
+      } else {
+        console.debug('node went down in the meanwhile...');
+      }
     }, 2000);
     return () => {
       clearInterval(intvl);

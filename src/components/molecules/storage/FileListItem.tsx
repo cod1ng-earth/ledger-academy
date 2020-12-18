@@ -4,10 +4,10 @@ import { useIPFS } from 'context/IPFS';
 import {
   Flex, Box, Text, IconButton, List, useToast,
 } from '@chakra-ui/core';
-import { download, content } from 'modules/download';
 import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
 import { storeOnArweave } from 'modules/arweave';
 import { PinningApi } from 'modules/pinning';
+import { content, download } from 'modules/download';
 
 interface FileListItemProps {
   file: Ipfs.UnixFSLsResult;

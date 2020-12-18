@@ -6,15 +6,16 @@ import NewMessageForm from 'components/atoms/NewMessageForm';
 import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
 import PubsubPeers from 'components/molecules/storage/PubsubPeers';
 import React, { useCallback, useState } from 'react';
+import IPFSSwarmAddressAlert from 'components/molecules/storage/IPFSSwarmAddressAlert';
 import { useIPFS } from '../../../context/IPFS';
 
-interface IIpfsPubSubInterface {
-  onTopic?: (topic: string) => void;
-}
+// interface IIpfsPubSubInterface {
+//   onTopic?: (topic: string) => void;
+// }
 
 const textDecoder = new TextDecoder('utf-8');
 
-const IpfsPubSub = (props: IIpfsPubSubInterface) => {
+const IpfsPubSub = () => {
   const [topic, setTopic] = useState<string>('');
 
   const [messages, setMessages] = useState<any[]>([]);
@@ -53,6 +54,9 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
   }
 
   return (<Flex direction="column" >
+
+    <IPFSSwarmAddressAlert />
+
     <Heading as="h2" size="md" my="2">Publish - Subscribe</Heading>
 
     <InputBase>
@@ -63,7 +67,7 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
         submitLabel="subscribe"
       />
     </InputBase>
-
+    {topic && <Heading size="md">Subscribed to {topic}</Heading>}
     {messages.map((msg, i) => <Box p={2} key={`msg-${msg.from}-${i}`}>
       <Text as="b">{msg.from}.{i}</Text>
       <PubsubMessageDisplay data={msg.data} />

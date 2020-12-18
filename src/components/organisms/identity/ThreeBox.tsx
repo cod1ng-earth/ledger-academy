@@ -8,6 +8,7 @@ import ThreeBoxProfile from 'components/molecules/identity/3box/ThreeBoxProfile'
 import ThreeBoxSpace from 'components/molecules/identity/3box/ThreeBoxSpace';
 import React, { useState } from 'react';
 import Web3 from 'web3';
+import IPFSSwarmAddressAlert from 'components/molecules/storage/IPFSSwarmAddressAlert';
 
 const ThreeBox = () => {
   const [box, setBox] = useState<any>();
@@ -19,6 +20,7 @@ const ThreeBox = () => {
   return !web3Active
     ? <Web3Alert />
     : <Box my="6" w="100%">
+        <IPFSSwarmAddressAlert />
       {box
         ? <>
           <Alert status="success" mb="6">
