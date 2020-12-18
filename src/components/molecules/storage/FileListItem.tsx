@@ -10,7 +10,7 @@ import { PinningApi } from 'modules/pinning';
 import { content, download } from 'modules/download';
 
 interface FileListItemProps {
-  file: any;
+  file: Ipfs.UnixFSLsResult;
   arweave: any;
   arweaveWallet: ArweaveWallet | undefined;
   pinningApi: PinningApi;

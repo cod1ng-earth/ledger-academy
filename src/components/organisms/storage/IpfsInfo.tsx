@@ -1,5 +1,5 @@
 import {
-  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, CloseButton, ListItem, Text, useClipboard,
+  Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertDescription, AlertTitle, Box, Button, CloseButton, ListItem, Text, useClipboard, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, IconButton,
 } from '@chakra-ui/core';
 import OneLineTextInput, { InputBase, IOneLineTextInput } from 'components/atoms/InputFlex';
 import IPFSConnectKnownAddress, { knownSwarmPeers, knownTransports } from 'components/molecules/storage/IPFSConnectKnownAddress';
@@ -8,6 +8,10 @@ import { useIPFS } from 'context/IPFS';
 import { Ipfs } from 'ipfs';
 import { IPinningServiceConfiguration } from 'modules/pinning';
 import React, { useCallback, useEffect, useState } from 'react';
+import QRCode from 'qrcode.react';
+import QrReader from 'react-qr-scanner';
+
+import { IoQrCode } from 'react-icons/io5';
 
 const ConnectInput = (props: IOneLineTextInput) => {
   const [connectionError, setConnectionError] = useState<string>();
@@ -51,6 +55,10 @@ const IpfsInfo = ({ config, updateConfig }: {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localAddrs, setLocalAddrs] = useState<Ipfs.Multiaddr[]>([]);
 
+  const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
+  const [qrCodeContent, setQRCodeContent] = useState<string>('');
+  const [scanningForRelayPeer, setScanningForRelayPeer] = useState<string>('');
+
   const refresh = useCallback(async () => {
     if (!ipfsNode) return;
 
@@ -71,14 +79,44 @@ const IpfsInfo = ({ config, updateConfig }: {
     refresh();
   };
 
+  const circuitConnect = (circuitPeer: string, peerId: string) => {
+    const peer = `${circuitPeer}/p2p-circuit/p2p/${peerId}`;
+    swarmConnect(peer);
+    setScanningForRelayPeer('');
+  };
+
+  const showQrCode = (content: string) => {
+    setQRCodeContent(content);
+    setIsQrModalOpen(true);
+  };
+
   return <Box>
+    <Modal isOpen={isQrModalOpen} onClose={() => setIsQrModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Scan this</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <QRCode value={qrCodeContent} size={400} includeMargin={true} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
     <Accordion allowToggle>
       <AccordionItem>
         <AccordionHeader>
           Identity <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
-          <Text><b>ID</b> {ipfsIdentity?.id}</Text>
+          <Text>
+            <b>ID</b> {ipfsIdentity?.id}
+            <IconButton
+              size="sm"
+              mx={2}
+              aria-label="scan ipfs id" icon={IoQrCode}
+              onClick={() => showQrCode(ipfsIdentity?.id || '')}
+            />
+          </Text>
           <Text isTruncated><b>Public Key</b> {ipfsIdentity?.publicKey}</Text>
           <Text><b>Version</b> {ipfsIdentity?.agentVersion} / <b>Protocol</b>: {ipfsIdentity?.protocolVersion} </Text>
         </AccordionPanel>
@@ -94,10 +132,45 @@ const IpfsInfo = ({ config, updateConfig }: {
             placeholder="/dns4/<domain>/tcp/<4002>/wss/p2p/<peer-id>"
             submitLabel="connect"
           />
-          <InputBase justifyContent="flex-end">
-            <Text>connect to known peers</Text>
-            <IPFSConnectKnownAddress knownAddresses={knownSwarmPeers} connect={swarmConnect} />
+          <InputBase justifyContent="space-between">
+            <Box>
+              <Text>connect via circuit relay</Text>
+              {
+                scanningForRelayPeer ? <Button
+                  variantColor="teal"
+                  leftIcon={IoQrCode}
+                  size="sm"
+                  onClick={() => setScanningForRelayPeer('')}
+                >stop</Button>
+                  : knownSwarmPeers.map((peer) => <Button key={`scanPeer-${peer.name}`}
+                variantColor="teal"
+                leftIcon={IoQrCode}
+                size="sm"
+                onClick={() => { setScanningForRelayPeer(peer.address); } }
+              >{peer.name}
+              </Button>)
+            }
+            </Box>
+            <Box>
+              <Text>connect to known peers</Text>
+              <IPFSConnectKnownAddress knownAddresses={knownSwarmPeers} connect={swarmConnect} />
+            </Box>
           </InputBase>
+
+          <Box>
+          {
+            scanningForRelayPeer && <QrReader
+            onScan={(peerId: string) => {
+              if (peerId) {
+                circuitConnect(scanningForRelayPeer, peerId);
+              }
+            }}
+            onError={console.error}
+            facingMode="rear"
+            />
+          }
+          </Box>
+
           <Box>
             {peers.map((p: Ipfs.Peer) => <PeerInfo key={p.addr.toString()} addr={p.addr} />)}
           </Box>
