@@ -1,83 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Ipfs } from 'ipfs';
+import { Box, Flex, IconButton, List, Text, useToast } from '@chakra-ui/core';
+import CID from 'cids';
+import { useArweave } from 'context/Arweave';
 import { useIPFS } from 'context/IPFS';
-import {
-  Flex, Box, Text, IconButton, List, useToast,
-} from '@chakra-ui/core';
-import { download, content } from 'modules/download';
-import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
+import { UnixFSEntry } from 'ipfs-core/src/components/files/ls';
 import { storeOnArweave } from 'modules/arweave';
-import { PinningApi } from 'modules/pinning';
+import { content, download } from 'modules/download';
+import { CheckPinResult, PinningApi } from 'modules/pinning';
+import React, { useState } from 'react';
+
 
 interface FileListItemProps {
-  file: Ipfs.UnixFSLsResult;
-  arweave: any;
-  arweaveWallet: ArweaveWallet | undefined;
-  pinningApi: PinningApi;
+  file: UnixFSEntry;
+  pinningApi: PinningApi
 }
 
-interface IPinningPeer {
-  peername: string;
-  status: string;
-  timestamp: string;
-}
-
-const FileItemDetails = ({
-  file, pinningApi,
+const PinningDetails = ({
+  result
 }: {
-  file: Ipfs.UnixFSLsResult, pinningApi: PinningApi
+  result: CheckPinResult
 }) => {
-  const [pinStatus, setPinStatus] = useState<{[key: string]: IPinningPeer}>({});
-
-  useEffect(() => {
-    (async () => {
-      const pinResult = await pinningApi.checkPin(file.cid.toString());
-      setPinStatus(pinResult.peer_map);
-    })();
-  }, []);
-
   return <List ml={4}>
-    {Object.values(pinStatus).map((pinningPeer: IPinningPeer) => (
-        <Flex key={pinningPeer.peername} mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
-          <Box>
-            <Text as="b">
-              {pinningPeer.peername}
-            </Text>
-            <Text fontSize="xs">Status: {pinningPeer.status}</Text>
-            <Text fontSize="xs">Timestamp: {pinningPeer.timestamp}</Text>
-          </Box>
-        </Flex>))
-    }
+    {result.count === 0 && <Box>not pinned.</Box>}
+    {result.rows.map( (res, i) => (
+    <Flex key={res.id} mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
+      <Box>
+        <Text as="b">
+          pinned at {res.date_pinned}
+        </Text>
+      </Box>
+    </Flex>
+    ))}
   </List>;
+
 };
 
 const FileListItem = ({
-  file, arweave, arweaveWallet, pinningApi,
+  file,
+  pinningApi
 }: FileListItemProps) => {
   const { ipfsNode } = useIPFS();
+  const { arweave, account } = useArweave();
 
   const [arweaveTransaction, setArweaveTransaction] = useState<any>();
-  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [pinStatusResult, setPinStatusResult] = useState<CheckPinResult | null>();
+
   const toast = useToast();
 
-  const sCid = file.cid.toString();
-
   const gatewayLinkProps = {
-    href: `https://ipfs.io/ipfs/${sCid}`,
+    href: `https://ipfs.io/ipfs/${file.cid}`,
     target: '_blank',
   };
 
-  const addToArweave = async (cid: string, filename: string) => {
-    if (!arweaveWallet) return;
+  const addToArweave = async (cid: CID, filename: string) => {
+    if (!account) return;
     const ipfsContent = await content({ ipfsNode, cid });
 
     const transaction = await storeOnArweave({
       arweave,
-      wallet: arweaveWallet,
+      account,
       data: ipfsContent,
       tags: {
         'Content-Type': 'application/text',
-        cid,
+        cid: cid.toString(),
         filename,
         search: 'eddie-test',
       },
@@ -86,15 +70,33 @@ const FileListItem = ({
     setArweaveTransaction(transaction);
   };
 
+  const showDetails = async () => {
+    if (pinStatusResult) {
+      setPinStatusResult(null)
+      return;
+    }
+    setPinStatusResult(await pinningApi.checkPin(file.cid));
+  }
+
   const requestPin = async () => {
-    const res = await pinningApi.pin(sCid);
-    toast({
-      title: `Pinning of ${sCid} requested`,
-      status: 'info',
-      duration: 3000,
-      isClosable: true,
-    });
-    console.log(res);
+    try {
+      const res = await pinningApi.pin(file.cid);
+      toast({
+        title: `Pinning of ${file.cid} requested`,
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+      console.log(res);
+    } catch(error) {
+      console.error(error.message);
+      toast({
+        status: "error",
+        title: `pinning failed`,
+        description: error.message,
+        isClosable: true
+      })
+    }
   };
 
   return <><Flex mt="1" p="1" bg="gray.100" d="flex" align="center" justify="space-between">
@@ -102,18 +104,20 @@ const FileListItem = ({
         <Text>
           {file.name}
         </Text>
-        <Text as="a" fontSize="xs" onClick={() => setShowDetails(!showDetails)}>{sCid}</Text>
-        {arweaveTransaction && <Text fontSize="xs">Arweave ID: {arweaveTransaction.id}, Fee: {arweaveTransaction.reward}</Text>}
+        <Text as="a" fontSize="xs" onClick={showDetails}>
+          {file.cid.toString()}
+        </Text>
       </Box>
       <Flex gridGap="2">
-        {arweaveWallet && <IconButton
+        {account && <IconButton
           variantColor="teal"
           icon="plus-square"
           aria-label="Add to Arweave"
-          onClick={() => addToArweave(sCid, file.name)}
+          onClick={() => addToArweave(file.cid, file.name)}
           size="sm"
         ></IconButton>}
         {ipfsNode && <IconButton
+          title="Pin"
           variantColor="teal"
           icon="attachment"
           aria-label="Pin"
@@ -123,6 +127,7 @@ const FileListItem = ({
         {ipfsNode && <IconButton
           variantColor="teal"
           icon="download"
+          title="Download"
           aria-label="Download"
           onClick={() => download({ ipfsNode, cid: file.cid, fileName: file.name })}
           size="sm"
@@ -130,6 +135,7 @@ const FileListItem = ({
         <IconButton
           variantColor="teal"
           icon="external-link"
+          title="open on gateway"
           aria-label="open on gateway"
           as="a"
           size="sm"
@@ -137,7 +143,12 @@ const FileListItem = ({
         />
       </Flex>
     </Flex>
-    {showDetails && <FileItemDetails file={file} pinningApi={pinningApi} />}
+    {pinStatusResult && (
+      <>
+        <PinningDetails result={pinStatusResult} />
+        {arweaveTransaction && <Text fontSize="xs">Arweave ID: {arweaveTransaction.id}, Fee: {arweaveTransaction.reward}</Text>}
+      </>
+    )}
     </>;
 };
 export default FileListItem;

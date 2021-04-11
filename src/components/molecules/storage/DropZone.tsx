@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 export default function DropZone({ addData, onUpdated }: {
-  addData: (fileName: string, data: ArrayBuffer | string | null) => Promise<void>,
+  addData: (fileName: string, data: Uint8Array | string) => Promise<void>,
   onUpdated: () => Promise<void>
 }) {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {

@@ -4,7 +4,7 @@ import {
 import OneLineTextInput, { InputBase } from 'components/atoms/InputFlex';
 import { default as ODB } from 'orbit-db';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIPFS } from '../../../context/IPFS';
+import { useIPFS } from 'context/IPFS';
 
 interface LogMessage {
   message: string

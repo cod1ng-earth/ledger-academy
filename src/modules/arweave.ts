@@ -1,23 +1,30 @@
-import { ArweaveWallet } from 'components/organisms/storage/ArweaveTab';
+import { JWKInterface } from "arweave/node/lib/wallet";
+
+export interface ArweaveAccount {
+  privateKey: JWKInterface;
+  address: string;
+  balance: string;
+}
 
 export const storeOnArweave = async ({
   arweave,
-  wallet,
+  account,
   data,
   tags = {},
 }: {
     arweave: any,
-    wallet: ArweaveWallet,
+    account: ArweaveAccount,
     data: any,
     tags?: {[key: string]: string},
 }): Promise<any> => {
-  const transaction = await arweave.createTransaction({ data }, wallet.privateKey);
+
+  const transaction = await arweave.createTransaction({ data }, account.privateKey);
   Object.keys(tags).forEach((k) => {
     transaction.addTag(k, tags[k]);
   });
 
-  await arweave.transactions.sign(transaction, wallet.privateKey);
-  const response = await arweave.transactions.post(transaction);
+  await arweave.transactions.sign(transaction, account.privateKey);
+  await arweave.transactions.post(transaction);
   console.debug(transaction);
   return transaction;
 };

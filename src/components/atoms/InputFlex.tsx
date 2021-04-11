@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
   Button, Flex, Input, InputGroup, InputRightElement, Text,
 } from '@chakra-ui/core';

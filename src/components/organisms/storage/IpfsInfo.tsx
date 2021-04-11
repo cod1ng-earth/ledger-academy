@@ -14,10 +14,10 @@ import {
   Text,
 } from '@chakra-ui/core';
 import { useIPFS } from 'context/IPFS';
-import { Ipfs } from 'ipfs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ConfigurationDialog } from 'components/organisms/storage/PinningConfiguration';
-import { IPinningServiceConfiguration } from 'modules/pinning';
+import Multiaddr from 'multiaddr';
+import { Peer, Id as IpfsId } from 'modules/ipfs';
+import multiaddr from 'multiaddr';
 
 const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
@@ -25,7 +25,7 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const res = await ipfsNode!.swarm.connect(peer);
+    const res = await ipfsNode!.swarm.connect(multiaddr(peer));
     console.debug(res);
     onConnected();
 
@@ -51,31 +51,25 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   </Box>;
 };
 
-const IpfsInfo = ({ config, updateConfig }: {
-  config: IPinningServiceConfiguration
-  updateConfig: (cfg: IPinningServiceConfiguration) => void,
-}) => {
+const IpfsInfo = () => {
   const { ipfsNode } = useIPFS();
-  const [ipfsIdentity, setIpfsIdentity] = useState<Ipfs.Id>();
+  const [ipfsIdentity, setIpfsIdentity] = useState<IpfsId>();
 
-  const [peers, setPeers] = useState<Ipfs.Peer[]>([]);
-  const [addrs, setAddrs] = useState<Ipfs.PeerInfo[]>([]);
+  const [peers, setPeers] = useState<Peer[]>([]);
+  // const [addrs, setAddrs] = useState<PeerInfo[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [localAddrs, setLocalAddrs] = useState<Ipfs.Multiaddr[]>([]);
+  const [localAddrs, setLocalAddrs] = useState<Multiaddr[]>([]);
 
   const refresh = useCallback(async () => {
-    if (!ipfsNode) return;
     const _peers = await ipfsNode.swarm.peers();
-
     setPeers(_peers.sort());
-    setAddrs(await ipfsNode.swarm.addrs());
     setLocalAddrs(await ipfsNode.swarm.localAddrs());
     setIpfsIdentity(await ipfsNode.id());
   }, [ipfsNode]);
 
   useEffect(() => {
     refresh();
-  }, [ipfsNode, refresh]);
+  }, [refresh]);
 
   return <Box>
     <Accordion allowToggle>
@@ -94,23 +88,23 @@ const IpfsInfo = ({ config, updateConfig }: {
         <AccordionPanel>
           <Button onClick={refresh}>refresh</Button>
           <List>
-            {peers.map((p: Ipfs.Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
+            {peers.map((p: Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
           </List>
 
           <ConnectPeer onConnected={refresh} />
         </AccordionPanel>
       </AccordionItem>
 
-      <AccordionItem>
+      {/*<AccordionItem>
         <AccordionHeader>
           Addresses <AccordionIcon />
         </AccordionHeader>
         <AccordionPanel>
           <List>
-            {addrs.map((addr: Ipfs.PeerInfo) => <ListItem key={addr.id}>
+            {addrs.map((addr: PeerInfo) => <ListItem key={addr.id}>
               <Text as="b">{addr.id}</Text>
               <List ml="3">
-                {addr.addrs.map((_addr: Ipfs.Multiaddr, i: number) => <ListItem key={`${addr}-${i}`}>
+                {addr.addrs.map((_addr: Multiaddr, i: number) => <ListItem key={`${addr}-${i}`}>
                   {_addr.toString()}
                 </ListItem>)}
               </List>
@@ -118,10 +112,9 @@ const IpfsInfo = ({ config, updateConfig }: {
           </List>
         </AccordionPanel>
       </AccordionItem>
+      */}
     </Accordion>
-    <Box mt={12}>
-      <ConfigurationDialog config={config} updateConfig={updateConfig} />
-    </Box>
+
   </Box>;
 };
 

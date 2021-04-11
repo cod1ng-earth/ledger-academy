@@ -1,5 +1,4 @@
 import { Box, SimpleGrid, Heading } from '@chakra-ui/core';
-import { RouteComponentProps } from '@reach/router';
 import { useWeb3React } from '@web3-react/core';
 import Web3Alert, { ConnectedAlert } from 'components/atoms/Web3Alert';
 import MintForm from 'components/organisms/blockchain/MintForm';
@@ -11,7 +10,7 @@ import ExchangeForm from 'components/organisms/blockchain/ExchangeForm';
 import ADIToken from '../../contracts/ADIToken.json';
 import TransferForm from '../organisms/blockchain/TransferForm';
 
-const EthPage = (props: RouteComponentProps) => {
+const EthPage = () => {
   const MINTER_ROLE = Web3.utils.keccak256('MINTER_ROLE');
 
   const {
