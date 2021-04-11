@@ -5,6 +5,7 @@ import { useWeb3React } from '@web3-react/core';
 import { injected } from 'modules/connectors';
 import React from 'react';
 import Web3 from 'web3';
+
 import MainMenu from './MainMenu';
 import Navigation from './Navigation';
 

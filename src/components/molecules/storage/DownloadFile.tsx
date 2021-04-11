@@ -1,8 +1,9 @@
 import OneLineTextInput from 'components/atoms/InputFlex';
 import { useIPFS } from 'context/IPFS';
-import { CID } from 'ipfs';
+import { CID } from 'ipfs-core';
 import { download } from 'modules/download';
-import React from 'react';
+import React from 'react'
+
 
 const DownloadFile = () => {
   const { ipfsNode } = useIPFS();

@@ -1,4 +1,4 @@
-import {create as createIpfs} from 'ipfs'
+import { create as createIpfs } from 'ipfs-core'
 import { Server, IPFSService } from 'ipfs-message-port-server'
 
 const main = async () => {

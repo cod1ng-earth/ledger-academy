@@ -17,6 +17,7 @@ export default function PubsubMessageDisplay({ data }: {data: string}) {
       (async () => {
         const res = await ipfsNode?.files.read(`/ipfs/${data}`);
         const chunks = [];
+        if (!res) return;
         for await (const r of res) {
           chunks.push(r);
         }

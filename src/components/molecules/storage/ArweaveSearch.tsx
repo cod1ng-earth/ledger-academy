@@ -22,7 +22,7 @@ const ArweaveSearch = ({ arweave, searchPhrase }: {arweave: any, searchPhrase: s
       console.debug(result);
       setSearchResult(result);
     })();
-  }, [searchPhrase]);
+  }, [searchPhrase, arweave]);
 
   return (<List>
         {searchResult.map((r) => (

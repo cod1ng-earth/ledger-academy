@@ -8,20 +8,19 @@ import PubsubPeers from 'components/molecules/storage/PubsubPeers';
 import React, { useCallback, useState } from 'react';
 import { useIPFS } from '../../../context/IPFS';
 
-interface IIpfsPubSubInterface {
-  onTopic?: (topic: string) => void;
-}
 
 const textDecoder = new TextDecoder('utf-8');
+const textEncoder = new TextEncoder();
 
-const IpfsPubSub = (props: IIpfsPubSubInterface) => {
+const IpfsPubSub = () => {
   const [topic, setTopic] = useState<string>('');
 
   const [messages, setMessages] = useState<any[]>([]);
   const { ipfsNode } = useIPFS();
 
   async function publish(_message: string): Promise<void> {
-    return ipfsNode?.pubsub.publish(topic, _message);
+    const enc = textEncoder.encode(_message);
+    return ipfsNode.pubsub.publish(topic, enc, {});
   }
 
   function decodeMessageToUtf8(_message: any): object {
@@ -41,15 +40,11 @@ const IpfsPubSub = (props: IIpfsPubSubInterface) => {
 
   async function subscribe(_topic: string): Promise<void> {
     if (topic) {
-      ipfsNode!.pubsub.unsubscribe(topic);
+      ipfsNode.pubsub.unsubscribe(topic);
     }
     setTopic(_topic);
     setMessages([]);
-    ipfsNode!.pubsub.subscribe(_topic, handleNewMessage, {
-      onError: (err: any) => {
-        console.error(err);
-      },
-    });
+    ipfsNode.pubsub.subscribe(_topic, handleNewMessage, {});
   }
 
   return (<Flex direction="column" >

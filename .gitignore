@@ -31,5 +31,5 @@ build
 .env.*
 
 # this file is built by yarn run sharedworkers
-public/ipfsWorker.js
+public/ipfsWorker
 .ganache

@@ -1,38 +1,32 @@
 import {
-  Box, Button, Flex, Heading, IconButton, List, SimpleGrid, Textarea,
+  Box, Button, Flex, Heading, IconButton, List, SimpleGrid, Textarea
 } from '@chakra-ui/core';
 import DownloadFile from 'components/molecules/storage/DownloadFile';
 import DropZone from 'components/molecules/storage/DropZone';
 import FileListItem from 'components/molecules/storage/FileListItem';
-import { Ipfs } from 'ipfs';
+import { useIPFS } from 'context/IPFS';
+import { UnixFSEntry } from 'ipfs-core/src/components/files/ls';
 import { PinningApi } from 'modules/pinning';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIPFS } from '../../../context/IPFS';
-import { ArweaveWallet } from './ArweaveTab';
 
-interface IpfsFileManagerProps {
-  arweave: any;
-  arweaveWallet: ArweaveWallet | undefined;
-  pinningApi: PinningApi;
-}
 
-const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManagerProps) => {
+const IpfsFileManager = ({pinningApi}: {
+  pinningApi: PinningApi
+}) => {
   const { ipfsNode } = useIPFS();
-  const [files, setFiles] = useState<Ipfs.UnixFSLsResult[]>([]);
+  const [files, setFiles] = useState<UnixFSEntry[]>([]);
   const [folderCid, setFolderCid] = useState<string>('');
 
   const FOLDER_NAME = '/dropzone';
 
-  async function addData(fileName: string, data: ArrayBuffer | string | null): Promise<void> {
-    return ipfsNode!.files.write(`${FOLDER_NAME}/${fileName}`, data, {
+  async function addData(fileName: string, data: string | Uint8Array): Promise<void> {
+    return ipfsNode.files.write(`${FOLDER_NAME}/${fileName}`, data, {
       create: true, parents: true,
     });
   }
 
   const refreshDirectory = useCallback(async () => {
     try {
-      if (!ipfsNode) return;
-
       let stats;
       try {
         stats = await ipfsNode.files.stat(FOLDER_NAME);
@@ -52,7 +46,7 @@ const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManager
     } catch (e) {
       console.error(e);
     }
-  }, [ipfsNode]);
+  }, [ipfsNode.files]);
 
   const submitText = async (e: any) => {
     if (!ipfsNode) {
@@ -68,8 +62,8 @@ const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManager
   };
 
   useEffect(() => {
-    if (ipfsNode) { refreshDirectory(); }
-  }, [ipfsNode, refreshDirectory]);
+    refreshDirectory()
+  }, [refreshDirectory]);
 
   return (<Flex direction="column" >
     <Box p="2" bg="gray.200" my="2">
@@ -101,11 +95,9 @@ const IpfsFileManager = ({ arweave, arweaveWallet, pinningApi }: IpfsFileManager
       </Flex>
       <List>
         {files.map((f) => <FileListItem
+          pinningApi={pinningApi}
           file={f}
           key={`${f.cid.toString()}`}
-          arweave={arweave}
-          arweaveWallet={arweaveWallet}
-          pinningApi={pinningApi}
         />)}
       </List>
     </Box>
