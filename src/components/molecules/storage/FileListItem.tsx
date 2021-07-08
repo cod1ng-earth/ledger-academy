@@ -2,7 +2,7 @@ import { Box, Flex, IconButton, List, Text, useToast } from '@chakra-ui/core';
 import CID from 'cids';
 import { useArweave } from 'context/Arweave';
 import { useIPFS } from 'context/IPFS';
-import { UnixFSEntry } from 'ipfs-core/src/components/files/ls';
+import { MFSEntry } from 'ipfs-core/src/components/files/ls';
 import { storeOnArweave } from 'modules/arweave';
 import { content, download } from 'modules/download';
 import { CheckPinResult, PinningApi } from 'modules/pinning';
@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 
 interface FileListItemProps {
-  file: UnixFSEntry;
+  file: MFSEntry;
   pinningApi: PinningApi
 }
 

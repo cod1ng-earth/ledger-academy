@@ -6,7 +6,7 @@ import NewMessageForm from 'components/atoms/NewMessageForm';
 import PubsubMessageDisplay from 'components/molecules/storage/PubsubMessageDisplay';
 import PubsubPeers from 'components/molecules/storage/PubsubPeers';
 import React, { useCallback, useState } from 'react';
-import { useIPFS } from '../../../context/IPFS';
+import { useIPFS } from 'context/IPFS';
 
 
 const textDecoder = new TextDecoder('utf-8');
@@ -40,7 +40,7 @@ const IpfsPubSub = () => {
 
   async function subscribe(_topic: string): Promise<void> {
     if (topic) {
-      ipfsNode.pubsub.unsubscribe(topic);
+      ipfsNode.pubsub.unsubscribe(topic, handleNewMessage);
     }
     setTopic(_topic);
     setMessages([]);

@@ -15,9 +15,10 @@ import {
 } from '@chakra-ui/core';
 import { useIPFS } from 'context/IPFS';
 import React, { useCallback, useEffect, useState } from 'react';
-import Multiaddr from 'multiaddr';
-import { Peer, Id as IpfsId } from 'modules/ipfs';
-import multiaddr from 'multiaddr';
+import { Multiaddr } from 'multiaddr';
+import { multiaddr } from 'multiaddr';
+import { IDResult } from 'ipfs-core-types/src/root';
+import { PeersResult } from 'ipfs-core-types/src/swarm';
 
 const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
   const { ipfsNode } = useIPFS();
@@ -53,9 +54,10 @@ const ConnectPeer = ({ onConnected }: { onConnected: () => Promise<void> }) => {
 
 const IpfsInfo = () => {
   const { ipfsNode } = useIPFS();
-  const [ipfsIdentity, setIpfsIdentity] = useState<IpfsId>();
+  const [ipfsIdentity, setIpfsIdentity] = useState<IDResult>();
+  
 
-  const [peers, setPeers] = useState<Peer[]>([]);
+  const [peers, setPeers] = useState<PeersResult[]>([]);
   // const [addrs, setAddrs] = useState<PeerInfo[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localAddrs, setLocalAddrs] = useState<Multiaddr[]>([]);
@@ -73,22 +75,25 @@ const IpfsInfo = () => {
 
   return <Box>
     <Accordion allowToggle>
-      <AccordionItem>
-        <AccordionHeader>
-          Identity <AccordionIcon />
-        </AccordionHeader>
-        <AccordionPanel>
-          <Text><b>ID</b> {ipfsIdentity?.id}</Text>
-          <Text isTruncated><b>Public Key</b> {ipfsIdentity?.publicKey}</Text>
-        </AccordionPanel>
-      </AccordionItem>
+      {
+        ipfsIdentity && <AccordionItem>
+          <AccordionHeader>
+            Identity <AccordionIcon />
+          </AccordionHeader>
+          <AccordionPanel>
+            <Text><b>ID</b> {ipfsIdentity.id}</Text>
+            <Text><b>Version</b> {ipfsIdentity.agentVersion} </Text>
+            <Text isTruncated><b>Public Key</b> {ipfsIdentity.publicKey}</Text>
+          </AccordionPanel>
+        </AccordionItem>
+      }
 
       <AccordionItem>
         <AccordionHeader>Peers <AccordionIcon /></AccordionHeader>
         <AccordionPanel>
           <Button onClick={refresh}>refresh</Button>
           <List>
-            {peers.map((p: Peer) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
+            {peers.map((p: PeersResult) => <ListItem key={p.peer}>{p.addr.toString()}</ListItem>)}
           </List>
 
           <ConnectPeer onConnected={refresh} />

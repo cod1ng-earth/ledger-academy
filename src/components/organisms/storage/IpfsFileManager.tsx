@@ -5,7 +5,7 @@ import DownloadFile from 'components/molecules/storage/DownloadFile';
 import DropZone from 'components/molecules/storage/DropZone';
 import FileListItem from 'components/molecules/storage/FileListItem';
 import { useIPFS } from 'context/IPFS';
-import { UnixFSEntry } from 'ipfs-core/src/components/files/ls';
+import type { MFSEntry } from 'ipfs-core-types/src/files';
 import { PinningApi } from 'modules/pinning';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ const IpfsFileManager = ({pinningApi}: {
   pinningApi: PinningApi
 }) => {
   const { ipfsNode } = useIPFS();
-  const [files, setFiles] = useState<UnixFSEntry[]>([]);
+  const [files, setFiles] = useState<MFSEntry[]>([]);
   const [folderCid, setFolderCid] = useState<string>('');
 
   const FOLDER_NAME = '/dropzone';
